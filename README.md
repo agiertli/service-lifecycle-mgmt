@@ -23,6 +23,6 @@ Setting up JVM 1
 ```
 username: anton (this value must match)
 password: password1! (this value can be arbitrary)
-roles: admin,analyst,user,SOAGovernanceSpecialist,ServiceAnalyst,servicedeveloper,qaspecialist (these roles must match)
+roles: admin,analyst,user,SOAGovernanceSpecialist,ServiceAnalyst,ServiceDeveloper,QASpecialist (these roles must match)
 ```
 
