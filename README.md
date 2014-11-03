@@ -60,5 +60,6 @@ version: 2.0.3
 Runtime strategy: Singleton
 Kie Base Name: myBase
 Kie Session name: Session1
+```
 
 That's it! You have successfully set up first JVM - deployment should be successful and to verify it, there should be bunch of entries under Process Management -> Process Definitions in the kie workbench
