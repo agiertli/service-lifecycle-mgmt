@@ -14,6 +14,10 @@ JVM1 < ---REST API---- > JVM2
 While technically it should be possible to deploy all components of this architecture on one single JVM,
 since all the development has been done using two separate machines, this README will describe this approach.
 
+Absolutley first thing, before attempting anything is to have this repository cloned locally on your filesystem. You can achieve it by issuing following command:
+
+$ git clone https://github.com/agiertli/service-lifecycle-mgmt.git
+
 
 Setting up JVM 1
 ----------------
