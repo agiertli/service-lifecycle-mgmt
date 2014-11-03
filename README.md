@@ -13,3 +13,19 @@ JVM1 < ---REST API---- > JVM2
 
 While technically it should be possible to deploy all components of this architecture on one single JVM,
 since all the development has been done using two separate machines, this README will describe this approach.
+
+
+Setting up JVM 1
+----------------
+
+1. [Download and unzip JBoss EAP 6.3](http://www.jboss.org/products/eap/download/)
+2. run '$JBOSS_HOME/bin/add-user.sh' script, and user with following characteristics:
+
+```
+username: anton (this value must match)
+
+password: password1! (this value can be arbitrary)
+
+roles: admin,analyst,user,SOAGovernanceSpecialist,ServiceAnalyst,servicedeveloper,qaspecialist (these roles must match)
+```
+
