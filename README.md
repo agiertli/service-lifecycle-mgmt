@@ -25,4 +25,5 @@ username: anton (this value must match)
 password: password1! (this value can be arbitrary)
 roles: admin,analyst,user,SOAGovernanceSpecialist,ServiceAnalyst,ServiceDeveloper,QASpecialist (these roles must match)
 ```
-
+3. [Download and unzip JBPM Execution Service 6.2.0.CR1](http://repository.jboss.org/nexus/content/groups/public-jboss/org/kie/kie-wb-distribution-wars/6.2.0.CR1/kie-wb-distribution-wars-6.2.0.CR1-eap6_3.war)
+We need to make this war an  'exploded' one. So once unzipped, backup the original *.war file and add war extension to the freshly created directory.
