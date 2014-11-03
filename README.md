@@ -19,13 +19,10 @@ Setting up JVM 1
 ----------------
 
 1. [Download and unzip JBoss EAP 6.3](http://www.jboss.org/products/eap/download/)
-2. run '$JBOSS_HOME/bin/add-user.sh' script, and user with following characteristics:
-
+2. run '$JBOSS_HOME/bin/add-user.sh' script, and add user with following characteristics:
 ```
 username: anton (this value must match)
-
 password: password1! (this value can be arbitrary)
-
 roles: admin,analyst,user,SOAGovernanceSpecialist,ServiceAnalyst,servicedeveloper,qaspecialist (these roles must match)
 ```
 
