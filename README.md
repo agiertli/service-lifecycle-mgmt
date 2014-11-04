@@ -77,7 +77,7 @@ Setting up JVM 2
  /subsystem=web/connector=http/:write-attribute(name=protocol,value=org.apache.coyote.http11.Http11NioProtocol)
  ```
  
- - Start the JBoss using $JBOSS_HOME/bin/standalone.sh . If you are running JVM1 and JVM2 on the same physical , make sure there are no port conflicts. For example adding following parameter after standalone.sh :
+ - Start the JBoss using $JBOSS_HOME/bin/standalone.sh . If you are running JVM1 and JVM2 on the same physical machine, make sure there are no port conflicts. For example adding following parameter after standalone.sh :
  ```
  -Djboss.socket.binding.port-offset=200
  ```
