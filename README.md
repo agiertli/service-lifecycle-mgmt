@@ -72,7 +72,7 @@ Setting up JVM 2
 
  - [Download and unzip JBoss EAP 6.3](http://www.jboss.org/download-manager/file/jboss-eap-6.3.0.GA.zip)
 
- - Due to the followintg [Atmosphere issue](https://github.com/Atmosphere/atmosphere/issues/1597) you need to start the JBoss cli using $JBOSS_HOME/bin/jboss-cli.sh ane enter following command:
+ - Due to the followintg [Atmosphere issue](https://github.com/Atmosphere/atmosphere/issues/1597) you need to start the $JBOSS_HOME/bin/jboss-cli.sh and enter following command:
  ```
  /subsystem=web/connector=http/:write-attribute(name=protocol,value=org.apache.coyote.http11.Http11NioProtocol)
  ```
