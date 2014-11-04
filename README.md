@@ -16,7 +16,10 @@ since all the development has been done using two separate machines, this README
 
 Absolutely first thing, before attempting anything is to have this repository cloned locally on your filesystem. You can achieve it by issuing following command:
 
+```
 $ git clone https://github.com/agiertli/service-lifecycle-mgmt.git
+$ git checkout proof-of-concept
+```
 
 
 Setting up JVM 1
@@ -63,3 +66,48 @@ Kie Session name: Session1
 ```
 
 That's it! You have successfully set up first JVM - deployment should be successful and to verify it, there should be bunch of entries under Process Management -> Process Definitions in the kie workbench
+
+Setting up JVM 2
+----------------
+
+ - [Download and unzip JBoss EAP 6.3](http://www.jboss.org/download-manager/file/jboss-eap-6.3.0.GA.zip)
+
+ - Due to the followintg [Atmosphere issue](https://github.com/Atmosphere/atmosphere/issues/1597) you need to start the JBoss cli using $JBOSS_HOME/bin/jboss-cli.sh ane enter following command:
+ ```
+ /subsystem=web/connector=http/:write-attribute(name=protocol,value=org.apache.coyote.http11.Http11NioProtocol)
+ ```
+ 
+ - Start the JBoss using $JBOSS_HOME/bin/standalone.sh . If you are running JVM1 and JVM2 on the same physical , make sure there are no port conflicts. For example adding following parameter after standalone.sh :
+ ```
+ -Djboss.socket.binding.port-offset=200
+ ```
+ 
+ Build & Deploy Service Lifecycle Management Application
+ -------------------------------------------------------
+ 
+ - navigate to vaadin-frontend folder and alter src/main/resources/jbpm.properties so it fits your environment
+ - only alter url/username/password parameters and leave the remaining properties to their default values
+ - build the application using following command:
+ 
+ ``` 
+ mvn clean package 
+ ```
+ 
+ Repository for jBPM artefacts is configured directly in the application's pom.xml, vaadin artefacts are located in the maven central repo, therefore, no additional configuration should be needed
+ - This process take a while - minutes, once done, deploy the resultant WAR application onto JVM 2 by issuing following command:
+ ```
+ $JBOSS_HOME/bin/jboss-cli.sh
+ $ connect localhost:101999
+ deploy ~/path/to/vaadin-frontend/target/vaadin-frontend-1.0.war
+ ```
+ 
+ - Once deployed, visit the application @ http://localhost:8280/vaadin-frontend-1.0/
+ 
+ - Following screens should be fully functional:
+ ```
+ Start new Service Lifecycle -> Start New Lifecycle - for new service
+ Lifecycle Instances + details
+ Lifecycle Tasks + details
+ ```
+ 
+ Notification actions, Work on a Task, starting the process for an existing service are not implemented at all.
