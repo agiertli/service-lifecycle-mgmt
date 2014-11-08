@@ -7,7 +7,6 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-import org.fi.muni.service_lifecycle_tests.Service;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.kie.services.client.api.RemoteRestRuntimeEngineFactory;
@@ -63,7 +62,7 @@ public class EmailServiceTest {
 	public static void setUpBeforeClass() throws Exception {
 
 		RemoteRestRuntimeEngineFactory factory = RemoteRestRuntimeEngineFactory.newBuilder().addDeploymentId(deploymentId).addUrl(new URL(url))
-				.addUserName(username).addPassword(password).addExtraJaxbClasses(Service.class).buildFactory();
+				.addUserName(username).addPassword(password).buildFactory();
 		engine = factory.newRuntimeEngine();
 
 	}
