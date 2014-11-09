@@ -1,12 +1,10 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
-import java.net.MalformedURLException;
 import java.util.logging.Logger;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.Page;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -47,6 +45,7 @@ public class MainView extends VerticalLayout implements View {
 		public void buttonClick(ClickEvent event) {
 
 			MainView.this.navigator.navigateTo("main" + "/" + menuitem);
+			logger.info("main view button click");
 		}
 	}
 
@@ -145,6 +144,7 @@ public class MainView extends VerticalLayout implements View {
 		else if (event.getParameters().equalsIgnoreCase(ProcessListView.NAME)) {
 
 			panelContent.addComponent(new ProcessListView(this.getNavigator()));
+			return ;
 
 		}
 
@@ -152,12 +152,14 @@ public class MainView extends VerticalLayout implements View {
 		else if (event.getParameters().equalsIgnoreCase(TaskListView.NAME)) {
 
 			panelContent.addComponent(new TaskListView(this.getNavigator()));
+			return;
 
 			// Redirect to Notification Action view
 		} else if (event.getParameters().equalsIgnoreCase("notificationactions")) {
 
 			// panelContent.addComponent(new TaskListView(this.getNavigator()));
 			// todo - add Notification Actions view
+			return;
 
 		}
 
@@ -171,10 +173,18 @@ public class MainView extends VerticalLayout implements View {
 		else if (event.getParameters().contains((ProcessDetailView.NAME.toLowerCase()))) {
 
 			// parse the id=X parameter
-			Long processInstanceId = Long.valueOf(event.getParameters().substring(
-					event.getParameters().indexOf("id=") + 3));
+			Long processInstanceId = Long.valueOf(event.getParameters().substring(event.getParameters().indexOf("id=") + 3));
 
 			panelContent.addComponent(new ProcessDetailView(processInstanceId, this.getNavigator()));
+
+		}
+
+		// Redirect to Task Detail View
+		else if (event.getParameters().contains(TaskDetailView.NAME.toLowerCase())) {
+
+			Long taskId = Long.valueOf(event.getParameters().substring(event.getParameters().indexOf("id=") + 3));
+
+			panelContent.addComponent(new TaskDetailView(taskId, this.getNavigator()));
 
 		}
 

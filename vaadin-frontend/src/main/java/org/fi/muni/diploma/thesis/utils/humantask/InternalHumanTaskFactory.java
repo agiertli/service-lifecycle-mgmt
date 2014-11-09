@@ -1,4 +1,4 @@
-package org.fi.muni.diploma.thesis.humantask;
+package org.fi.muni.diploma.thesis.utils.humantask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +93,10 @@ public class InternalHumanTaskFactory {
 			output1.setOutputIdentifier("outServiceDescription");
 			output1.setDataType(HumanTaskOutputType.TEXT_AREA);
 			output1.setLabel("Service Description:");
+			
+			outputs.add(output1);
+			
+			humanTask.setOutputs(outputs);
 
 			break;
 		}

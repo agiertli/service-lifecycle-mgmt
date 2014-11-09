@@ -1,4 +1,4 @@
-package org.fi.muni.diploma.thesis.humantask;
+package org.fi.muni.diploma.thesis.utils.humantask;
 
 public class HumanTaskOutput {
 	

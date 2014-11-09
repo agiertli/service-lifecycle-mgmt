@@ -1,36 +1,30 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterDecorator;
 import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterGenerator;
-import org.fi.muni.diploma.thesis.frontend.views.ProcessListView.ButtonListener;
-import org.fi.muni.diploma.thesis.utils.ProcessStateMap;
 import org.fi.muni.diploma.thesis.utils.RuntimeEngineWrapper;
 import org.fi.muni.diploma.thesis.utils.TaskServiceWrapper;
 import org.kie.api.task.TaskService;
-import org.kie.api.task.model.Task;
 import org.kie.api.task.model.TaskSummary;
 import org.kie.services.client.serialization.jaxb.impl.audit.JaxbProcessInstanceLog;
 import org.tepi.filtertable.paged.PagedFilterControlConfig;
 import org.tepi.filtertable.paged.PagedFilterTable;
 
+import com.google.gwt.thirdparty.streamhtmlparser.util.EntityResolver.Status;
 import com.vaadin.data.Container;
-import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
@@ -145,9 +139,17 @@ public class TaskListView extends VerticalLayout implements View {
 		int i = 1;
 
 		for (TaskSummary taskSummary : taskList) {
+			if (taskSummary.getId() == 1 && taskSummary.getStatus().name().equals("InProgress")) {
+				logger.info("podmienka true");
+				continue;
+			}
 
 			cont.addItem(i);
 
+			logger.info(String.valueOf("dafuq task id:"+taskSummary.getId()));
+			logger.info(String.valueOf("dafuq process id:"+taskSummary.getProcessInstanceId()));
+			logger.info(taskSummary.getStatus().name());
+			
 			cont.getContainerProperty(i, "Task Name").setValue(taskSummary.getName());
 			cont.getContainerProperty(i, "Task ID").setValue(taskSummary.getId());
 			cont.getContainerProperty(i, "Process Instance ID").setValue(taskSummary.getProcessInstanceId());
@@ -182,6 +184,7 @@ public class TaskListView extends VerticalLayout implements View {
 
 			cont.getContainerProperty(i, "Action").setValue(detailsField);
 
+		i++;
 		}
 
 		return cont;
