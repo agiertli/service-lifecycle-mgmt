@@ -86,7 +86,7 @@ Setting up JVM 2
  -------------------------------------------------------
  
  - navigate to vaadin-frontend folder and alter src/main/resources/jbpm.properties so it fits your environment
- - deploymnent id must is a combination from the step before - group:artifact:version:kiebase:kiesession
+ - deploymnent id is a combination from the step before - group:artifact:version:kiebase:kiesession of a KJAR deployed in the kie-wb
  - build the application using following command:
  
  ``` 
