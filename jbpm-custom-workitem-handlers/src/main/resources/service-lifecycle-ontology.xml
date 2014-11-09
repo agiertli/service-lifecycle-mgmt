@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xml:base="http://www.jboss.org/overlord/service-lifecycle.owl">
+  
+  <owl:Ontology rdf:ID="ServiceLifecycleStatus">
+    <rdfs:label>Service Lifecycle Status</rdfs:label>
+    <rdfs:comment>Service Lifecycle Status Ontology</rdfs:comment>
+  </owl:Ontology>
+
+  <owl:Class rdf:ID="ServiceLifecycle">
+    <rdfs:label>Service lifecycle</rdfs:label>
+    <rdfs:comment>Root status - participating in Service Lifecycle Workflow.</rdfs:comment>
+  </owl:Class>
+  
+  <!-- Basic set of possible service states -->
+
+  <owl:Class rdf:ID="ServiceIdentification">
+    <rdfs:subClassOf rdf:resource="http://www.jboss.org/overlord/service-lifecycle.owl#ServiceLifecycle" />
+    <rdfs:label>Service Identification</rdfs:label>
+    <rdfs:comment>Service Identification</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="InitialService">
+    <rdfs:subClassOf rdf:resource="http://www.jboss.org/overlord/service-lifecycle.owl#ServiceLifecycle" />
+    <rdfs:label>Initial state of service</rdfs:label>
+    <rdfs:comment>Initial state of service</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Registered">
+    <rdfs:subClassOf rdf:resource="http://www.jboss.org/overlord/service-lifecycle.owl#ServiceLifecycle" />
+    <rdfs:label>Registered</rdfs:label>
+    <rdfs:comment>Registered</rdfs:comment>
+  </owl:Class>
+  
+    <owl:Class rdf:ID="InTest">
+    <rdfs:subClassOf rdf:resource="http://www.jboss.org/overlord/service-lifecycle.owl#ServiceLifecycle" />
+    <rdfs:label>In Test</rdfs:label>
+    <rdfs:comment>In Test</rdfs:comment>
+  </owl:Class>
+  
+      <owl:Class rdf:ID="Available">
+    <rdfs:subClassOf rdf:resource="http://www.jboss.org/overlord/service-lifecycle.owl#ServiceLifecycle" />
+    <rdfs:label>Available</rdfs:label>
+    <rdfs:comment>Available</rdfs:comment>
+  </owl:Class>
+  
+    <owl:Class rdf:ID="Deprecated">
+    <rdfs:subClassOf rdf:resource="http://www.jboss.org/overlord/service-lifecycle.owl#ServiceLifecycle" />
+    <rdfs:label>Deprecated</rdfs:label>
+    <rdfs:comment>Deprecated</rdfs:comment>
+  </owl:Class>
+  
+      <owl:Class rdf:ID="Retired">
+    <rdfs:subClassOf rdf:resource="http://www.jboss.org/overlord/service-lifecycle.owl#ServiceLifecycle" />
+    <rdfs:label>Retired</rdfs:label>
+    <rdfs:comment>Retired</rdfs:comment>
+  </owl:Class>
+
+</rdf:RDF>

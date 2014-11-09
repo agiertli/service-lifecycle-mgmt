@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>service-lifecycle</groupId>
+	<artifactId>handlers</artifactId>
+	<version>0.0.1</version>
+
+
+	<properties>
+		<jbpm.version>6.2.0.CR1</jbpm.version>
+		<sramp.version>0.6.0.Final</sramp.version>
+	</properties>
+
+
+	<repositories>
+		<repository>
+			<id>jboss community repository</id>
+			<url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+		</repository>
+	</repositories>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.overlord.sramp</groupId>
+			<artifactId>s-ramp-client</artifactId>
+			<version>${sramp.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.overlord.sramp</groupId>
+			<artifactId>s-ramp-atom</artifactId>
+			<version>${sramp.version}</version>
+		</dependency>
+		
+			<dependency>
+			<groupId>org.overlord.sramp</groupId>
+			<artifactId>s-ramp-common</artifactId>
+			<version>${sramp.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.fi.muni.diploma.thesis</groupId>
+			<artifactId>service-lifecycle-model</artifactId>
+			<version>1.0.Final</version>
+		</dependency>
+		<!-- jBPM 6 dependencies -->
+		<dependency>
+			<groupId>org.kie</groupId>
+			<artifactId>kie-api</artifactId>
+			<version>${jbpm.version}</version>
+		</dependency>
+		
+		<dependency>
+	<groupId>junit</groupId>
+	<artifactId>junit</artifactId>
+	<version>4.11</version>
+<scope>test</scope>
+</dependency>
+		
+
+	</dependencies>
+
+
+</project>
