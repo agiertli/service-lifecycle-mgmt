@@ -14,7 +14,6 @@ import org.kie.services.client.serialization.jaxb.impl.audit.JaxbProcessInstance
 import org.tepi.filtertable.paged.PagedFilterControlConfig;
 import org.tepi.filtertable.paged.PagedFilterTable;
 
-import com.google.gwt.thirdparty.streamhtmlparser.util.EntityResolver.Status;
 import com.vaadin.data.Container;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.Navigator;
@@ -139,15 +138,18 @@ public class TaskListView extends VerticalLayout implements View {
 		int i = 1;
 
 		for (TaskSummary taskSummary : taskList) {
+			
+			//dirty hack, bug in kie-wb creates "dead" process instance with id 1, and starts the task, with id 1..
+			// it's not possible to work on this task, so we are excluding it
 			if (taskSummary.getId() == 1 && taskSummary.getStatus().name().equals("InProgress")) {
-				logger.info("podmienka true");
+			//	logger.info("podmienka true");
 				continue;
 			}
 
 			cont.addItem(i);
 
-			logger.info(String.valueOf("dafuq task id:"+taskSummary.getId()));
-			logger.info(String.valueOf("dafuq process id:"+taskSummary.getProcessInstanceId()));
+		//	logger.info(String.valueOf("dafuq task id:"+taskSummary.getId()));
+		//	logger.info(String.valueOf("dafuq process id:"+taskSummary.getProcessInstanceId()));
 			logger.info(taskSummary.getStatus().name());
 			
 			cont.getContainerProperty(i, "Task Name").setValue(taskSummary.getName());

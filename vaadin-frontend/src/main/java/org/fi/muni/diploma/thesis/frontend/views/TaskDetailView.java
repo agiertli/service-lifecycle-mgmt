@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import org.fi.muni.diploma.thesis.frontend.views.humantaskform.HumanTaskForm;
 import org.fi.muni.diploma.thesis.utils.TaskServiceWrapper;
 import org.fi.muni.diploma.thesis.utils.humantask.HumanTaskName;
-import org.fi.muni.diploma.thesis.utils.humantask.HumanTaskOutputType;
 import org.fi.muni.diploma.thesis.utils.humantask.InternalHumanTaskFactory;
 import org.jbpm.process.audit.AuditLogService;
 import org.kie.api.task.TaskService;
@@ -16,7 +15,6 @@ import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -56,6 +54,7 @@ public class TaskDetailView extends VerticalLayout implements View {
 		logger.info("human task name after conversion:" + name.toString());
 
 		//add Human Task Form
+		// Task  'Select Service From S-RAMP' is not working due to unsolve issues with jbpm+custom objects
 		addComponent(new HumanTaskForm(id, InternalHumanTaskFactory.newInternalHumanTask(name),this.getNavigator()));
 
 	}
