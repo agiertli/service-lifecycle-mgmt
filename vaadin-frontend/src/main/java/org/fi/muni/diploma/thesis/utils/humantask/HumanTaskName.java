@@ -49,7 +49,7 @@ public enum HumanTaskName {
 
 			return EVALUATE_TEST_RESULTS;
 
-		case "Select service from  S-RAMP":
+		case "Select service from S-RAMP":
 			return SELECT_SERVICE_FROM_SRAMP;
 
 		case "Register Existing Service":

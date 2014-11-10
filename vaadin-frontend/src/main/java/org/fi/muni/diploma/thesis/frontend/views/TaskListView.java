@@ -77,6 +77,7 @@ public class TaskListView extends VerticalLayout implements View {
 
 		List<TaskSummary> taskList = taskService.getTasksAssignedAsPotentialOwner("anton", "en-UK");
 
+		
 		VerticalLayout layout = new VerticalLayout();
 		taskListTable = buildTaskListTable(taskList);
 		taskListTable.setPageLength(taskListTable.getContainerDataSource().size());
