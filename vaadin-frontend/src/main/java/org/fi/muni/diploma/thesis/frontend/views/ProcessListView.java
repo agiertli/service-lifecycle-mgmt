@@ -126,6 +126,7 @@ public class ProcessListView extends VerticalLayout implements View {
 		filterTable.setContainerDataSource(buildContainer(allProcesses));
 		filterTable.setFilterBarVisible(true);
 		filterTable.setFilterFieldVisible("Details", false);
+		filterTable.setFilterFieldValue("Process State", ProcessStateMap.States.ACTIVE);
 
 		return filterTable;
 	}

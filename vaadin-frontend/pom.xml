@@ -89,6 +89,12 @@
 			<groupId>org.kie.remote</groupId>
 			<artifactId>kie-remote-jaxb</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.fi.muni.diploma.thesis</groupId>
+			<artifactId>service-lifecycle-model</artifactId>
+			<version>1.0.Final</version>
+		</dependency>
 
 		<!-- vaadin dependencies -->
 		
