@@ -97,7 +97,7 @@ Setting up JVM 2
  - This process take a while - minutes, once done, deploy the resultant WAR application onto JVM 2 by issuing following command:
  ```
  $JBOSS_HOME/bin/jboss-cli.sh
- $ connect localhost:101999
+ $ connect localhost:10199
  deploy ~/path/to/vaadin-frontend/target/vaadin-frontend-1.0.war
  ```
  
