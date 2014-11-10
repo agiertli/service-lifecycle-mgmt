@@ -19,7 +19,10 @@ import org.fi.muni.diploma.thesis.utils.humantask.HumanTaskOutputType;
 import org.fi.muni.diploma.thesis.utils.humantask.InternalHumanTask;
 import org.kie.api.task.TaskService;
 
+import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.data.util.converter.StringToIntegerConverter;
@@ -49,13 +52,18 @@ public class HumanTaskForm extends VerticalLayout {
 	private TaskService taskService;
 	public Navigator navigator;
 
+	//for storing integer
+	final MyBean myBean = new MyBean();
+	BeanItem<MyBean> beanItem = new BeanItem<MyBean>(myBean);
+	final Property<Integer> integerProperty = (Property<Integer>) beanItem.getItemProperty("value");
+
 	public class ButtonListener implements ClickListener {
 
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		
+
 		String menuitem;
 
 		public ButtonListener(String menuitem) {
@@ -69,6 +77,12 @@ public class HumanTaskForm extends VerticalLayout {
 			logger.info("button clicked");
 
 			FieldGroup data = (FieldGroup) event.getButton().getData();
+			try {
+				data.commit();
+			} catch (CommitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Long id = HumanTaskForm.this.getTaskid();
 
 			Map<String, Object> result = new HashMap<String, Object>();
@@ -79,19 +93,26 @@ public class HumanTaskForm extends VerticalLayout {
 				Field<?> field = iterator.next();
 
 				System.out.println("output name:" + binder.getPropertyId(field));
+				
 				System.out.println("output value:" + field.getValue());
-
+				System.out.println("output type:" + field.getType()+"property:"+field.getPropertyDataSource().getType());
+				
+				//look out for Integer
+				if (field.getPropertyDataSource().getType().equals(Integer.class)) {
+					logger.info("we have found integer output");
+					
+					result.put((String) binder.getPropertyId(field), integerProperty.getValue());
+				}
+				else {
 				result.put((String) binder.getPropertyId(field), field.getValue());
+				}
 
 			}
-			
-			
-            //	taskService.start(id, "anton");
-			//	taskService.complete(id, "anton", result);
-			
-			HumanTaskForm.this.navigator.navigateTo("main"+"/"+TaskListView.NAME);
 
-		
+			taskService.start(id, "anton");
+			taskService.complete(id, "anton", result);
+
+			HumanTaskForm.this.navigator.navigateTo("main" + "/" + TaskListView.NAME);
 
 		}
 	}
@@ -100,11 +121,10 @@ public class HumanTaskForm extends VerticalLayout {
 
 	}
 
-	public HumanTaskForm(Long taskId, InternalHumanTask newInternalHumanTask,Navigator navigator) {
+	public HumanTaskForm(Long taskId, InternalHumanTask newInternalHumanTask, Navigator navigator) {
 		this.humanTask = newInternalHumanTask;
 		this.taskid = taskId;
 		this.navigator = navigator;
-		
 
 		// data binding of form
 		this.setItemset(new PropertysetItem());
@@ -134,37 +154,44 @@ public class HumanTaskForm extends VerticalLayout {
 				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<String>(""));
 				this.getBinder().bind(checkbox, output.getOutputIdentifier());
 				fl.addComponent(checkbox);
-			}
 				break;
-			case ENUM_STATE:
-				
+			}
+
+			case ENUM_STATE: {
+
 				NativeSelect enumSelect = new NativeSelect(output.getLabel());
 				enumSelect.setRequired(true);
 				enumSelect.setRequiredError("This field is required");
-				
+
 				if (this.getHumanTask().getName().equals(HumanTaskName.REGISTER_EXISTING_SERVICE.toString())) {
-					
-					enumSelect.addItems("InTest", "Available","Deprecated");
+
+					enumSelect.addItems("InTest", "Available", "Deprecated");
 				}
 				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<String>(""));
 				this.getBinder().bind(enumSelect, output.getOutputIdentifier());
-				
+
 				fl.addComponent(enumSelect);
-				
+
 				break;
+			}
 			case INTEGER: {
 
+				
+				logger.info("adding integer output:" + output.getDataType() + "label:" + output.getLabel());
 				TextField integerField = new TextField(output.getLabel());
-				integerField.setConverter(new StringToIntegerConverter());
+				integerField.setConverter(Integer.class);
+				// integerField.setConverter(new StringToIntegerConverter());
 				integerField.addValidator(new IntegerRangeValidator("Value has to be from range 0-65535", 0, 65535));
 				integerField.setRequired(true);
 				integerField.setRequiredError("This field is required");
-				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<Integer>(0));
-				this.getBinder().bind(integerField, output.getOutputIdentifier());
+				
+			//	this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<Integer>(((Integer)8480)));
+				this.getItemset().addItemProperty(output.getOutputIdentifier(), integerProperty);
+		     	this.getBinder().bind(integerField, output.getOutputIdentifier());
 				fl.addComponent(integerField);
+				break;
 
 			}
-				break;
 			case PASSWORD: {
 
 				PasswordField passwordField = new PasswordField(output.getLabel());
@@ -183,8 +210,9 @@ public class HumanTaskForm extends VerticalLayout {
 				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<String>(""));
 				this.getBinder().bind(stringField, output.getOutputIdentifier());
 				fl.addComponent(stringField);
-			}
 				break;
+			}
+
 			case TEXT_AREA: {
 
 				TextArea textArea = new TextArea(output.getLabel());
@@ -193,8 +221,9 @@ public class HumanTaskForm extends VerticalLayout {
 				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<String>(""));
 				this.getBinder().bind(textArea, output.getOutputIdentifier());
 				fl.addComponent(textArea);
-			}
 				break;
+			}
+
 			default:
 				break;
 
@@ -247,6 +276,18 @@ public class HumanTaskForm extends VerticalLayout {
 
 	public void setNavigator(Navigator navigator) {
 		this.navigator = navigator;
+	}
+	
+	public class MyBean {
+	    private int value;
+
+	    public int getValue() {
+	        return value;
+	    }
+
+	    public void setValue(int integer) {
+	        value = integer;
+	    }
 	}
 
 }
