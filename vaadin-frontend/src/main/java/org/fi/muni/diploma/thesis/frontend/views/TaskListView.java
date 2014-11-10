@@ -145,9 +145,20 @@ public class TaskListView extends VerticalLayout implements View {
 		int i = 1;
 
 		for (TaskSummary taskSummary : taskList) {
+			
+			//dirty hack, bug in kie-wb creates "dead" process instance with id 1, and starts the task, with id 1..
+			// it's not possible to work on this task, so we are excluding it
+			if (taskSummary.getId() == 1 && taskSummary.getStatus().name().equals("InProgress")) {
+			//	logger.info("podmienka true");
+				continue;
+			}
 
 			cont.addItem(i);
 
+		//	logger.info(String.valueOf("dafuq task id:"+taskSummary.getId()));
+		//	logger.info(String.valueOf("dafuq process id:"+taskSummary.getProcessInstanceId()));
+			logger.info(taskSummary.getStatus().name());
+			
 			cont.getContainerProperty(i, "Task Name").setValue(taskSummary.getName());
 			cont.getContainerProperty(i, "Task ID").setValue(taskSummary.getId());
 			cont.getContainerProperty(i, "Process Instance ID").setValue(taskSummary.getProcessInstanceId());
@@ -182,6 +193,7 @@ public class TaskListView extends VerticalLayout implements View {
 
 			cont.getContainerProperty(i, "Action").setValue(detailsField);
 
+		i++;
 		}
 
 		return cont;
