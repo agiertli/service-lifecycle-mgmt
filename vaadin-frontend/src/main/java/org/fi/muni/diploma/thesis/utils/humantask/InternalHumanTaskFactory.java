@@ -29,8 +29,8 @@ public class InternalHumanTaskFactory {
 			output1.setLabel("Consumers informed about service deprecation:");
 
 			HumanTaskOutput output2 = new HumanTaskOutput();
-			output2.setDataType(HumanTaskOutputType.BOOLEAN);
-			output2.setOutputIdentifier("outBoolServiceConfigUpdated");
+			output2.setDataType(HumanTaskOutputType.TEXT_AREA);
+			output2.setOutputIdentifier("outServiceConfigUpdated");
 			output2.setLabel("Service configuration updated:");
 
 			outputs.add(output1);
@@ -106,13 +106,13 @@ public class InternalHumanTaskFactory {
 			humanTask.setName(HumanTaskName.INITIALIZE.toString());
 
 			HumanTaskOutput output1 = new HumanTaskOutput();
-			output1.setOutputIdentifier("outBoolContractDefined");
-			output1.setDataType(HumanTaskOutputType.BOOLEAN);
+			output1.setOutputIdentifier("outContractDefined");
+			output1.setDataType(HumanTaskOutputType.TEXT_AREA);
 			output1.setLabel("Contract defined:");
 
 			HumanTaskOutput output2 = new HumanTaskOutput();
-			output2.setOutputIdentifier("outBoolDocumentationWritten");
-			output2.setDataType(HumanTaskOutputType.BOOLEAN);
+			output2.setOutputIdentifier("outDocumentationWritten");
+			output2.setDataType(HumanTaskOutputType.TEXT_AREA);
 			output2.setLabel("Documentation written:");
 
 			outputs.add(output1);
@@ -235,8 +235,14 @@ public class InternalHumanTaskFactory {
 			output1.setOutputIdentifier("outServiceSrampUUID");
 			output1.setDataType(HumanTaskOutputType.STRING);
 			output1.setLabel("Service UUID:");
+			
+			HumanTaskOutput output2 = new HumanTaskOutput();
+			output2.setOutputIdentifier("t_serviceName");
+			output2.setDataType(HumanTaskOutputType.STRING);
+			output2.setLabel("Service Name:");
 
 			outputs.add(output1);
+			outputs.add(output2);
 
 			humanTask.setOutputs(outputs);
 
