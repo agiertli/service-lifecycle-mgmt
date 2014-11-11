@@ -1,0 +1,40 @@
+
+<form id="1342573139">
+<property name="subject" value=""/>
+<property name="name" value="ServiceLifecycleProject.srampQueryTest-taskform.form"/>
+<property name="displayMode" value="default"/>
+<property name="status" value="0"/>
+<field position="3" name="username" type="InputText" id="755011060">
+<property name="fieldRequired" value="false"/>
+<property name="label" value="quot;enquot;,quot;username (username)quot;"/>
+<property name="inputBinding" value=""/>
+<property name="outputBinding" value="username"/>
+<property name="fieldClass" value="java.lang.String"/>
+</field>
+<field position="1" name="password" type="InputText" id="523682280">
+<property name="fieldRequired" value="false"/>
+<property name="label" value="quot;enquot;,quot;password (password)quot;"/>
+<property name="inputBinding" value=""/>
+<property name="outputBinding" value="password"/>
+<property name="fieldClass" value="java.lang.String"/>
+</field>
+<field position="2" name="port" type="InputTextInteger" id="1827365201">
+<property name="fieldRequired" value="false"/>
+<property name="label" value="quot;enquot;,quot;port (port)quot;"/>
+<property name="inputBinding" value=""/>
+<property name="outputBinding" value="port"/>
+<property name="fieldClass" value="java.lang.Integer"/>
+</field>
+<field position="0" name="hostname" type="InputText" id="1212140955">
+<property name="fieldRequired" value="false"/>
+<property name="label" value="quot;enquot;,quot;hostname (hostname)quot;"/>
+<property name="inputBinding" value=""/>
+<property name="outputBinding" value="hostname"/>
+<property name="fieldClass" value="java.lang.String"/>
+</field>
+<dataHolder inputId="" name="#0000A0" type="basicType" outId="hostname" value="java.lang.String" id="hostname"/>
+<dataHolder inputId="" name="#B29FE4" type="basicType" outId="password" value="java.lang.String" id="password"/>
+<dataHolder inputId="" name="#A7E690" type="basicType" outId="port" value="java.lang.Integer" id="port"/>
+<dataHolder inputId="" name="#9BCAFA" type="className" outId="serviceList" value="java.util.List" id="serviceList"/>
+<dataHolder inputId="" name="#FF54A7" type="basicType" outId="username" value="java.lang.String" id="username"/>
+</form>

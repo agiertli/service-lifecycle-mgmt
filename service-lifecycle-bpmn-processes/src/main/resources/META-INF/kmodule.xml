@@ -1,0 +1,10 @@
+<kmodule xmlns="http://jboss.org/kie/6.0.0/kmodule" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <kbase name="myBase" default="true" eventProcessingMode="stream" equalsBehavior="identity" packages="*">
+    <ksession name="Session1" type="stateful" default="true" clockType="realtime">
+      <workItemHandlers>
+        <workItemHandler type="org.fi.muni.diploma.thesis.handlers.QuerySRAMPHandler" name="QuerySRAMP"/>
+        <workItemHandler type="org.fi.muni.diploma.thesis.handlers.ApplyOntologyHandler" name="ApplyOntology"/>
+      </workItemHandlers>
+    </ksession>
+  </kbase>
+</kmodule>

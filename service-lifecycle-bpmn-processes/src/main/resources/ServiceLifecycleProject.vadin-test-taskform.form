@@ -1,0 +1,23 @@
+
+<form id="965098991">
+<property name="subject" value=""/>
+<property name="name" value="ServiceLifecycleProject.vadin-test-taskform.form"/>
+<property name="displayMode" value="default"/>
+<property name="status" value="0"/>
+<field position="0" name="var1" type="InputText" id="2143912487">
+<property name="fieldRequired" value="false"/>
+<property name="label" value="quot;enquot;,quot;var1 (var1)quot;"/>
+<property name="inputBinding" value=""/>
+<property name="outputBinding" value="var1"/>
+<property name="fieldClass" value="java.lang.String"/>
+</field>
+<field position="1" name="var2" type="InputTextInteger" id="1067323897">
+<property name="fieldRequired" value="false"/>
+<property name="label" value="quot;enquot;,quot;var2 (var2)quot;"/>
+<property name="inputBinding" value=""/>
+<property name="outputBinding" value="var2"/>
+<property name="fieldClass" value="java.lang.Integer"/>
+</field>
+<dataHolder inputId="" name="#0000A0" type="basicType" outId="var1" value="java.lang.String" id="var1"/>
+<dataHolder inputId="" name="#FF54A7" type="basicType" outId="var2" value="java.lang.Integer" id="var2"/>
+</form>

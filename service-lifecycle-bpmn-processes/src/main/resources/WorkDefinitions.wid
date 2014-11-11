@@ -1,0 +1,88 @@
+import org.drools.core.process.core.datatype.impl.type.StringDataType;
+import org.drools.core.process.core.datatype.impl.type.ObjectDataType;
+import org.drools.core.process.core.datatype.impl.type.IntegerDataType;
+import org.drools.core.process.core.datatype.impl.type.ListDataType;
+[
+  [
+    "name" : "Email",
+    "parameters" : [
+      "From" : new StringDataType(),
+      "To" : new StringDataType(),
+      "Subject" : new StringDataType(),
+      "Body" : new StringDataType()
+    ],
+    "displayName" : "Email",
+    "icon" : "defaultemailicon.gif"
+  ],
+
+  [
+    "name" : "Log",
+    "parameters" : [
+      "Message" : new StringDataType()
+    ],
+    "displayName" : "Log",
+    "icon" : "defaultlogicon.gif"
+  ],
+
+  [
+    "name" : "WebService",
+    "parameters" : [
+        "Url" : new StringDataType(),
+         "Namespace" : new StringDataType(),
+         "Interface" : new StringDataType(),
+         "Operation" : new StringDataType(),
+         "Parameter" : new StringDataType(),
+         "Mode" : new StringDataType()
+    ],
+    "results" : [
+        "Result" : new ObjectDataType(),
+    ],
+    "displayName" : "WS",
+    "icon" : "defaultservicenodeicon.png"
+  ],
+
+  [
+    "name" : "Rest",
+    "parameters" : [
+        "Url" : new StringDataType(),
+        "Method" : new StringDataType(),
+        "ConnectTimeout" : new StringDataType(),
+        "ReadTimeout" : new StringDataType(),
+        "Username" : new StringDataType(),
+        "Password" : new StringDataType()
+    ],
+    "results" : [
+        "Result" : new ObjectDataType(),
+    ],
+    "displayName" : "REST",
+    "icon" : "defaultservicenodeicon.png"
+  ],
+[
+    "name" : "QuerySRAMP",
+    "parameters" : [
+      "inHost" : new StringDataType(),
+      "inPort" : new IntegerDataType(),
+      "inUsername" : new StringDataType(),
+      "inPassword" : new StringDataType(),
+    ],
+    "results" : [
+        "OutServiceList" : new ListDataType(),
+    ],
+    "displayName" : "Query S-RAMP repository for Services",
+    "icon" : "defaultservicenodeicon.png"
+  ],
+
+  [
+    "name" : "ApplyOntology",
+    "parameters" : [
+      "inHost" : new StringDataType(),
+      "inPort" : new IntegerDataType(),
+      "inUsername" : new StringDataType(),
+      "inPassword" : new StringDataType(),
+      "inUuid" : new StringDataType(),
+      "inValue": new StringDataType(),
+    ],
+    "displayName" : "Apply ontology",
+    "icon" : "defaultservicenodeicon.png"
+  ]
+]

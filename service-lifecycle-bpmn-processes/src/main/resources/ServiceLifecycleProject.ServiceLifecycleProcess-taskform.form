@@ -1,0 +1,25 @@
+
+<form id="1944044487">
+<property name="subject" value=""/>
+<property name="name" value="ServiceLifecycleProject.ServiceLifecycleProcess-taskform.form"/>
+<property name="displayMode" value="default"/>
+<property name="status" value="0"/>
+<dataHolder inputId="" name="#E9E371" type="basicType" outId="ServiceState" value="java.lang.String" id="ServiceState"/>
+<dataHolder inputId="" name="#BBBBBB" type="basicType" outId="consumersInformedAboutDeprecation" value="java.lang.Boolean" id="consumersInformedAboutDeprecation"/>
+<dataHolder inputId="" name="#000000" type="basicType" outId="consumersInformedAboutRetirement" value="java.lang.Boolean" id="consumersInformedAboutRetirement"/>
+<dataHolder inputId="" name="#B29FE4" type="basicType" outId="hostname" value="java.lang.String" id="hostname"/>
+<dataHolder inputId="" name="#FF54A7" type="basicType" outId="isContractDefined" value="java.lang.Boolean" id="isContractDefined"/>
+<dataHolder inputId="" name="#0000A0" type="basicType" outId="isDocumentationWritten" value="java.lang.Boolean" id="isDocumentationWritten"/>
+<dataHolder inputId="" name="#A7E690" type="basicType" outId="isPolicyFulfilled" value="java.lang.Boolean" id="isPolicyFulfilled"/>
+<dataHolder inputId="" name="#FBB767" type="basicType" outId="isServiceConfigUpdated" value="java.lang.Boolean" id="isServiceConfigUpdated"/>
+<dataHolder inputId="" name="#FF54A7" type="basicType" outId="isServiceCreated" value="java.lang.Boolean" id="isServiceCreated"/>
+<dataHolder inputId="" name="#FF8881" type="basicType" outId="isServiceDeployedInProduction" value="java.lang.Boolean" id="isServiceDeployedInProduction"/>
+<dataHolder inputId="" name="#B29FE4" type="basicType" outId="passedIntegrationTestsWithComponents" value="java.lang.Boolean" id="passedIntegrationTestsWithComponents"/>
+<dataHolder inputId="" name="#9BCAFA" type="basicType" outId="passedIntegrationTestsWithServiceConsumers" value="java.lang.Boolean" id="passedIntegrationTestsWithServiceConsumers"/>
+<dataHolder inputId="" name="#FF8881" type="basicType" outId="password" value="java.lang.String" id="password"/>
+<dataHolder inputId="" name="#9BCAFA" type="basicType" outId="port" value="java.lang.Integer" id="port"/>
+<dataHolder inputId="" name="#0000A0" type="basicType" outId="serviceDescription" value="java.lang.String" id="serviceDescription"/>
+<dataHolder inputId="" name="#FBB767" type="basicType" outId="serviceSRAMPUUID" value="java.lang.String" id="serviceSRAMPUUID"/>
+<dataHolder inputId="" name="#BBBBBB" type="className" outId="srampServiceList" value="java.util.List" id="srampServiceList"/>
+<dataHolder inputId="" name="#A7E690" type="basicType" outId="username" value="java.lang.String" id="username"/>
+</form>
