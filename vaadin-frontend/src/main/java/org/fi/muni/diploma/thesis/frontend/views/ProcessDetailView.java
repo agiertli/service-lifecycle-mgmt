@@ -1,11 +1,9 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterDecorator;
-import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterGenerator;
-import org.fi.muni.diploma.thesis.frontend.views.ProcessListView.ButtonListener;
 import org.fi.muni.diploma.thesis.utils.ProcessStateMap;
 import org.fi.muni.diploma.thesis.utils.RuntimeEngineWrapper;
 import org.kie.services.client.serialization.jaxb.impl.audit.JaxbProcessInstanceLog;
@@ -13,16 +11,13 @@ import org.kie.services.client.serialization.jaxb.impl.audit.JaxbVariableInstanc
 import org.tepi.filtertable.FilterTable;
 
 import com.vaadin.data.Container;
-import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
 public class ProcessDetailView extends VerticalLayout implements View {
@@ -105,62 +100,71 @@ public class ProcessDetailView extends VerticalLayout implements View {
 	@SuppressWarnings("unchecked")
 	private Container buildContainerForVariablesTable(List<JaxbVariableInstanceLog> varLog) {
 
-		// get specificaly process states from the sub process
-		List<JaxbVariableInstanceLog> processStates = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
-				.findVariableInstancesByName("ServiceState_sub", false);
+		List<JaxbVariableInstanceLog> filterSubProcessStates = new ArrayList<JaxbVariableInstanceLog>();
+
+		// find all sub processes
+		List<JaxbProcessInstanceLog> subProcesses = (List<JaxbProcessInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
+				.findSubProcessInstances(ProcessDetailView.this.processId);
+
+		// search for ServiceState_sub variable
+		for (JaxbProcessInstanceLog sub : subProcesses) {
+
+			filterSubProcessStates.addAll((List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
+					.findVariableInstances(sub.getProcessInstanceId(), "ServiceState_sub"));
+
+		}
+
+		JaxbVariableInstanceLog finalStateHolder = new JaxbVariableInstanceLog();
+		finalStateHolder = filterSubProcessStates.get(0);
+
+		// only save the LAST instance
+		for (JaxbVariableInstanceLog finalState : filterSubProcessStates) {
+
+			if (finalState.getDate().after(finalStateHolder.getDate())) {
+
+				finalStateHolder = finalState;
+			}
+
+		}
+
+		List<JaxbVariableInstanceLog> mainProcessStates = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
+				.findVariableInstances(ProcessDetailView.this.processId, "ServiceState");
 
 		IndexedContainer cont = new IndexedContainer();
 		int counter = 1;
-
-		int stateindex = 0;
 
 		cont.addContainerProperty("Variable Name", String.class, null);
 		cont.addContainerProperty("Variable Value", String.class, null);
 
 		for (JaxbVariableInstanceLog var : varLog) {
 
-			// we want to ignore empty values and taskGroup
-			if (var.getValue().isEmpty() || var.getVariableId().equals("taskGroup")) {
+			if (var.getVariableId().equals("ServiceState")) {
 
 				continue;
-
-			} else {
-
-				// we only want to preserve the latest ServiceState value
-				if (var.getVariableId().equals("ServiceState") && stateindex != 0) {
-
-					for (JaxbVariableInstanceLog subState : processStates) {
-						if (subState.getExternalId().equals(var.getExternalId())) {
-
-							cont.getContainerProperty(stateindex, "Variable Value").setValue(subState.getValue());
-						}
-
-						else {
-
-							cont.getContainerProperty(stateindex, "Variable Value").setValue(var.getValue());
-						}
-						counter++;
-						continue;
-
-					}
-				}
-
-				if (var.getVariableId().equals("ServiceState") && stateindex == 0) {
-
-					stateindex = counter;
-
-				}
-
-				cont.addItem(counter);
-
-				cont.getContainerProperty(counter, "Variable Name").setValue(var.getVariableId());
-				cont.getContainerProperty(counter, "Variable Value").setValue(var.getValue());
-
-				counter++;
 			}
+
+			cont.addItem(counter);
+
+			cont.getContainerProperty(counter, "Variable Name").setValue(var.getVariableId());
+			cont.getContainerProperty(counter, "Variable Value").setValue(var.getValue());
+
+			counter++;
+		}
+
+		cont.addItem(counter);
+		cont.getContainerProperty(counter, "Variable Name").setValue("Service state");
+		if (filterSubProcessStates.size() > 0) {
+
+			cont.getContainerProperty(counter, "Variable Value").setValue(finalStateHolder.getValue());
+
+		} else {
+
+			cont.getContainerProperty(counter, "Variable Value").setValue(mainProcessStates.get(mainProcessStates.size() - 1).getValue());
+
 		}
 
 		return cont;
+
 	}
 
 	// build the Process Detail Table
