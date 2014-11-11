@@ -8,7 +8,7 @@ package org.fi.muni.diploma.thesis.utils.humantask;
  */
 public enum HumanTaskName {
 
-	DEPRECATE_SERVICE("Deprecate Service"), RETIRE_SERVICE("Retire Service"), INITIALIZE("Initialize"), REGISTER("Register"), TEST("Test"), IDENTIFY_SERVICE(
+	DEPRECATE_SERVICE("Deprecate service"), RETIRE_SERVICE("Retire Service"), INITIALIZE("Initialize"), REGISTER("Register"), TEST("Test"), IDENTIFY_SERVICE(
 			"Identify Service"), EVALUATE_TEST_RESULTS("Evaluate tests result"), SELECT_SERVICE_FROM_SRAMP("Select service from S-RAMP"), REGISTER_EXISTING_SERVICE(
 			"Register Existing Service");
 
@@ -27,7 +27,7 @@ public enum HumanTaskName {
 
 		switch (name) {
 
-		case "Deprecate Service":
+		case "Deprecate service":
 			return DEPRECATE_SERVICE;
 
 		case "Retire Service":
