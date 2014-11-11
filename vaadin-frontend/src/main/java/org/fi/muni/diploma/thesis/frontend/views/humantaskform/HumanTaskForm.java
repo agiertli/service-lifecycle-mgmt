@@ -31,6 +31,10 @@ import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.data.validator.IntegerRangeValidator;
+import com.vaadin.event.FieldEvents.BlurEvent;
+import com.vaadin.event.FieldEvents.BlurListener;
+import com.vaadin.event.FieldEvents.FocusEvent;
+import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -59,6 +63,7 @@ public class HumanTaskForm extends VerticalLayout {
 	private TaskService taskService;
 	public Navigator navigator;
 	private TextField uuid;
+	private TextField serviceName;
 
 	// for storing integer
 	final MyBean myBean = new MyBean();
@@ -80,8 +85,9 @@ public class HumanTaskForm extends VerticalLayout {
 		public void buttonClick(ClickEvent event) {
 			// TODO Auto-generated method stub
 
-			String uuid = (String) event.getButton().getData();
-			HumanTaskForm.this.getUuid().setValue(uuid);
+			Service service = (Service) event.getButton().getData();
+			HumanTaskForm.this.getUuid().setValue(service.getUUID());
+			HumanTaskForm.this.getServiceName().setValue(service.getName());
 
 		}
 
@@ -236,8 +242,8 @@ public class HumanTaskForm extends VerticalLayout {
 				CheckBox checkbox = new CheckBox();
 				checkbox.setCaption(output.getLabel());
 				checkbox.setRequired(true);
-			//	checkbox.setValue(true);
-		
+				// checkbox.setValue(true);
+
 				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<Boolean>(false));
 				this.getBinder().bind(checkbox, output.getOutputIdentifier());
 				fl.addComponent(checkbox);
@@ -298,8 +304,14 @@ public class HumanTaskForm extends VerticalLayout {
 				this.getBinder().bind(stringField, output.getOutputIdentifier());
 				fl.addComponent(stringField);
 
+				// we need to save the outputs of select service task explicitly due to "SELECT" functionality
 				if (this.humanTask.getName().equals(HumanTaskName.SELECT_SERVICE_FROM_SRAMP.toString())) {
-					this.setUuid(stringField);
+
+					if (output.getOutputIdentifier().toLowerCase().contains("uuid")) {
+						this.setUuid(stringField);
+					} else if (output.getOutputIdentifier().toLowerCase().contains("name")) {
+						this.setServiceName(stringField);
+					}
 				}
 
 				break;
@@ -310,7 +322,42 @@ public class HumanTaskForm extends VerticalLayout {
 				TextArea textArea = new TextArea(output.getLabel());
 				textArea.setRequired(true);
 				textArea.setRequiredError("This field is required");
-				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<String>(""));
+				textArea.addFocusListener(new FocusListener() {
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void focus(FocusEvent event) {
+
+						if (((TextArea) event.getComponent()).getValue().equals("Enter some description or URL pointing to the resource")) {
+
+							((TextArea) event.getComponent()).setValue("");
+
+						}
+
+					}
+
+				});
+				//this is stupid - it won't be possible to let an empty value, and it should be possible
+//				textArea.addBlurListener(new BlurListener() {
+//
+//					/**
+//					 * 
+//					 */
+//					private static final long serialVersionUID = 1L;
+//
+//					@Override
+//					public void blur(BlurEvent event) {
+//						((TextArea) event.getComponent()).setValue("Enter some description or URL pointing to the resource");
+//
+//					}
+//				});
+
+				this.getItemset().addItemProperty(output.getOutputIdentifier(),
+						new ObjectProperty<String>("Enter some description or URL pointing to the resource"));
 				this.getBinder().bind(textArea, output.getOutputIdentifier());
 				fl.addComponent(textArea);
 				break;
@@ -363,7 +410,7 @@ public class HumanTaskForm extends VerticalLayout {
 			cont.getContainerProperty(i, "Service UUID").setValue(service.getUUID());
 
 			Button detailsField = new Button("select");
-			detailsField.setData(service.getUUID());
+			detailsField.setData(service);
 			detailsField.addClickListener(new SelectListener());
 			detailsField.addStyleName(BaseTheme.BUTTON_LINK);
 
@@ -443,6 +490,14 @@ public class HumanTaskForm extends VerticalLayout {
 
 	public void setUuid(TextField uuid) {
 		this.uuid = uuid;
+	}
+
+	public TextField getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(TextField serviceName) {
+		this.serviceName = serviceName;
 	}
 
 }
