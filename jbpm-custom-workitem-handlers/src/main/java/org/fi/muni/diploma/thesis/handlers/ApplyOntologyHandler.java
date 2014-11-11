@@ -40,8 +40,8 @@ public class ApplyOntologyHandler implements WorkItemHandler {
         }
 
         try {
-        	log.info("handler uuid:"+params.get("uuid"));
-            srampClient.classifyArtifact((String) params.get("uuid"),(String)params.get("value"));
+        	log.info("handler uuid:"+params.get("inUuid"));
+            srampClient.classifyArtifact((String) params.get("inUuid"),(String)params.get("inValue"));
         } catch (SrampClientException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -119,7 +119,7 @@ public class SRAMPClient {
         boolean alreadyExists = false;
         List<OntologySummary> ontologies = this.client.getOntologies();
         for (OntologySummary ontology : ontologies) {
-            if ("http://www.example.org/lifecycle.owl".equals(ontology.getBase())) {
+            if ("http://www.jboss.org/overlord/service-lifecycle.owl".equals(ontology.getBase())) {
                 alreadyExists = true;
                 break;
             }
