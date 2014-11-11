@@ -62,8 +62,7 @@ public class TaskListView extends VerticalLayout implements View {
 		public void buttonClick(ClickEvent event) {
 
 			logger.info("button click, redirecting to Task Details page");
-			TaskListView.this.navigator.navigateTo("main" + "/" + menuitem + "?id="
-					+ String.valueOf((Long) event.getButton().getData()));
+			TaskListView.this.navigator.navigateTo("main" + "/" + menuitem + "?id=" + String.valueOf((Long) event.getButton().getData()));
 
 		}
 
@@ -77,7 +76,6 @@ public class TaskListView extends VerticalLayout implements View {
 
 		List<TaskSummary> taskList = taskService.getTasksAssignedAsPotentialOwner("anton", "en-UK");
 
-		
 		VerticalLayout layout = new VerticalLayout();
 		taskListTable = buildTaskListTable(taskList);
 		taskListTable.setPageLength(taskListTable.getContainerDataSource().size());
@@ -99,9 +97,9 @@ public class TaskListView extends VerticalLayout implements View {
 
 		layout.addComponent(greeting);
 		layout.addComponent(taskListTable);
-		
+
 		HorizontalLayout h = taskListTable.createControls(config);
-		
+
 		layout.addComponent(h);
 		layout.setComponentAlignment(h, Alignment.TOP_CENTER);
 		layout.setComponentAlignment(greeting, Alignment.TOP_CENTER);
@@ -139,46 +137,38 @@ public class TaskListView extends VerticalLayout implements View {
 		int i = 1;
 
 		for (TaskSummary taskSummary : taskList) {
-			
-			//dirty hack, bug in kie-wb creates "dead" process instance with id 1, and starts the task, with id 1..
+
+			// dirty hack, bug in kie-wb creates "dead" process instance with id 1, and starts the task, with id 1..
 			// it's not possible to work on this task, so we are excluding it
 			if (taskSummary.getId() == 1 && taskSummary.getStatus().name().equals("InProgress")) {
-			//	logger.info("podmienka true");
+				// logger.info("podmienka true");
 				continue;
 			}
 
 			cont.addItem(i);
 
-		//	logger.info(String.valueOf("dafuq task id:"+taskSummary.getId()));
-		//	logger.info(String.valueOf("dafuq process id:"+taskSummary.getProcessInstanceId()));
+			// logger.info(String.valueOf("dafuq task id:"+taskSummary.getId()));
+			// logger.info(String.valueOf("dafuq process id:"+taskSummary.getProcessInstanceId()));
 			logger.info(taskSummary.getStatus().name());
-			
+
 			cont.getContainerProperty(i, "Task Name").setValue(taskSummary.getName());
 			cont.getContainerProperty(i, "Task ID").setValue(taskSummary.getId());
-			cont.getContainerProperty(i, "Process Instance ID").setValue(taskSummary.getProcessInstanceId());
 
 			JaxbProcessInstanceLog p = (JaxbProcessInstanceLog) RuntimeEngineWrapper.getEngine().getAuditLogService()
 					.findProcessInstance(taskSummary.getProcessInstanceId());
 
-			cont.getContainerProperty(i, "Process Name").setValue(p.getProcessName());
-			
-			
-		//	cont.getContainerProperty(i, "Role Assigned").setValue("");
+			if (p.getParentProcessInstanceId() == null) {
 
-//			
-//			Map<String,Object> taskContent = RuntimeEngineWrapper.getEngine().getTaskService().getTaskContent(taskSummary.getId());
-//			logger.info("content size:"+String.valueOf(taskContent.size()));
-//			
-//			for (Map.Entry<String, Object> entry : taskContent.entrySet()) {
-//			    String key = entry.getKey();
-//			    Object value = entry.getValue();
-//			    logger.info("key:"+key);
-//			    logger.info("value:"+(String) value);
-//			   
-//			}
-			
-			cont.getContainerProperty(i, "Role Assigned").setValue(
-					(String) taskService.getTaskContent(taskSummary.getId()).get("group"));
+				cont.getContainerProperty(i, "Process Instance ID").setValue(taskSummary.getProcessInstanceId());
+				cont.getContainerProperty(i, "Process Name").setValue(p.getProcessName());
+			} else {
+
+				cont.getContainerProperty(i, "Process Instance ID").setValue(p.getParentProcessInstanceId());
+				cont.getContainerProperty(i, "Process Name").setValue(
+						RuntimeEngineWrapper.getEngine().getAuditLogService().findProcessInstance(p.getParentProcessInstanceId()).getProcessName());
+			}
+
+			cont.getContainerProperty(i, "Role Assigned").setValue((String) taskService.getTaskContent(taskSummary.getId()).get("group"));
 
 			Button detailsField = new Button("Work on Task");
 			detailsField.setData(taskSummary.getId());
@@ -187,7 +177,7 @@ public class TaskListView extends VerticalLayout implements View {
 
 			cont.getContainerProperty(i, "Action").setValue(detailsField);
 
-		i++;
+			i++;
 		}
 
 		return cont;
