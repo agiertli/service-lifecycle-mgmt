@@ -236,7 +236,9 @@ public class HumanTaskForm extends VerticalLayout {
 				CheckBox checkbox = new CheckBox();
 				checkbox.setCaption(output.getLabel());
 				checkbox.setRequired(true);
-				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<String>(""));
+			//	checkbox.setValue(true);
+		
+				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<Boolean>(false));
 				this.getBinder().bind(checkbox, output.getOutputIdentifier());
 				fl.addComponent(checkbox);
 				break;
