@@ -91,7 +91,7 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		FilterTable filterTable = new FilterTable("");
 		// filterTable.setSizeUndefined();
 		filterTable.setContainerDataSource(buildContainerForVariablesTable(varLog));
-		filterTable.setFilterBarVisible(false);
+		filterTable.setFilterBarVisible(true);
 
 		return filterTable;
 	}
@@ -138,7 +138,7 @@ public class ProcessDetailView extends VerticalLayout implements View {
 
 		for (JaxbVariableInstanceLog var : varLog) {
 
-			if (var.getVariableId().equals("ServiceState")) {
+			if (var.getVariableId().equals("ServiceState") || var.getVariableId().equals("taskGroup")) {
 
 				continue;
 			}
