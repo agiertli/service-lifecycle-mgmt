@@ -46,12 +46,12 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		VerticalLayout layout = new VerticalLayout();
 
 		// Get process metadata
-		JaxbProcessInstanceLog selectedProcess = (JaxbProcessInstanceLog) RuntimeEngineWrapper.getEngine()
-				.getAuditLogService().findProcessInstance(processId);
+		JaxbProcessInstanceLog selectedProcess = (JaxbProcessInstanceLog) RuntimeEngineWrapper.getEngine().getAuditLogService()
+				.findProcessInstance(processId);
 
 		// Get Process Variables
-		List<JaxbVariableInstanceLog> varLog = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine()
-				.getAuditLogService().findVariableInstances(processId);
+		List<JaxbVariableInstanceLog> varLog = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
+				.findVariableInstances(processId);
 
 		// Build process details table
 		processDetailsTable = buildProcessDetailsTable(selectedProcess);
@@ -105,8 +105,14 @@ public class ProcessDetailView extends VerticalLayout implements View {
 	@SuppressWarnings("unchecked")
 	private Container buildContainerForVariablesTable(List<JaxbVariableInstanceLog> varLog) {
 
+		// get specificaly process states from the sub process
+		List<JaxbVariableInstanceLog> processStates = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
+				.findVariableInstancesByName("ServiceState_sub", false);
+
 		IndexedContainer cont = new IndexedContainer();
 		int counter = 1;
+
+		int stateindex = 0;
 
 		cont.addContainerProperty("Variable Name", String.class, null);
 		cont.addContainerProperty("Variable Value", String.class, null);
@@ -119,6 +125,31 @@ public class ProcessDetailView extends VerticalLayout implements View {
 				continue;
 
 			} else {
+
+				// we only want to preserve the latest ServiceState value
+				if (var.getVariableId().equals("ServiceState") && stateindex != 0) {
+
+					for (JaxbVariableInstanceLog subState : processStates) {
+						if (subState.getExternalId().equals(var.getExternalId())) {
+
+							cont.getContainerProperty(stateindex, "Variable Value").setValue(subState.getValue());
+						}
+
+						else {
+
+							cont.getContainerProperty(stateindex, "Variable Value").setValue(var.getValue());
+						}
+						counter++;
+						continue;
+
+					}
+				}
+
+				if (var.getVariableId().equals("ServiceState") && stateindex == 0) {
+
+					stateindex = counter;
+
+				}
 
 				cont.addItem(counter);
 
@@ -159,8 +190,7 @@ public class ProcessDetailView extends VerticalLayout implements View {
 
 		cont.getContainerProperty(1, "Process Name").setValue(selectedProcess.getProcessName());
 		cont.getContainerProperty(1, "Process ID").setValue(selectedProcess.getProcessInstanceId());
-		cont.getContainerProperty(1, "Process State").setValue(
-				ProcessStateMap.getProcessStatusAsEnum(selectedProcess.getStatus()));
+		cont.getContainerProperty(1, "Process State").setValue(ProcessStateMap.getProcessStatusAsEnum(selectedProcess.getStatus()));
 		cont.getContainerProperty(1, "Start Date").setValue(selectedProcess.getStart());
 		cont.getContainerProperty(1, "End Date").setValue(selectedProcess.getEnd());
 
