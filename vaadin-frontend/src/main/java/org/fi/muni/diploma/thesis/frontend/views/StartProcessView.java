@@ -54,12 +54,24 @@ public class StartProcessView extends VerticalLayout implements View {
 		@SuppressWarnings("static-access")
 		@Override
 		public void buttonClick(ClickEvent event) {
+			
+			String processid = "";
 
 			if (menuitem.equals("newservice")) {
+				processid = runtimeEngine.getProperties().getProcessIdNewService(); 
+			}
+				else if (menuitem.equals("existingservice")) {
+					
+					processid = runtimeEngine.getProperties().getProcessIdExistingService();
+				}
+				else {
+					
+					return; //don't do nothing if user hacks the url with the improper id
+				}
 
-				// hard-coded value for Service Lifecycle - New Service
+				// Start the service lifecycle instance
 				ProcessInstance processInstance = runtimeEngine.getEngine().getKieSession()
-						.startProcess(runtimeEngine.getProperties().getProcessIdNewService());
+						.startProcess(processid);
 				Notification notif = new Notification("New Lifecycle with id '" + processInstance.getId()
 						+ "'  successfully started", Type.HUMANIZED_MESSAGE);
 
@@ -72,12 +84,9 @@ public class StartProcessView extends VerticalLayout implements View {
 				notif.show(Page.getCurrent());
 
 				return;
-			} else {
-
-				StartProcessView.this.navigator.navigateTo("main" + "/" + menuitem);
-			}
+			} 
 		}
-	}
+	
 
 	public StartProcessView(Navigator navigator) {
 
@@ -93,7 +102,7 @@ public class StartProcessView extends VerticalLayout implements View {
 		Button newServiceButton = new Button("Start Service Lifecycle - for a new service", new ButtonListener(
 				"newservice"));
 		Button existingServiceButton = new Button("Start Service Lifecycle - for existing service", new ButtonListener(
-				StartProcessExistingServiceView.NAME));
+				"existingservice"));
 
 		Label gap = new Label("");
 		gap.setHeight("200px");
