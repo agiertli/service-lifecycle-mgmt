@@ -114,17 +114,19 @@ public class ProcessDetailView extends VerticalLayout implements View {
 
 		}
 
-		JaxbVariableInstanceLog finalStateHolder = new JaxbVariableInstanceLog();
-		finalStateHolder = filterSubProcessStates.get(0);
+		JaxbVariableInstanceLog finalStateHolder = null;
+		if (!filterSubProcessStates.isEmpty()) {
+			finalStateHolder = filterSubProcessStates.get(0);
 
-		// only save the LAST instance
-		for (JaxbVariableInstanceLog finalState : filterSubProcessStates) {
+			// only save the LAST instance
+			for (JaxbVariableInstanceLog finalState : filterSubProcessStates) {
 
-			if (finalState.getDate().after(finalStateHolder.getDate())) {
+				if (finalState.getDate().after(finalStateHolder.getDate())) {
 
-				finalStateHolder = finalState;
+					finalStateHolder = finalState;
+				}
+
 			}
-
 		}
 
 		List<JaxbVariableInstanceLog> mainProcessStates = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
@@ -151,15 +153,18 @@ public class ProcessDetailView extends VerticalLayout implements View {
 			counter++;
 		}
 
-		cont.addItem(counter);
-		cont.getContainerProperty(counter, "Variable Name").setValue("Service state");
-		if (filterSubProcessStates.size() > 0) {
 
+		if (filterSubProcessStates.size() > 0 && finalStateHolder != null) {
+			cont.addItem(counter);
+			cont.getContainerProperty(counter, "Variable Name").setValue("Service state");
 			cont.getContainerProperty(counter, "Variable Value").setValue(finalStateHolder.getValue());
 
 		} else {
-
-			cont.getContainerProperty(counter, "Variable Value").setValue(mainProcessStates.get(mainProcessStates.size() - 1).getValue());
+			if (mainProcessStates.size() > 0) {
+				cont.addItem(counter);
+				cont.getContainerProperty(counter, "Variable Name").setValue("Service state");	
+				cont.getContainerProperty(counter, "Variable Value").setValue(mainProcessStates.get(mainProcessStates.size() - 1).getValue());
+			}
 
 		}
 
