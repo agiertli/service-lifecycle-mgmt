@@ -29,6 +29,12 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+		
+		<repository>
+			<id>jboss community repository</id>
+			<url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+		</repository>
+		
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -73,6 +79,28 @@
 	
 	
 	<dependencies>
+	
+	<!-- apache code -->
+	<dependency>
+	<groupId>commons-codec</groupId>
+	<artifactId>commons-codec</artifactId>
+	<version>1.9</version>
+</dependency>
+	
+	<!-- rtgov data model  -->
+	<dependency>
+	<groupId>org.overlord.rtgov.activity-management</groupId>
+<artifactId>activity</artifactId> 
+	<version>2.0.0.Final</version>
+</dependency>
+
+<!-- switchyard http mixin - only for testing purposes -->
+  <dependency>
+            <groupId>org.switchyard.components</groupId>
+            <artifactId>switchyard-component-test-mixin-http</artifactId>
+                <version>2.0.0.Alpha3</version>
+            <scope>test</scope>
+        </dependency>
 		
 		
 		<!-- jbpm/kie/drools dependencies -->
