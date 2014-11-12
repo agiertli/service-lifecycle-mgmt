@@ -14,13 +14,13 @@ import org.overlord.rtgov.activity.model.soa.RequestReceived;
 public class RTGovClient {
 	private final static Logger logger = Logger.getLogger(RTGovClient.class.getName());
 
+	private RTGovProperties properties;
 
-	public RTGovClient() {
+	public RTGovClient(RTGovProperties properties) {
+		this.properties = properties;
 	}
 
 	public List<Notification> getRetiredInvocation(RetiredService service) throws IOException {
-
-		RTGovProperties properties = new RTGovProperties();
 
 		// we are looking for invocation from the time when the service has been marked as retired until now
 		String queryString = "/activity/events/?from=" + service.getRetirementTimestamp() + "&to=" + System.currentTimeMillis();
@@ -44,23 +44,23 @@ public class RTGovClient {
 		});
 
 		is.close();
-		
+
 		List<Notification> result = new ArrayList<Notification>();
-		
-		for (ActivityType activity: activities) {
-			
-			//we are interested only in RequestReceived type
+
+		for (ActivityType activity : activities) {
+
+			// we are interested only in RequestReceived type
 			if (activity instanceof RequestReceived) {
-				
+
 				RequestReceived request = (RequestReceived) activity;
-				String requestServiceName = request.getServiceType().substring(request.getServiceType().lastIndexOf("}")+1);
-				logger.info("processed request service name:"+requestServiceName);
-				
-				//is the service invoked the one which has already been retired?
+				String requestServiceName = request.getServiceType().substring(request.getServiceType().lastIndexOf("}") + 1);
+				logger.info("processed request service name:" + requestServiceName);
+
+				// is the service invoked the one which has already been retired?
 				if (requestServiceName.equals(service.getName())) {
-					//put some necessary data
-					result.add(new Notification(service,request.getTimestamp(),request.getInterface(), request.getOperation()));
-					
+					// put some necessary data
+					result.add(new Notification(service, request.getTimestamp(), request.getInterface(), request.getOperation()));
+
 				}
 			}
 		}

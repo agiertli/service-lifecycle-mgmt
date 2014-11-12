@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.fi.muni.diploma.thesis.utils.RuntimeEngineWrapper;
+import org.fi.muni.diploma.thesis.utils.properties.RTGovProperties;
 import org.fi.muni.diploma.thesis.utils.rtgov.Notification;
 import org.fi.muni.diploma.thesis.utils.rtgov.RTGovClient;
 import org.fi.muni.diploma.thesis.utils.rtgov.RetiredService;
@@ -56,7 +57,7 @@ public class NotificationView extends VerticalLayout implements View {
 			
 			
 			List<Notification> notifications = new ArrayList<Notification>();
-			RTGovClient client = new RTGovClient();
+			RTGovClient client = new RTGovClient(new RTGovProperties());
 			
 			for (RetiredService service: retiredServices) {
 				
