@@ -87,12 +87,14 @@ public class HumanTaskForm extends VerticalLayout {
 
 			Service service = (Service) event.getButton().getData();
 			//copy the selected values to the input fields below /we have to remove readonly restriction first, once done, put it back
-			HumanTaskForm.this.getUuid().setReadOnly(false);
+			HumanTaskForm.this.getUuid().setEnabled(true);
 			HumanTaskForm.this.getUuid().setValue(service.getUUID());
-			HumanTaskForm.this.getServiceName().setReadOnly(false);
+			
+			HumanTaskForm.this.getServiceName().setEnabled(true);
 			HumanTaskForm.this.getServiceName().setValue(service.getName());
-			HumanTaskForm.this.getUuid().setReadOnly(true);
-			HumanTaskForm.this.getServiceName().setReadOnly(true);
+			
+			HumanTaskForm.this.getUuid().setEnabled(false);
+			HumanTaskForm.this.getServiceName().setEnabled(false);
 
 		}
 
@@ -311,7 +313,7 @@ public class HumanTaskForm extends VerticalLayout {
 
 				// we need to save the outputs of select service task explicitly due to "SELECT" functionality
 				if (this.humanTask.getName().equals(HumanTaskName.SELECT_SERVICE_FROM_SRAMP.toString())) {
-					stringField.setReadOnly(true); //user can't edit this
+					stringField.setEnabled(false); //user can't edit this
 
 					if (output.getOutputIdentifier().toLowerCase().contains("uuid")) {
 						this.setUuid(stringField);
