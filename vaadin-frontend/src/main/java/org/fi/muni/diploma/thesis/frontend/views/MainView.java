@@ -1,5 +1,6 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import com.vaadin.navigator.Navigator;
@@ -144,7 +145,7 @@ public class MainView extends VerticalLayout implements View {
 		else if (event.getParameters().equalsIgnoreCase(ProcessListView.NAME)) {
 
 			panelContent.addComponent(new ProcessListView(this.getNavigator()));
-			return ;
+			return;
 
 		}
 
@@ -157,16 +158,15 @@ public class MainView extends VerticalLayout implements View {
 			// Redirect to Notification Action view
 		} else if (event.getParameters().equalsIgnoreCase("notificationactions")) {
 
-			// panelContent.addComponent(new TaskListView(this.getNavigator()));
+			try {
+				panelContent.addComponent(new NotificationView(this.getNavigator()));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			// todo - add Notification Actions view
 			return;
 
-		}
-
-		// Redirect to Start Lifecycle - Existing Service view
-		else if (event.getParameters().equalsIgnoreCase(StartProcessExistingServiceView.NAME)) {
-
-			panelContent.addComponent(new StartProcessExistingServiceView(this.getNavigator()));
 		}
 
 		// Redirect to Lifecycle Detail view
