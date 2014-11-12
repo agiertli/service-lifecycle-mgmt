@@ -8,6 +8,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
 import org.overlord.rtgov.activity.model.ActivityType;
+import org.overlord.rtgov.activity.model.soa.RequestReceived;
 import org.switchyard.component.test.mixins.http.HTTPMixIn;
 
 /**
@@ -55,6 +56,24 @@ public class RTGovIntegrationTest {
 
 		java.util.List<ActivityType> activities = mapper.readValue(is, new TypeReference<java.util.List<ActivityType>>() {
 		});
+		
+		
+		for (ActivityType activity : activities) {
+			
+		if (activity instanceof org.overlord.rtgov.activity.model.soa.RequestReceived) {
+			
+			RequestReceived request = (RequestReceived) activity;
+			
+			System.out.println("service type:"+request.getServiceType());
+			System.out.println("operation:"+request.getOperation());
+			System.out.println("interface:"+request.getInterface());
+			System.out.println("timestamp"+request.getTimestamp());
+			System.out.println("provider:"+request.isServiceProvider());
+		//	request.
+			
+		}
+		
+		}
 		is.close();
 		System.out.println(activities.size());
 		assertNotNull(activities);
