@@ -181,7 +181,7 @@
       <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" id="_HZLF_WdqEeSHT5ei1taazg" language="http://www.java.com/java"><![CDATA[return  KieFunctions.isTrue(p_sendemail);]]></bpmn2:conditionExpression>
     </bpmn2:sequenceFlow>
     <bpmn2:sequenceFlow id="_9D4DA289-FCCD-45C9-A057-CE697783E50E" drools:bgcolor="#000000" drools:selectable="true" sourceRef="_C09D8A54-1BE8-436D-B956-F66029C68BDF" targetRef="_7F223F8A-BE30-4400-8DB8-0C76AB68D736"/>
-    <bpmn2:userTask id="_17158248-2A9F-4277-B319-31C9A4622F51" drools:selectable="true" drools:scriptFormat="http://www.java.com/java" name="Select service from   S-RAMP">
+    <bpmn2:userTask id="_17158248-2A9F-4277-B319-31C9A4622F51" drools:selectable="true" drools:scriptFormat="http://www.java.com/java" name="Select service from S-RAMP">
       <bpmn2:extensionElements>
         <drools:onEntry-script scriptFormat="http://www.java.com/java">
           <drools:script><![CDATA[kcontext.setVariable("taskGroup","SOAGovernanceSpecialist");]]></drools:script>
@@ -469,6 +469,12 @@
         <bpmn2:sourceRef>hostname</bpmn2:sourceRef>
         <bpmn2:targetRef>_17A01AC1-64CB-4165-AEF8-3ED3F2FE75ED_sub_HostnameInputX</bpmn2:targetRef>
       </bpmn2:dataInputAssociation>
+      
+            <bpmn2:dataOutputAssociation id="_rgBpQGm_EeSPwvKPiPjEmg">
+        <bpmn2:sourceRef>_17A01AC1-64CB-4165-AEF8-3ED3F2FE75ED_sub_ServiceListOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>srampServiceList</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
     </bpmn2:callActivity>
     <bpmn2:exclusiveGateway id="_10EE1DDE-7047-402F-BE75-8CCD7C1BB657" drools:bgcolor="#f0e68c" drools:selectable="true" drools:bordercolor="#a67f00" drools:dg="" name="Tests OK?" gatewayDirection="Diverging">
       <bpmn2:incoming>_FAF31FBC-18EF-445D-BD04-C597A3D4FEE5</bpmn2:incoming>

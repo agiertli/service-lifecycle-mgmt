@@ -59,8 +59,7 @@ public class ProcessListView extends VerticalLayout implements View {
 		public void buttonClick(ClickEvent event) {
 
 			logger.info("button click, redirecting to Process Details page");
-			ProcessListView.this.navigator.navigateTo("main" + "/" + menuitem + "?id="
-					+ String.valueOf((Long) event.getButton().getData()));
+			ProcessListView.this.navigator.navigateTo("main" + "/" + menuitem + "?id=" + String.valueOf((Long) event.getButton().getData()));
 
 		}
 
@@ -74,12 +73,12 @@ public class ProcessListView extends VerticalLayout implements View {
 		// auditService = new AuditServiceWrapper();
 
 		// find all lifecycles for 'new service'
-		List<JaxbProcessInstanceLog> processLogNewService = (List<JaxbProcessInstanceLog>) RuntimeEngineWrapper
-				.getEngine().getAuditLogService().findProcessInstances("service-lifecycle-new-service");
+		List<JaxbProcessInstanceLog> processLogNewService = (List<JaxbProcessInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
+				.findProcessInstances("service-lifecycle-new-service");
 
 		// find all lifecycles for 'existing service'
-		List<JaxbProcessInstanceLog> processLogExistingService = (List<JaxbProcessInstanceLog>) RuntimeEngineWrapper
-				.getEngine().getAuditLogService().findProcessInstances("service-lifecycle-existing-service");
+		List<JaxbProcessInstanceLog> processLogExistingService = (List<JaxbProcessInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
+				.findProcessInstances("service-lifecycle-existing-service");
 
 		// all lifecycle instances
 		List<JaxbProcessInstanceLog> allProcesses = new ArrayList<JaxbProcessInstanceLog>();
@@ -139,6 +138,7 @@ public class ProcessListView extends VerticalLayout implements View {
 		cont.addContainerProperty("Process Name", String.class, null);
 		cont.addContainerProperty("Process Instance ID", Long.class, null);
 		cont.addContainerProperty("Process State", ProcessStateMap.States.class, null);
+
 		cont.addContainerProperty("Start Date", Date.class, null);
 		cont.addContainerProperty("End Date", Date.class, null);
 		cont.addContainerProperty("Details", Button.class, null);
@@ -150,8 +150,7 @@ public class ProcessListView extends VerticalLayout implements View {
 
 			cont.getContainerProperty(i, "Process Name").setValue(process.getProcessName());
 			cont.getContainerProperty(i, "Process Instance ID").setValue(process.getProcessInstanceId());
-			cont.getContainerProperty(i, "Process State").setValue(
-					ProcessStateMap.getProcessStatusAsEnum(process.getStatus()));
+			cont.getContainerProperty(i, "Process State").setValue(ProcessStateMap.getProcessStatusAsEnum(process.getStatus()));
 			cont.getContainerProperty(i, "Start Date").setValue(process.getStart());
 			cont.getContainerProperty(i, "End Date").setValue(process.getEnd());
 
