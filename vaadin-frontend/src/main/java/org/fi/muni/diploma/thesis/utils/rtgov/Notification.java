@@ -6,8 +6,7 @@ public class Notification {
 	private long invocationTimestamp;
 	private String interfaceName;
 	private String operation;
-	
-	private boolean processed;
+
 	
 	
 	public Notification(){}
@@ -48,11 +47,6 @@ public class Notification {
 		return "Notification [service=" + service + ", invocationTimestamp=" + invocationTimestamp + ", interfaceName=" + interfaceName
 				+ ", operation=" + operation + "]";
 	}
-	public boolean isProcessed() {
-		return processed;
-	}
-	public void setProcessed(boolean processed) {
-		this.processed = processed;
-	}
+
 
 }

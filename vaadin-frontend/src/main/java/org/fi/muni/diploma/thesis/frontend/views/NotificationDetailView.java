@@ -1,5 +1,7 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,10 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.fi.muni.diploma.thesis.frontend.views.humantaskform.HumanTaskForm.ButtonListener;
+import javax.naming.NamingException;
+
+import org.fi.muni.diploma.thesis.utils.DatabaseUtil;
 import org.fi.muni.diploma.thesis.utils.RuntimeEngineWrapper;
 import org.fi.muni.diploma.thesis.utils.rtgov.Notification;
-import org.kie.api.runtime.process.ProcessInstance;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -26,7 +29,6 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
@@ -197,36 +199,43 @@ public class NotificationDetailView extends VerticalLayout implements View {
 			Notification notification = (Notification) event.getButton().getData();
 
 			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("p_send", send);
+			if (send == null) {
 
-			if (send) {
-				for (Component c : NotificationDetailView.this.getFormComponents()) {
+				params.put("p_send", false);
+			} else {
+				params.put("p_send", send);
+			}
 
-					// only one text area and that's body
-					if (c instanceof TextArea) {
+			if (send != null) {
+				if (send) {
+					for (Component c : NotificationDetailView.this.getFormComponents()) {
 
-						logger.info("body:" + ((TextArea) c).getValue());
-						params.put("p_body", ((TextArea) c).getValue());
-					}
+						// only one text area and that's body
+						if (c instanceof TextArea) {
 
-					// process remaining text fields
-					else if (c instanceof TextField) {
-
-						if (c.getCaption().toLowerCase().contains("to")) {
-
-							logger.info("to:" + ((TextField) c).getValue());
-							params.put("p_to", ((TextField) c).getValue());
-						} else if (c.getCaption().toLowerCase().contains("subject")) {
-
-							logger.info("subject:" + ((TextField) c).getValue());
-							params.put("p_subject", ((TextField) c).getValue());
-						} else if (c.getCaption().toLowerCase().contains("from")) {
-
-							logger.info("from:" + ((TextField) c).getValue());
-							params.put("p_from", ((TextField) c).getValue());
+							logger.info("body:" + ((TextArea) c).getValue());
+							params.put("p_body", ((TextArea) c).getValue());
 						}
-					}
 
+						// process remaining text fields
+						else if (c instanceof TextField) {
+
+							if (c.getCaption().toLowerCase().contains("to")) {
+
+								logger.info("to:" + ((TextField) c).getValue());
+								params.put("p_to", ((TextField) c).getValue());
+							} else if (c.getCaption().toLowerCase().contains("subject")) {
+
+								logger.info("subject:" + ((TextField) c).getValue());
+								params.put("p_subject", ((TextField) c).getValue());
+							} else if (c.getCaption().toLowerCase().contains("from")) {
+
+								logger.info("from:" + ((TextField) c).getValue());
+								params.put("p_from", ((TextField) c).getValue());
+							}
+						}
+
+					}
 				}
 			}
 
@@ -240,10 +249,23 @@ public class NotificationDetailView extends VerticalLayout implements View {
 			notif.setDelayMsec(2500);
 			notif.setPosition(Position.MIDDLE_CENTER);
 
+	
+
+			// so many things can go wrong :(
+			// insert processed record into the database
+			try {
+				DatabaseUtil dbUtil = new DatabaseUtil();
+				dbUtil.insertProcessedNotification(notification.getInvocationTimestamp());
+				dbUtil.close();
+			} catch (IOException | NamingException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			// Show it in the page
 			NotificationDetailView.this.navigator.navigateTo("main" + "/" + menuitem);
 			notif.show(Page.getCurrent());
-
+			
 		}
 
 	}

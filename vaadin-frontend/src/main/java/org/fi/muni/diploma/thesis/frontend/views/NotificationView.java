@@ -1,10 +1,13 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
+
+import javax.naming.NamingException;
 
 import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterDecorator;
 import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterGenerator;
@@ -40,7 +43,7 @@ public class NotificationView extends VerticalLayout implements View {
 
 	private Notification currentNotification;
 
-	public NotificationView(Navigator navigator) throws IOException {
+	public NotificationView(Navigator navigator) throws IOException, NamingException, SQLException {
 
 		this.navigator = navigator;
 
@@ -103,7 +106,6 @@ public class NotificationView extends VerticalLayout implements View {
 		cont.addContainerProperty("Invocation Date", Date.class, null);
 		cont.addContainerProperty("Interface", String.class, null);
 		cont.addContainerProperty("Operation", String.class, null);
-		cont.addContainerProperty("Notification Sent", Boolean.class, false);
 		cont.addContainerProperty("Action", Button.class, null);
 
 		int i = 1;
@@ -116,7 +118,6 @@ public class NotificationView extends VerticalLayout implements View {
 			cont.getContainerProperty(i, "Invocation Date").setValue(new Date(notification.getInvocationTimestamp()));
 			cont.getContainerProperty(i, "Interface").setValue(notification.getInterfaceName());
 			cont.getContainerProperty(i, "Operation").setValue(notification.getOperation());
-			cont.getContainerProperty(i, "Notification Sent").setValue(notification.isProcessed());
 
 			Button detailsField = new Button("send notification");
 			detailsField.setData(notification);
@@ -172,7 +173,7 @@ public class NotificationView extends VerticalLayout implements View {
 
 	}
 
-	public List<Notification> getNotifications() throws IOException {
+	public List<Notification> getNotifications() throws IOException, NamingException, SQLException {
 
 		List<RetiredService> retiredServices = new ArrayList<RetiredService>();
 		List<Notification> notifications = new ArrayList<Notification>();

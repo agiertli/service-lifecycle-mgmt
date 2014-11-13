@@ -1,12 +1,17 @@
 package org.fi.muni.diploma.thesis.utils.rtgov;
 
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.naming.NamingException;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.fi.muni.diploma.thesis.utils.DatabaseUtil;
 import org.fi.muni.diploma.thesis.utils.properties.RTGovProperties;
 import org.overlord.rtgov.activity.model.ActivityType;
 import org.overlord.rtgov.activity.model.soa.RequestReceived;
@@ -20,7 +25,9 @@ public class RTGovClient {
 		this.properties = properties;
 	}
 
-	public List<Notification> getRetiredInvocation(RetiredService service) throws IOException {
+	public List<Notification> getRetiredInvocation(RetiredService service) throws IOException, NamingException, SQLException {
+
+		DatabaseUtil dbUtil;
 
 		// we are looking for invocation from the time when the service has been marked as retired until now
 		String queryString = "/activity/events/?from=" + service.getRetirementTimestamp() + "&to=" + System.currentTimeMillis();
@@ -47,6 +54,8 @@ public class RTGovClient {
 
 		List<Notification> result = new ArrayList<Notification>();
 
+		dbUtil = new DatabaseUtil();
+
 		for (ActivityType activity : activities) {
 
 			// we are interested only in RequestReceived type
@@ -59,11 +68,19 @@ public class RTGovClient {
 				// is the service invoked the one which has already been retired?
 				if (requestServiceName.equals(service.getName())) {
 					// put some necessary data
-					result.add(new Notification(service, request.getTimestamp(), request.getInterface(), request.getOperation()));
 
+					ResultSet resultSet = null; //clear the previous result
+					resultSet = dbUtil.findNotificationById(request.getTimestamp());
+
+					// if invocation with this timestamp haven't already been processed, we can add it to the result
+					if (!resultSet.isBeforeFirst())
+						result.add(new Notification(service, request.getTimestamp(), request.getInterface(), request.getOperation()));
 				}
+
 			}
 		}
+
+		dbUtil.close();// never forget to close db connection..I guess..
 
 		return result;
 	}
