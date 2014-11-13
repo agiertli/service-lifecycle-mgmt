@@ -3,9 +3,11 @@ package org.fi.muni.diploma.thesis.utils;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import org.fi.muni.diploma.thesis.utils.properties.JBPMProperties;
 import org.kie.api.runtime.KieSession;
 import org.kie.services.client.api.RemoteRestRuntimeEngineFactory;
 import org.kie.services.client.api.command.RemoteRuntimeEngine;
+
 
 /**
  * Wrapper of RemoteRuntimeEngine which gives us access to all important services such as
