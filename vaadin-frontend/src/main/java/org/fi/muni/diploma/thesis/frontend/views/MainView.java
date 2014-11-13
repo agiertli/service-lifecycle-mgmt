@@ -3,6 +3,9 @@ package org.fi.muni.diploma.thesis.frontend.views;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import org.fi.muni.diploma.thesis.utils.rtgov.Notification;
+import org.fi.muni.diploma.thesis.utils.rtgov.RetiredService;
+
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -156,7 +159,7 @@ public class MainView extends VerticalLayout implements View {
 			return;
 
 			// Redirect to Notification Action view
-		} else if (event.getParameters().equalsIgnoreCase("notificationactions")) {
+		} else if (event.getParameters().equalsIgnoreCase(NotificationView.NAME)) {
 
 			try {
 				panelContent.addComponent(new NotificationView(this.getNavigator()));
@@ -185,6 +188,55 @@ public class MainView extends VerticalLayout implements View {
 			Long taskId = Long.valueOf(event.getParameters().substring(event.getParameters().indexOf("id=") + 3));
 
 			panelContent.addComponent(new TaskDetailView(taskId, this.getNavigator()));
+
+		}
+
+		// Redirect to Notification Detail View
+		else if (event.getParameters().contains(NotificationDetailView.NAME.toLowerCase())) {
+
+			logger.info("maini view, url params:" + event.getParameters());
+
+			String cropped = event.getParameters().substring(event.getParameters().indexOf("?") + 1);
+			String[] params = cropped.split("&");
+
+			Notification notification = new Notification();
+			RetiredService service = new RetiredService();
+
+			// assemble the params into POJOs
+			for (String p : params) {
+
+				// System.out.println(p);
+
+				String[] pair = p.split("=");
+
+				if (pair[0].equals("serviceName")) {
+
+					service.setName(pair[1]);
+
+				} else if (pair[0].equals("retirementDate")) {
+
+					service.setRetirementTimestamp(Long.valueOf(pair[1]));
+
+				}
+
+				else if (pair[0].equals("interfaceName")) {
+
+					notification.setInterfaceName(pair[1]);
+				} else if (pair[0].equals("invocationTime")) {
+
+					notification.setInvocationTimestamp(Long.valueOf(pair[1]));
+				}
+
+				else if (pair[0].equals("operation")) {
+
+					notification.setOperation(pair[1]);
+				}
+
+			}
+
+			notification.setService(service);
+
+			panelContent.addComponent(new NotificationDetailView(this.getNavigator(), notification));
 
 		}
 

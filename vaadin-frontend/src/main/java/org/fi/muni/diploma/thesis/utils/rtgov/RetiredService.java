@@ -5,6 +5,8 @@ public class RetiredService {
 	public String name;
 	public long retirementTimestamp;
 	
+	public RetiredService(){}
+	
 	public RetiredService(String name, long retirementTimestamp) {
 		
 		this.name = name;

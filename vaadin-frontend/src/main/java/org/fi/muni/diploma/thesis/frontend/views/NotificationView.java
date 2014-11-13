@@ -2,84 +2,211 @@ package org.fi.muni.diploma.thesis.frontend.views;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterDecorator;
+import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterGenerator;
 import org.fi.muni.diploma.thesis.utils.RuntimeEngineWrapper;
 import org.fi.muni.diploma.thesis.utils.properties.RTGovProperties;
 import org.fi.muni.diploma.thesis.utils.rtgov.Notification;
 import org.fi.muni.diploma.thesis.utils.rtgov.RTGovClient;
 import org.fi.muni.diploma.thesis.utils.rtgov.RetiredService;
 import org.kie.services.client.serialization.jaxb.impl.audit.JaxbVariableInstanceLog;
+import org.tepi.filtertable.paged.PagedFilterControlConfig;
+import org.tepi.filtertable.paged.PagedFilterTable;
 
+import com.vaadin.data.Container;
+import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.BaseTheme;
 
 public class NotificationView extends VerticalLayout implements View {
 
 	private static final long serialVersionUID = 1L;
 	private Navigator navigator;
 	private final static Logger logger = Logger.getLogger(NotificationView.class.getName());
+	private PagedFilterTable<?> filterTable;
+	public static final String NAME = "notificationactions";
 
+	private Notification currentNotification;
 
-	@SuppressWarnings("unused")
 	public NotificationView(Navigator navigator) throws IOException {
 
 		this.navigator = navigator;
 
-		List<RetiredService> retiredServices = new ArrayList<RetiredService>();
+		VerticalLayout layout = new VerticalLayout();
+		List<Notification> notifications = this.getNotifications();
 
-		@SuppressWarnings("unchecked")
-		// let's look for all retired variables
-		List<JaxbVariableInstanceLog> varLog = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
-				.findVariableInstancesByNameAndValue("ServiceState_sub", "Retired", false);
-		
-		logger.info("number of retired servicestate_sub"+varLog.size());
-		
-	
-		//look for service names which is stored in the same sub process
-		for (JaxbVariableInstanceLog var: varLog) {
-			
-			logger.info("looping through following sub process instance:"+var.getProcessInstanceId());
-		
-			
-			@SuppressWarnings("unchecked")
-			List<JaxbVariableInstanceLog> serviceNames = (List<JaxbVariableInstanceLog>) 	RuntimeEngineWrapper
-					.getEngine()
-					.getAuditLogService()
-					.findVariableInstances(var.getProcessInstanceId(), "sub_servicename");
-			
-			if (!serviceNames.isEmpty()) {
-				//created retiredservice object - servicename and time of retiremend
-				retiredServices.add(new RetiredService(serviceNames.get(0).getValue(),var.getDate().getTime()));
-			
-			
-			List<Notification> notifications = new ArrayList<Notification>();
-			RTGovClient client = new RTGovClient(new RTGovProperties());
-			
-			for (RetiredService service: retiredServices) {
-				
+		Label greeting = new Label("List of retired service invocations");
+		greeting.setSizeUndefined();
+		greeting.setStyleName("h1");
+		layout.addComponent(greeting);
+		layout.setComponentAlignment(greeting, Alignment.TOP_CENTER);
 
-				notifications.addAll(client.getRetiredInvocation(service));
-			}
-			
-			if (!notifications.isEmpty()) {
-				
-				System.out.println("result of RTGov client:"+notifications.toString());
-			}		
-			}
+		if (!notifications.isEmpty()) {
+
+			filterTable = buildFilterTable(notifications);
+			filterTable.setPageLength(filterTable.getContainerDataSource().size());
+			layout.addComponent(filterTable);
+			layout.setComponentAlignment(greeting, Alignment.TOP_CENTER);
+			layout.setComponentAlignment(filterTable, Alignment.TOP_CENTER);
+
+			PagedFilterControlConfig config = new PagedFilterControlConfig();
+			config.setItemsPerPage("Invocations per page:");
+			List<Integer> lengths = new ArrayList<Integer>();
+			lengths.add(10);
+			lengths.add(20);
+			lengths.add(50);
+			lengths.add(100);
+			lengths.add(250);
+			lengths.add(500);
+			config.setPageLengthsAndCaptions(lengths);
+
+			layout.addComponent(filterTable.createControls(config));
 		}
 
+		addComponent(layout);
 
+	}
+
+	private PagedFilterTable<?> buildFilterTable(List<Notification> notifications) {
+
+		PagedFilterTable<IndexedContainer> filterTable = new PagedFilterTable<IndexedContainer>("");
+		// filterTable.setSizeFull();
+		filterTable.setFilterDecorator(new CustomFilterDecorator());
+		filterTable.setFilterGenerator(new CustomFilterGenerator());
+		filterTable.setContainerDataSource(buildContainer(notifications));
+		filterTable.setFilterBarVisible(true);
+		filterTable.setFilterFieldVisible("Action", false);
+		// filterTable.setFilterFieldValue("Process State", ProcessStateMap.States.ACTIVE);
+
+		return filterTable;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Container buildContainer(List<Notification> notifications) {
+
+		IndexedContainer cont = new IndexedContainer();
+
+		cont.addContainerProperty("Service Name", String.class, null);
+		cont.addContainerProperty("Retirement Date", Date.class, null);
+		cont.addContainerProperty("Invocation Date", Date.class, null);
+		cont.addContainerProperty("Interface", String.class, null);
+		cont.addContainerProperty("Operation", String.class, null);
+		cont.addContainerProperty("Notification Sent", Boolean.class, false);
+		cont.addContainerProperty("Action", Button.class, null);
+
+		int i = 1;
+
+		for (Notification notification : notifications) {
+			cont.addItem(i);
+
+			cont.getContainerProperty(i, "Service Name").setValue(notification.getService().getName());
+			cont.getContainerProperty(i, "Retirement Date").setValue(new Date(notification.getService().getRetirementTimestamp()));
+			cont.getContainerProperty(i, "Invocation Date").setValue(new Date(notification.getInvocationTimestamp()));
+			cont.getContainerProperty(i, "Interface").setValue(notification.getInterfaceName());
+			cont.getContainerProperty(i, "Operation").setValue(notification.getOperation());
+			cont.getContainerProperty(i, "Notification Sent").setValue(notification.isProcessed());
+
+			Button detailsField = new Button("send notification");
+			detailsField.setData(notification);
+			detailsField.addClickListener(new ButtonListener(NotificationDetailView.NAME));
+			detailsField.addStyleName(BaseTheme.BUTTON_LINK);
+
+			cont.getContainerProperty(i, "Action").setValue(detailsField);
+
+			i++;
+
+		}
+
+		return cont;
 
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
+		return;
+	}
 
+	class ButtonListener implements ClickListener {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		private String menuitem;
+
+		public ButtonListener(String menuitem) {
+
+			this.menuitem = menuitem;
+
+		}
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+
+			Notification n = (Notification) event.getButton().getData();
+
+			String serviceName = n.getService().getName();
+			long retirementDate = n.getService().getRetirementTimestamp();
+			String interfaceName = n.getInterfaceName();
+			long invocationTime = n.getInvocationTimestamp();
+			String operation = n.getOperation();
+
+			//essentially deserialize whole object as a parameter since we want to avoid any further db interaction
+			NotificationView.this.navigator.navigateTo("main" + "/" + menuitem + "?serviceName=" + serviceName + "&retirementDate=" + retirementDate
+					+ "&interfaceName=" + interfaceName + "&" + "invocationTime=" + invocationTime + "&operation=" + operation);
+
+		}
+
+	}
+
+	public List<Notification> getNotifications() throws IOException {
+
+		List<RetiredService> retiredServices = new ArrayList<RetiredService>();
+		List<Notification> notifications = new ArrayList<Notification>();
+
+		@SuppressWarnings("unchecked")
+		// let's look for all retired variables
+		List<JaxbVariableInstanceLog> varLog = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
+				.findVariableInstancesByNameAndValue("ServiceState_sub", "Retired", false);
+
+		logger.info("number of retired servicestate_sub" + varLog.size());
+
+		// look for service names which is stored in the same sub process
+		for (JaxbVariableInstanceLog var : varLog) {
+
+			logger.info("looping through following sub process instance:" + var.getProcessInstanceId());
+
+			@SuppressWarnings("unchecked")
+			List<JaxbVariableInstanceLog> serviceNames = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
+					.findVariableInstances(var.getProcessInstanceId(), "sub_servicename");
+
+			if (!serviceNames.isEmpty()) {
+				// created retiredservice object - servicename and time of retiremend
+				retiredServices.add(new RetiredService(serviceNames.get(0).getValue(), var.getDate().getTime()));
+
+				RTGovClient client = new RTGovClient(new RTGovProperties());
+
+				for (RetiredService service : retiredServices) {
+
+					notifications.addAll(client.getRetiredInvocation(service));
+				}
+
+			}
+		}
+		return notifications;
 	}
 
 	public Navigator getNavigator() {
@@ -88,6 +215,14 @@ public class NotificationView extends VerticalLayout implements View {
 
 	public void setNavigator(Navigator navigator) {
 		this.navigator = navigator;
+	}
+
+	public Notification getCurrentNotification() {
+		return currentNotification;
+	}
+
+	public void setCurrentNotification(Notification currentNotification) {
+		this.currentNotification = currentNotification;
 	}
 
 }

@@ -7,6 +7,11 @@ public class Notification {
 	private String interfaceName;
 	private String operation;
 	
+	private boolean processed;
+	
+	
+	public Notification(){}
+	
 	public Notification(RetiredService service, long invocationTimestamp, String interfaceName, String operation) {
 		super();
 		this.service = service;
@@ -42,6 +47,12 @@ public class Notification {
 	public String toString() {
 		return "Notification [service=" + service + ", invocationTimestamp=" + invocationTimestamp + ", interfaceName=" + interfaceName
 				+ ", operation=" + operation + "]";
+	}
+	public boolean isProcessed() {
+		return processed;
+	}
+	public void setProcessed(boolean processed) {
+		this.processed = processed;
 	}
 
 }
