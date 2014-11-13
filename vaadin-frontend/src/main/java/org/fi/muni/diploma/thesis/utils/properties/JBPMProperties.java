@@ -21,6 +21,7 @@ public class JBPMProperties {
 	private String deploymentId;
 	private String processIdNewService;
 	private String processIdExistingService;
+	private String processIdNotification;
 
 	public JBPMProperties() throws IOException {
 
@@ -38,6 +39,7 @@ public class JBPMProperties {
 		this.deploymentId = props.getProperty("jbpm.deploymentid");
 		this.processIdNewService = props.getProperty("jbpm.processid.newservice");
 		this.processIdExistingService = props.getProperty("jbpm.processid.existingservice");
+		this.processIdNotification = props.getProperty("jbpm.processid.notification");
 		
 		logger.info("username:"+this.getUsername());
 		logger.info("password:"+this.getPassword());
@@ -45,6 +47,7 @@ public class JBPMProperties {
 		logger.info("new service id:"+this.getProcessIdNewService());
 		logger.info("existing service id:"+this.getProcessIdExistingService());
 		logger.info("url:"+this.getUrl().toString());
+		logger.info("notificatino id:"+this.getProcessIdNotification());
 
 	}
 
@@ -94,6 +97,14 @@ public class JBPMProperties {
 
 	public void setProcessIdExistingService(String processIdExistingService) {
 		this.processIdExistingService = processIdExistingService;
+	}
+
+	public String getProcessIdNotification() {
+		return processIdNotification;
+	}
+
+	public void setProcessIdNotification(String processIdNotification) {
+		this.processIdNotification = processIdNotification;
 	}
 
 }
