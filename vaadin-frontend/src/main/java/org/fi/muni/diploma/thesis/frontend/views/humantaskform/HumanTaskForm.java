@@ -186,7 +186,8 @@ public class HumanTaskForm extends VerticalLayout {
 
 				// we want to do some additional checking when the human task is register, as we need to pass
 				// VALID data for http connection
-				if (HumanTaskForm.this.humanTask.getName().equals(HumanTaskName.REGISTER.toString())) {
+				if (humanTask.getName().equals(HumanTaskName.REGISTER.toString())
+						|| humanTask.getName().equals(HumanTaskName.REGISTER_EXISTING_SERVICE.toString())) {
 
 					List<HumanTaskOutput> outputs = HumanTaskForm.this.humanTask.getOutputs();
 
@@ -215,7 +216,8 @@ public class HumanTaskForm extends VerticalLayout {
 			 * verify s-ramp connection, if not successful don't even try to complete the task!
 			 */
 
-			if (HumanTaskForm.this.humanTask.getName().equals(HumanTaskName.REGISTER.toString())) {
+			if (HumanTaskForm.this.humanTask.getName().equals(HumanTaskName.REGISTER.toString())
+					|| humanTask.getName().equals(HumanTaskName.REGISTER_EXISTING_SERVICE.toString())) {
 
 				try {
 					HumanTaskForm.this.verifySrampConnection(username, password, hostname, port);
