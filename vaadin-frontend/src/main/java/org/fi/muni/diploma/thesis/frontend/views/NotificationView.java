@@ -159,15 +159,9 @@ public class NotificationView extends VerticalLayout implements View {
 
 			Notification n = (Notification) event.getButton().getData();
 
-			String serviceName = n.getService().getName();
-			long retirementDate = n.getService().getRetirementTimestamp();
-			String interfaceName = n.getInterfaceName();
-			long invocationTime = n.getInvocationTimestamp();
-			String operation = n.getOperation();
+			getUI().getSession().setAttribute("notification", n); // pass the session via session
 
-			//essentially deserialize whole object as a parameter since we want to avoid any further db interaction
-			NotificationView.this.navigator.navigateTo("main" + "/" + menuitem + "?serviceName=" + serviceName + "&retirementDate=" + retirementDate
-					+ "&interfaceName=" + interfaceName + "&" + "invocationTime=" + invocationTime + "&operation=" + operation);
+			NotificationView.this.navigator.navigateTo("main" + "/" + menuitem);
 
 		}
 

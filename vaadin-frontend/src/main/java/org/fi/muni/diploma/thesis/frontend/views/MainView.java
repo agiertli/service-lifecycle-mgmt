@@ -1,6 +1,5 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.fi.muni.diploma.thesis.utils.rtgov.Notification;
@@ -163,7 +162,7 @@ public class MainView extends VerticalLayout implements View {
 
 			try {
 				panelContent.addComponent(new NotificationView(this.getNavigator()));
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -194,47 +193,8 @@ public class MainView extends VerticalLayout implements View {
 		// Redirect to Notification Detail View
 		else if (event.getParameters().contains(NotificationDetailView.NAME.toLowerCase())) {
 
-			logger.info("maini view, url params:" + event.getParameters());
-
-			String cropped = event.getParameters().substring(event.getParameters().indexOf("?") + 1);
-			String[] params = cropped.split("&");
-
-			Notification notification = new Notification();
-			RetiredService service = new RetiredService();
-
-			// assemble the params into POJOs
-			for (String p : params) {
-
-				// System.out.println(p);
-
-				String[] pair = p.split("=");
-
-				if (pair[0].equals("serviceName")) {
-
-					service.setName(pair[1]);
-
-				} else if (pair[0].equals("retirementDate")) {
-
-					service.setRetirementTimestamp(Long.valueOf(pair[1]));
-
-				}
-
-				else if (pair[0].equals("interfaceName")) {
-
-					notification.setInterfaceName(pair[1]);
-				} else if (pair[0].equals("invocationTime")) {
-
-					notification.setInvocationTimestamp(Long.valueOf(pair[1]));
-				}
-
-				else if (pair[0].equals("operation")) {
-
-					notification.setOperation(pair[1]);
-				}
-
-			}
-
-			notification.setService(service);
+			Notification notification = (Notification) getUI().getSession().getAttribute("notification");
+			getUI().getSession().setAttribute("notificatoin", null); // clear the value once we don't need it
 
 			panelContent.addComponent(new NotificationDetailView(this.getNavigator(), notification));
 
