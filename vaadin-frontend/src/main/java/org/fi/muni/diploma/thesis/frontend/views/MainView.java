@@ -199,11 +199,12 @@ public class MainView extends VerticalLayout implements View {
 				
 				Label notFound = new Label("Unknown notification. Please don't try to hack me anymore");
 				addComponent(notFound);
-				setComponentAlignment(notFound, Alignment.TOP_LEFT);
+				panelContent.addComponent(notFound);
+				panelContent.setComponentAlignment(notFound, Alignment.TOP_LEFT);
 				return;
 			}
 			
-			getUI().getSession().setAttribute("notificatoin", null); // clear the value once we don't need it
+			getUI().getSession().setAttribute("notification", null); // clear the value once we don't need it
 
 			panelContent.addComponent(new NotificationDetailView(this.getNavigator(), notification));
 
