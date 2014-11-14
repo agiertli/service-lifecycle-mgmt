@@ -255,7 +255,7 @@ public class NotificationDetailView extends VerticalLayout implements View {
 			// insert processed record into the database
 			try {
 				DatabaseUtil dbUtil = new DatabaseUtil();
-				dbUtil.insertProcessedNotification(notification.getInvocationTimestamp());
+				dbUtil.insertProcessedNotification(notification.getService().getRetirementTimestamp(),notification.getInvocationTimestamp());
 				dbUtil.close();
 			} catch (IOException | NamingException | SQLException e) {
 				// TODO Auto-generated catch block

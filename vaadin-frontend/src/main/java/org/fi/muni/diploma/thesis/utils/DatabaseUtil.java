@@ -37,32 +37,32 @@ public class DatabaseUtil {
 		this.conn.close();
 	}
 
-	public int insertProcessedNotification(long invocationTimestamp) throws SQLException {
+	public int insertProcessedNotification(long retirement_date, long invocationTimestamp) throws SQLException {
 
 		Statement createTable = null;
 
-		String createSql = "CREATE TABLE IF NOT EXISTS NOTIFICATION(ID BIGINT PRIMARY KEY)";
+		String createSql = "CREATE TABLE IF NOT EXISTS NOTIFICATION(RETIREMENT_DATE BIGINT, INVOCATION_TIMESTAMP BIGINT, PRIMARY KEY(RETIREMENT_DATE, INVOCATION_TIMESTAMP))";
 		createTable = this.conn.createStatement();
 		createTable.executeUpdate(createSql);
 
 		Statement insertRow = null;
 		insertRow = this.conn.createStatement();
-		String insertSql = "INSERT INTO NOTIFICATION " + "VALUES (" + String.valueOf(invocationTimestamp) + ")";
+		String insertSql = "INSERT INTO NOTIFICATION " + "VALUES (" + String.valueOf(retirement_date)+","+String.valueOf(invocationTimestamp) + ")";
 		int counter = insertRow.executeUpdate((insertSql));
 
 		return counter;
 	}
 
-	public ResultSet findNotificationById(long invocationTimestamp) throws NamingException, SQLException, IOException {
+	public ResultSet findNotificationById(long retirementtimestamp,long invocationTimestamp) throws NamingException, SQLException, IOException {
 
 		Statement createTable = null;
 
-		String createSql = "CREATE TABLE IF NOT EXISTS NOTIFICATION(ID BIGINT PRIMARY KEY)";
+		String createSql = "CREATE TABLE IF NOT EXISTS NOTIFICATION(RETIREMENT_DATE BIGINT, INVOCATION_TIMESTAMP BIGINT, PRIMARY KEY(RETIREMENT_DATE, INVOCATION_TIMESTAMP))";
 		createTable = this.conn.createStatement();
 		createTable.executeUpdate(createSql);
 
 		Statement selectByIdStatement = null;
-		String selectByIdSQL = "Select * FROM NOTIFICATION WHERE ID =" + String.valueOf(invocationTimestamp);
+		String selectByIdSQL = "Select * FROM NOTIFICATION WHERE RETIREMENT_DATE =" + String.valueOf(retirementtimestamp+"AND INVOCATION_TIMESTAMP="+invocationTimestamp);
 		selectByIdStatement = this.conn.createStatement();
 		ResultSet rs = selectByIdStatement.executeQuery(selectByIdSQL);
 

@@ -71,7 +71,7 @@ public class RTGovClient {
 
 					dbUtil = new DatabaseUtil();
 					ResultSet resultSet = null; // clear the previous result
-					resultSet = dbUtil.findNotificationById(request.getTimestamp());
+					resultSet = dbUtil.findNotificationById(service.getRetirementTimestamp(),request.getTimestamp());
 
 					// if invocation with this timestamp haven't already been processed, we can add it to the result
 					if (!resultSet.isBeforeFirst()) {
