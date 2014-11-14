@@ -73,6 +73,7 @@ public class HumanTaskForm extends VerticalLayout {
 
 	// for presenting found services in S-RAMP repository
 	private PagedFilterTable<?> filterTable;
+	private Label errorLabel;
 
 	public class SelectListener implements ClickListener {
 
@@ -125,8 +126,21 @@ public class HumanTaskForm extends VerticalLayout {
 			try {
 				data.commit();
 			} catch (CommitException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				
+			logger.info("GET CAUSE:"+e.getCause().toString());
+				
+			if (e.getCause().toString().contains("EmptyValueException")) {
+			if (HumanTaskForm.this.errorLabel!=null) {
+				
+				removeComponent(HumanTaskForm.this.errorLabel);
+			}
+				HumanTaskForm.this.errorLabel = new Label("Fill in all the required values");
+				addComponent(errorLabel);
+				setComponentAlignment(errorLabel, Alignment.BOTTOM_LEFT);
+				return; //end the processing
+			}
+				
 			}
 			Long id = HumanTaskForm.this.getTaskid();
 
