@@ -194,6 +194,15 @@ public class MainView extends VerticalLayout implements View {
 		else if (event.getParameters().contains(NotificationDetailView.NAME.toLowerCase())) {
 
 			Notification notification = (Notification) getUI().getSession().getAttribute("notification");
+			
+			if (notification == null) {
+				
+				Label notFound = new Label("Unknown notification. Please don't try to hack me anymore");
+				addComponent(notFound);
+				setComponentAlignment(notFound, Alignment.TOP_LEFT);
+				return;
+			}
+			
 			getUI().getSession().setAttribute("notificatoin", null); // clear the value once we don't need it
 
 			panelContent.addComponent(new NotificationDetailView(this.getNavigator(), notification));
