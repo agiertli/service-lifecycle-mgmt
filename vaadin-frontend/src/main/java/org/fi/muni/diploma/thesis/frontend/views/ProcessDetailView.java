@@ -43,6 +43,14 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		// Get process metadata
 		JaxbProcessInstanceLog selectedProcess = (JaxbProcessInstanceLog) RuntimeEngineWrapper.getEngine().getAuditLogService()
 				.findProcessInstance(processId);
+		
+		if (selectedProcess  == null) {
+			
+			Label notfound = new Label("Selected process not found, please don't try to hack me anymore!");
+			addComponent(notfound);
+			setComponentAlignment(notfound, Alignment.TOP_LEFT);
+			return;
+		}
 
 		// Get Process Variables
 		List<JaxbVariableInstanceLog> varLog = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
