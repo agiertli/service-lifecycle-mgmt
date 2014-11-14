@@ -57,7 +57,7 @@ public class NavigatorUI extends UI {
 		// we won't need to call this anymore
 		try {
 			
-			logger.info("obtaining remote runtime engine wrapper");
+		//	logger.info("obtaining remote runtime engine wrapper");
 
 			RuntimeEngineWrapper.getInstance();
 		} catch (MalformedURLException e) {

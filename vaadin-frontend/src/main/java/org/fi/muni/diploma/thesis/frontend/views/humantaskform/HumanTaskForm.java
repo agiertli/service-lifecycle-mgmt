@@ -1,5 +1,7 @@
 package org.fi.muni.diploma.thesis.frontend.views.humantaskform;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,16 +25,14 @@ import org.tepi.filtertable.paged.PagedFilterControlConfig;
 import org.tepi.filtertable.paged.PagedFilterTable;
 
 import com.vaadin.data.Container;
-import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
-import com.vaadin.data.validator.IntegerRangeValidator;
-import com.vaadin.event.FieldEvents.BlurEvent;
-import com.vaadin.event.FieldEvents.BlurListener;
+import com.vaadin.data.util.converter.Converter.ConversionException;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.navigator.Navigator;
@@ -41,6 +41,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -65,15 +66,13 @@ public class HumanTaskForm extends VerticalLayout {
 	private TextField uuid;
 	private TextField serviceName;
 
-	// for storing integer
-	final MyBean myBean = new MyBean();
-	BeanItem<MyBean> beanItem = new BeanItem<MyBean>(myBean);
-	@SuppressWarnings("unchecked")
-	final Property<Integer> integerProperty = (Property<Integer>) beanItem.getItemProperty("value");
-
 	// for presenting found services in S-RAMP repository
 	private PagedFilterTable<?> filterTable;
 	private Label errorLabel;
+	private Label srampErrorLabel;
+	private Label portError;
+	private TextField portField;
+	private CheckBox emailCheckbox;
 
 	public class SelectListener implements ClickListener {
 
@@ -84,16 +83,17 @@ public class HumanTaskForm extends VerticalLayout {
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			// TODO Auto-generated method stub
+			System.out.println("select listener");
 
 			Service service = (Service) event.getButton().getData();
-			//copy the selected values to the input fields below /we have to remove readonly restriction first, once done, put it back
+			// copy the selected values to the input fields below /we have to remove readonly restriction first, once
+			// done, put it back
 			HumanTaskForm.this.getUuid().setEnabled(true);
 			HumanTaskForm.this.getUuid().setValue(service.getUUID());
-			
+
 			HumanTaskForm.this.getServiceName().setEnabled(true);
 			HumanTaskForm.this.getServiceName().setValue(service.getName());
-			
+
 			HumanTaskForm.this.getUuid().setEnabled(false);
 			HumanTaskForm.this.getServiceName().setEnabled(false);
 
@@ -118,6 +118,26 @@ public class HumanTaskForm extends VerticalLayout {
 		@Override
 		public void buttonClick(ClickEvent event) {
 
+			if (HumanTaskForm.this.portField != null) {
+				try {
+					Integer convertedValue = (Integer) HumanTaskForm.this.portField.getConvertedValue();
+				} catch (ConversionException e) {
+
+					HumanTaskForm.this.removeComponents(HumanTaskForm.this.errorLabel, HumanTaskForm.this.portError,
+							HumanTaskForm.this.srampErrorLabel);
+
+					HumanTaskForm.this.portError = new Label("Enter valid port value [0-65535]");
+					addComponent(HumanTaskForm.this.errorLabel);
+					setComponentAlignment(HumanTaskForm.this.portError, Alignment.BOTTOM_LEFT);
+					return;
+				}
+			}
+
+			String hostname = "";
+			String password = "";
+			String username = "";
+			Integer port = 0;
+
 			taskService = new TaskServiceWrapper();
 			//
 			logger.info("button clicked");
@@ -127,20 +147,19 @@ public class HumanTaskForm extends VerticalLayout {
 				data.commit();
 			} catch (CommitException e) {
 				e.printStackTrace();
-				
-			logger.info("GET CAUSE:"+e.getCause().toString());
-				
-			if (e.getCause().toString().contains("EmptyValueException")) {
-			if (HumanTaskForm.this.errorLabel!=null) {
-				
-				removeComponent(HumanTaskForm.this.errorLabel);
-			}
-				HumanTaskForm.this.errorLabel = new Label("Fill in all the required values");
-				addComponent(errorLabel);
-				setComponentAlignment(errorLabel, Alignment.BOTTOM_LEFT);
-				return; //end the processing
-			}
-				
+
+				logger.info("GET CAUSE:" + e.getCause().toString());
+
+				if (e.getCause().toString().contains("EmptyValueException")) {
+					HumanTaskForm.this.removeComponents(HumanTaskForm.this.errorLabel, HumanTaskForm.this.portError,
+							HumanTaskForm.this.srampErrorLabel);
+
+					HumanTaskForm.this.errorLabel = new Label("Fill in all the required values");
+					addComponent(errorLabel);
+					setComponentAlignment(errorLabel, Alignment.BOTTOM_LEFT);
+					return; // end the processing
+				}
+
 			}
 			Long id = HumanTaskForm.this.getTaskid();
 
@@ -157,14 +176,61 @@ public class HumanTaskForm extends VerticalLayout {
 				logger.info("output type:" + field.getType() + "property:" + field.getPropertyDataSource().getType());
 
 				// look out for Integer
-				if (field.getPropertyDataSource().getType().equals(Integer.class)) {
+				if (binder.getPropertyId(field).toString().toLowerCase().contains("port")) {
 					logger.info("we have found integer output");
 
-					result.put((String) binder.getPropertyId(field), integerProperty.getValue());
+					result.put((String) binder.getPropertyId(field), (Integer) portField.getConvertedValue());
 				} else {
 					result.put((String) binder.getPropertyId(field), field.getValue());
 				}
 
+				// we want to do some additional checking when the human task is register, as we need to pass
+				// VALID data for http connection
+				if (HumanTaskForm.this.humanTask.getName().equals(HumanTaskName.REGISTER.toString())) {
+
+					List<HumanTaskOutput> outputs = HumanTaskForm.this.humanTask.getOutputs();
+
+					if (((String) binder.getPropertyId(field)).toLowerCase().contains("host")) {
+
+						hostname = (String) field.getValue();
+					} else if (((String) binder.getPropertyId(field)).toLowerCase().contains("pass")) {
+
+						password = (String) field.getValue();
+					} else if (((String) binder.getPropertyId(field)).toLowerCase().contains("user")) {
+
+						username = (String) field.getValue();
+					} else if (((String) binder.getPropertyId(field)).toLowerCase().contains("port")) {
+
+						port = (Integer) portField.getConvertedValue();
+					}
+
+				}
+
+			}
+
+			logger.info("now the validation with s-ramp client will happen");
+			logger.info(hostname + "+" + username + "+" + password + "+" + port);
+
+			/**
+			 * verify s-ramp connection, if not successful don't even try to complete the task!
+			 */
+
+			if (HumanTaskForm.this.humanTask.getName().equals(HumanTaskName.REGISTER.toString())) {
+
+				try {
+					HumanTaskForm.this.verifySrampConnection(username, password, hostname, port);
+				} catch (Exception e) {
+
+					e.printStackTrace();
+					HumanTaskForm.this.removeComponents(HumanTaskForm.this.errorLabel, HumanTaskForm.this.portError,
+							HumanTaskForm.this.srampErrorLabel);
+
+					HumanTaskForm.this.srampErrorLabel = new Label(
+							"Connection not established successfully! Please enter valid S-RAMP connection details");
+					addComponent(HumanTaskForm.this.srampErrorLabel);
+					setComponentAlignment(HumanTaskForm.this.srampErrorLabel, Alignment.BOTTOM_LEFT);
+					return;
+				}
 			}
 
 			taskService.start(id, "anton");
@@ -176,6 +242,23 @@ public class HumanTaskForm extends VerticalLayout {
 	}
 
 	public HumanTaskForm() {
+
+	}
+
+	/**
+	 * remove compoments from the view
+	 * 
+	 * @param components
+	 */
+	public void removeComponents(Component... components) {
+
+		for (Component c : components) {
+
+			if (c != null) {
+
+				removeComponent(c);
+			}
+		}
 
 	}
 
@@ -263,8 +346,51 @@ public class HumanTaskForm extends VerticalLayout {
 				CheckBox checkbox = new CheckBox();
 				checkbox.setCaption(output.getLabel());
 				checkbox.setRequired(true);
-				// checkbox.setValue(true);
 
+				// for enabling/disabling fields
+				if (output.getLabel().toLowerCase().contains("email")) {
+
+					checkbox.addValueChangeListener(new ValueChangeListener() {
+
+						private static final long serialVersionUID = 4402356351728724065L;
+
+						@Override
+						public void valueChange(ValueChangeEvent event) {
+							logger.info("change");
+
+							Iterator<Component> iterate = HumanTaskForm.this.iterator();
+
+							while (iterate.hasNext()) {
+
+								Component c = iterate.next();
+								if (c instanceof FormLayout) {
+
+									Iterator<Component> formIterator = ((FormLayout) c).iterator();
+
+									while (formIterator.hasNext()) {
+
+										Component b = formIterator.next();
+										if (b instanceof TextField) {
+
+											b.setEnabled((Boolean) event.getProperty().getValue());
+											((TextField) b).setRequired((Boolean) event.getProperty().getValue());
+										} else if (b instanceof TextArea) {
+
+											b.setEnabled((Boolean) event.getProperty().getValue());
+											((TextArea) b).setRequired((Boolean) event.getProperty().getValue());
+										}
+									}
+								}
+
+							}
+
+						}
+
+					});
+				}
+
+				// checkbox.setValue(true);
+				this.emailCheckbox = checkbox;
 				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<Boolean>(false));
 				this.getBinder().bind(checkbox, output.getOutputIdentifier());
 				fl.addComponent(checkbox);
@@ -293,16 +419,12 @@ public class HumanTaskForm extends VerticalLayout {
 				logger.info("adding integer output:" + output.getDataType() + "label:" + output.getLabel());
 				TextField integerField = new TextField(output.getLabel());
 				integerField.setConverter(Integer.class);
-				// integerField.setConverter(new StringToIntegerConverter());
-				integerField.addValidator(new IntegerRangeValidator("Value has to be from range 0-65535", 0, 65535));
 				integerField.setRequired(true);
 				integerField.setRequiredError("This field is required");
-
-				// this.getItemset().addItemProperty(output.getOutputIdentifier(), new
-				// ObjectProperty<Integer>(((Integer)8480)));
-				this.getItemset().addItemProperty(output.getOutputIdentifier(), integerProperty);
+				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<Integer>(0));
 				this.getBinder().bind(integerField, output.getOutputIdentifier());
 				fl.addComponent(integerField);
+				this.portField = integerField;
 				break;
 
 			}
@@ -319,15 +441,26 @@ public class HumanTaskForm extends VerticalLayout {
 			case STRING: {
 
 				TextField stringField = new TextField(output.getLabel());
+
 				stringField.setRequired(true);
+				stringField.setEnabled(true);
+
 				stringField.setRequiredError("This field is required");
 				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<String>(""));
 				this.getBinder().bind(stringField, output.getOutputIdentifier());
+
+				// email is not mandatory
+				if (this.getHumanTask().getName().equals(HumanTaskName.EVALUATE_TEST_RESULTS.toString())) {
+
+					stringField.setRequired(false);
+					stringField.setEnabled(false);
+				}
+
 				fl.addComponent(stringField);
 
 				// we need to save the outputs of select service task explicitly due to "SELECT" functionality
 				if (this.humanTask.getName().equals(HumanTaskName.SELECT_SERVICE_FROM_SRAMP.toString())) {
-					stringField.setEnabled(false); //user can't edit this
+					stringField.setEnabled(false); // user can't edit this
 
 					if (output.getOutputIdentifier().toLowerCase().contains("uuid")) {
 						this.setUuid(stringField);
@@ -342,7 +475,10 @@ public class HumanTaskForm extends VerticalLayout {
 			case TEXT_AREA: {
 
 				TextArea textArea = new TextArea(output.getLabel());
+
 				textArea.setRequired(true);
+				textArea.setEnabled(true);
+
 				textArea.setRequiredError("This field is required");
 				textArea.addFocusListener(new FocusListener() {
 
@@ -363,25 +499,31 @@ public class HumanTaskForm extends VerticalLayout {
 					}
 
 				});
-				//this is stupid - it won't be possible to let an empty value, and it should be possible
-//				textArea.addBlurListener(new BlurListener() {
-//
-//					/**
-//					 * 
-//					 */
-//					private static final long serialVersionUID = 1L;
-//
-//					@Override
-//					public void blur(BlurEvent event) {
-//						((TextArea) event.getComponent()).setValue("Enter some description or URL pointing to the resource");
-//
-//					}
-//				});
+				// this is stupid - it won't be possible to let an empty value, and it should be possible
+				// textArea.addBlurListener(new BlurListener() {
+				//
+				// /**
+				// *
+				// */
+				// private static final long serialVersionUID = 1L;
+				//
+				// @Override
+				// public void blur(BlurEvent event) {
+				// ((TextArea) event.getComponent()).setValue("Enter some description or URL pointing to the resource");
+				//
+				// }
+				// });
 
 				this.getItemset().addItemProperty(output.getOutputIdentifier(),
 						new ObjectProperty<String>("Enter some description or URL pointing to the resource"));
 				this.getBinder().bind(textArea, output.getOutputIdentifier());
+				if (this.getHumanTask().getName().equals(HumanTaskName.EVALUATE_TEST_RESULTS.toString())) {
+
+					textArea.setRequired(false);
+					textArea.setEnabled(false);
+				}
 				fl.addComponent(textArea);
+
 				break;
 			}
 
@@ -446,6 +588,22 @@ public class HumanTaskForm extends VerticalLayout {
 
 	}
 
+	public void verifySrampConnection(String username, String password, String hostname, Integer port) throws Exception {
+
+		try {
+			URL endpoint = new URL("http://" + hostname + ":" + port.toString() + "/s-ramp-server/s-ramp/servicedocument");
+			java.net.HttpURLConnection connection = (java.net.HttpURLConnection) endpoint.openConnection();
+			String userPassword = username + ":" + password;
+			String encoding = org.apache.commons.codec.binary.Base64.encodeBase64String(userPassword.getBytes());
+			connection.setRequestProperty("Authorization", "Basic " + encoding);
+			connection.getInputStream();
+		} catch (IOException e) {
+
+			throw e; // propagating this further
+		}
+
+	}
+
 	public InternalHumanTask getHumanTask() {
 		return humanTask;
 	}
@@ -484,18 +642,6 @@ public class HumanTaskForm extends VerticalLayout {
 
 	public void setNavigator(Navigator navigator) {
 		this.navigator = navigator;
-	}
-
-	public class MyBean {
-		private int value;
-
-		public int getValue() {
-			return value;
-		}
-
-		public void setValue(int integer) {
-			value = integer;
-		}
 	}
 
 	public PagedFilterTable<?> getFilterTable() {

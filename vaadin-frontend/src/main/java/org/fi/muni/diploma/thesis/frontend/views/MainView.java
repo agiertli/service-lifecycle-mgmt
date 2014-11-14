@@ -118,7 +118,7 @@ public class MainView extends VerticalLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		logger.info("enter method called");
+	//	logger.info("enter method called");
 		VerticalLayout panelContent = new VerticalLayout();
 		panelContent.setSizeFull();
 		panelContent.setMargin(true);
