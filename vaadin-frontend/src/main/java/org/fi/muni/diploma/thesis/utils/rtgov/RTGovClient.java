@@ -54,8 +54,6 @@ public class RTGovClient {
 
 		List<Notification> result = new ArrayList<Notification>();
 
-		dbUtil = new DatabaseUtil();
-
 		for (ActivityType activity : activities) {
 
 			// we are interested only in RequestReceived type
@@ -63,26 +61,28 @@ public class RTGovClient {
 
 				RequestReceived request = (RequestReceived) activity;
 				String requestServiceName = request.getServiceType().substring(request.getServiceType().lastIndexOf("}") + 1);
-				logger.info("processed request service name:" + requestServiceName);
+				// logger.info("processed request service name:" + requestServiceName);
 
 				// is the service invoked the one which has already been retired?
 				if (requestServiceName.equals(service.getName())) {
 					// put some necessary data
 
-					ResultSet resultSet = null; //clear the previous result
+					dbUtil = new DatabaseUtil();
+					ResultSet resultSet = null; // clear the previous result
 					resultSet = dbUtil.findNotificationById(request.getTimestamp());
 
 					// if invocation with this timestamp haven't already been processed, we can add it to the result
-					if (!resultSet.isBeforeFirst())
-						result.add(new Notification(service, request.getTimestamp(), request.getInterface(), request.getOperation()));
+					if (!resultSet.isBeforeFirst()) {
+						Notification n = new Notification(service, request.getTimestamp(), request.getInterface(), request.getOperation());
+						result.add(n);
+						logger.info("Adding a new notification:" + n.toString());
+					}
+					dbUtil.close();// never forget to close db connection..I guess..
+
 				}
-
 			}
+
 		}
-
-		dbUtil.close();// never forget to close db connection..I guess..
-
 		return result;
 	}
-
 }
