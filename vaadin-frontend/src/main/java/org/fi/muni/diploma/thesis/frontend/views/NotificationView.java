@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.naming.NamingException;
@@ -48,7 +50,7 @@ public class NotificationView extends VerticalLayout implements View {
 		this.navigator = navigator;
 
 		VerticalLayout layout = new VerticalLayout();
-		List<Notification> notifications = this.getNotifications();
+		Set<Notification> notifications = this.getNotifications();
 
 		Label greeting = new Label("List of retired service invocations");
 		greeting.setSizeUndefined();
@@ -82,7 +84,7 @@ public class NotificationView extends VerticalLayout implements View {
 
 	}
 
-	private PagedFilterTable<?> buildFilterTable(List<Notification> notifications) {
+	private PagedFilterTable<?> buildFilterTable(Set<Notification> notifications) {
 
 		PagedFilterTable<IndexedContainer> filterTable = new PagedFilterTable<IndexedContainer>("");
 		// filterTable.setSizeFull();
@@ -97,7 +99,7 @@ public class NotificationView extends VerticalLayout implements View {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Container buildContainer(List<Notification> notifications) {
+	private Container buildContainer(Set<Notification> notifications) {
 
 		IndexedContainer cont = new IndexedContainer();
 
@@ -167,10 +169,10 @@ public class NotificationView extends VerticalLayout implements View {
 
 	}
 
-	public List<Notification> getNotifications() throws IOException, NamingException, SQLException {
+	public Set<Notification> getNotifications() throws IOException, NamingException, SQLException {
 
-		List<RetiredService> retiredServices = new ArrayList<RetiredService>();
-		List<Notification> notifications = new ArrayList<Notification>();
+		Set<RetiredService> retiredServices = new HashSet<RetiredService>();
+		Set<Notification> notifications = new HashSet<Notification>();
 
 		@SuppressWarnings("unchecked")
 		// let's look for all retired variables

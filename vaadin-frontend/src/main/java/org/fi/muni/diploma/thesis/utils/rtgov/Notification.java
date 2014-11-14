@@ -18,6 +18,8 @@ public class Notification {
 		this.interfaceName = interfaceName;
 		this.operation = operation;
 	}
+	
+	
 	public RetiredService getService() {
 		return service;
 	}
@@ -47,6 +49,38 @@ public class Notification {
 		return "Notification [service=" + service + ", invocationTimestamp=" + invocationTimestamp + ", interfaceName=" + interfaceName
 				+ ", operation=" + operation + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (invocationTimestamp ^ (invocationTimestamp >>> 32));
+		result = prime * result + ((service == null) ? 0 : service.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Notification other = (Notification) obj;
+		if (invocationTimestamp != other.invocationTimestamp)
+			return false;
+		if (service == null) {
+			if (other.service != null)
+				return false;
+		} else if (!service.equals(other.service))
+			return false;
+		return true;
+	}
+
+
+
+
 
 
 }

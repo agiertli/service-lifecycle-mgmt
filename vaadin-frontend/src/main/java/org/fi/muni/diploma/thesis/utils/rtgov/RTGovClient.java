@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.naming.NamingException;
@@ -25,7 +27,7 @@ public class RTGovClient {
 		this.properties = properties;
 	}
 
-	public List<Notification> getRetiredInvocation(RetiredService service) throws IOException, NamingException, SQLException {
+	public Set<Notification> getRetiredInvocation(RetiredService service) throws IOException, NamingException, SQLException {
 
 		DatabaseUtil dbUtil;
 
@@ -52,7 +54,7 @@ public class RTGovClient {
 
 		is.close();
 
-		List<Notification> result = new ArrayList<Notification>();
+		Set<Notification> result = new HashSet<Notification>();
 
 		for (ActivityType activity : activities) {
 
@@ -74,6 +76,7 @@ public class RTGovClient {
 					// if invocation with this timestamp haven't already been processed, we can add it to the result
 					if (!resultSet.isBeforeFirst()) {
 						Notification n = new Notification(service, request.getTimestamp(), request.getInterface(), request.getOperation());
+
 						result.add(n);
 						logger.info("Adding a new notification:" + n.toString());
 					}
