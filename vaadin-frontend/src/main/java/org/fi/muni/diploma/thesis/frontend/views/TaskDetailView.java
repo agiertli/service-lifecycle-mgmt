@@ -15,6 +15,8 @@ import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -46,6 +48,16 @@ public class TaskDetailView extends VerticalLayout implements View {
 		taskService = new TaskServiceWrapper();
 
 		Task task = taskService.getTaskById(id);
+		
+		
+		if (task == null) {
+			
+			Label notfound = new Label("Requested task was was not found, plesae don't try to hack me anymore!");
+			addComponent(notfound);
+			setComponentAlignment(notfound, Alignment.TOP_LEFT);
+			return;
+		}
+		
 
 		// convert task name to enum, should be successfull unless there is a typo or new human task name which didn't
 		// get an update
