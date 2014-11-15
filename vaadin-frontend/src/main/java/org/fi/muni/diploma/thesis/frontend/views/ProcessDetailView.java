@@ -38,9 +38,10 @@ public class ProcessDetailView extends VerticalLayout implements View {
 	private FilterTable processDetailsTable;
 	private FilterTable processVariablesTable;
 	private Long processId;
-	private String selectedProcessName;
+	private JaxbProcessInstanceLog selectedProcess;
 	private Embedded currentImage;
-	
+	private String processState;
+
 	private static final Logger logger = Logger.getLogger(ProcessDetailView.class.getName());
 
 	@SuppressWarnings("unchecked")
@@ -51,8 +52,7 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		VerticalLayout layout = new VerticalLayout();
 
 		// Get process metadata
-		JaxbProcessInstanceLog selectedProcess = (JaxbProcessInstanceLog) RuntimeEngineWrapper.getEngine().getAuditLogService()
-				.findProcessInstance(processId);
+		this.selectedProcess = (JaxbProcessInstanceLog) RuntimeEngineWrapper.getEngine().getAuditLogService().findProcessInstance(processId);
 
 		if (selectedProcess == null) {
 
@@ -61,8 +61,6 @@ public class ProcessDetailView extends VerticalLayout implements View {
 			setComponentAlignment(notfound, Alignment.TOP_LEFT);
 			return;
 		}
-
-		this.selectedProcessName = selectedProcess.getProcessName();
 
 		// Get Process Variables
 		List<JaxbVariableInstanceLog> varLog = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
@@ -108,29 +106,49 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		processDiagramHeader.setStyleName("h2");
 		layout.addComponent(processDiagramHeader);
 		layout.setComponentAlignment(processDiagramHeader, Alignment.MIDDLE_LEFT);
-		
-		if (currentImage!=null) {
-			
+
+		if (currentImage != null) {
+
 			layout.removeComponent(currentImage);
 		}
 
 		// load the embedded image
-		Embedded image = new Embedded("", new StreamResource(new StreamSource() {
+		
+		StreamResource resource = new StreamResource(new StreamSource() {
 
 			private static final long serialVersionUID = 1;
+			
+
 
 			public InputStream getStream() {
 
 				FileUtil util = new FileUtil();
 
 				// select corresponding svg source file
-			//	logger.info("selected process name:"+ProcessDetailView.this.selectedProcessName);
-				InputStream is = util.getFileFromClasspath(ProcessDetailView.this.selectedProcessName);
+			//	logger.info("selected process name:"+ProcessDetailView.this.selectedProcess.getProcessName());
+				InputStream is = util.getFileFromClasspath(ProcessDetailView.this.selectedProcess.getProcessName());
+
+				if (ProcessStateMap.getProcessStatusAsEnum(ProcessDetailView.this.selectedProcess.getStatus()).equals(
+						ProcessStateMap.States.COMPLETED)) {
+				//	logger.info("wtf");
+					return is; // don't do any additional processing and return the original process diagram 
+
+				}
+				
+				InputStream altered = util.processSvg(is,ProcessDetailView.this.selectedProcess.getProcessName(),ProcessDetailView.this.processState);
 
 				// new ByteArrayInputStream("".getBytes());
-				return is;
+				
+				return altered;
 			}
-		}, ProcessDetailView.this.selectedProcessName+".svg"));
+			
+			
+		}, ProcessDetailView.this.selectedProcess.getProcessName() + ".svg");
+		
+		resource.setCacheTime(0);
+		
+		Embedded image = new Embedded("",resource);
+		
 
 		image.setMimeType("image/svg+xml");
 		layout.addComponent(image);
@@ -213,12 +231,15 @@ public class ProcessDetailView extends VerticalLayout implements View {
 			cont.addItem(counter);
 			cont.getContainerProperty(counter, "Variable Name").setValue("Service state");
 			cont.getContainerProperty(counter, "Variable Value").setValue(finalStateHolder.getValue());
+			
+			this.processState = finalStateHolder.getValue(); //preserve for additional processing
 
 		} else {
 			if (mainProcessStates.size() > 0) {
 				cont.addItem(counter);
 				cont.getContainerProperty(counter, "Variable Name").setValue("Service state");
 				cont.getContainerProperty(counter, "Variable Value").setValue(mainProcessStates.get(mainProcessStates.size() - 1).getValue());
+				this.processState = mainProcessStates.get(mainProcessStates.size() - 1).getValue();
 			}
 
 		}
@@ -296,14 +317,6 @@ public class ProcessDetailView extends VerticalLayout implements View {
 
 	public void setProcessId(Long processId) {
 		this.processId = processId;
-	}
-
-	public String getSelectedProcessName() {
-		return selectedProcessName;
-	}
-
-	public void setSelectedProcessName(String selectedProcessName) {
-		this.selectedProcessName = selectedProcessName;
 	}
 
 	public Embedded getCurrentImage() {
