@@ -27,15 +27,36 @@ private static final Logger logger = Logger.getLogger(FileUtil.class.getName());
 		return resourceStream;
 	}
 
-	public InputStream processSvg(InputStream is, String processName, String processState, Boolean servicesQueried, Boolean passedTests) {
+	public InputStream processSvg(InputStream is, String processName, String processState, Boolean servicesQueried, Boolean passedTests, Boolean serviceSelected) {
 
 		String input = this.getStringFromInputStream(is);
 		String output = "";
+		Boolean processSvg = true;
 		
 		
-//	logger.info("process name svg:"+processName);
-//	logger.info("process state svg:"+processState);
-
+	logger.info("process name svg:"+processName);
+	logger.info("process state svg:"+processState);
+	
+	//first task
+	if (processState == null && processName.toLowerCase().contains("exist")) {
+		
+		output = input.replace("<rect id=\"_E35C0A48-354D-43D1-A277-9AC67A3AE5B2bg_frame\" oryx:resize=\"vertical horizontal\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:url(#_E35C0A48-354D-43D1-A277-9AC67A3AE5B2background);stroke:#000000;stroke-width:1\" />",
+				"<rect id=\"_E35C0A48-354D-43D1-A277-9AC67A3AE5B2bg_frame\" oryx:resize=\"vertical horizontal\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:url(#_E35C0A48-354D-43D1-A277-9AC67A3AE5B2background);stroke:#00FF00;stroke-width:3\" />");
+		
+		processSvg = false;
+	}
+	
+	if (!serviceSelected && processName.toLowerCase().contains("exist") && processState != null) {
+		
+		//we selecting service
+		
+		output = input.replace("<rect id=\"_34BA16F3-5FD2-4D3C-9B3A-B5483FF6605Bbg_frame\" oryx:resize=\"vertical horizontal\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:url(#_34BA16F3-5FD2-4D3C-9B3A-B5483FF6605Bbackground);stroke:#000000;stroke-width:1\" />",
+				"<rect id=\"_34BA16F3-5FD2-4D3C-9B3A-B5483FF6605Bbg_frame\" oryx:resize=\"vertical horizontal\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:url(#_34BA16F3-5FD2-4D3C-9B3A-B5483FF6605Bbackground);stroke:#00FF00;stroke-width:3\" />");
+		processSvg = false;
+	}
+	
+	
+if (processState!=null && processSvg) {
 		// both processes have different process definition
 		switch (processState) {
 
@@ -105,6 +126,19 @@ private static final Logger logger = Logger.getLogger(FileUtil.class.getName());
 				
 			}
 			
+			else if (processName.toLowerCase().contains("exist") && passedTests) {
+				
+				output = input.replace("<rect id=\"_551CFE4C-F00F-42C9-A252-F702C1A339B5frame\" oryx:resize=\"vertical horizontal\" oryx:anchors=\"bottom top right left\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:none;stroke:#000000;stroke-width:4\" />",
+						"<rect id=\"_551CFE4C-F00F-42C9-A252-F702C1A339B5frame\" oryx:resize=\"vertical horizontal\" oryx:anchors=\"bottom top right left\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:none;stroke:#00FF00;stroke-width:4\" />");
+			}
+			
+			else if (processName.toLowerCase().contains("exist") && !passedTests) {
+				
+				output = input.replace("<rect id=\"_DC411D5C-CD72-4F6B-BB58-610ED5DC33D1bg_frame\" oryx:resize=\"vertical horizontal\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:url(#_DC411D5C-CD72-4F6B-BB58-610ED5DC33D1background);stroke:#000000;stroke-width:1\" />",
+						"<rect id=\"_DC411D5C-CD72-4F6B-BB58-610ED5DC33D1bg_frame\" oryx:resize=\"vertical horizontal\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:url(#_DC411D5C-CD72-4F6B-BB58-610ED5DC33D1background);stroke:#00FF00;stroke-width:3\" />");
+				
+			}
+			
 			
 			break;
 		}
@@ -117,6 +151,12 @@ private static final Logger logger = Logger.getLogger(FileUtil.class.getName());
 						"<rect id=\"_04D14669-B0C7-4052-A073-5EA3008B8417frame\" oryx:resize=\"vertical horizontal\" oryx:anchors=\"bottom top right left\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:none;stroke:#00FF00;stroke-width:4\" />");
 				
 			}
+			else if (processName.toLowerCase().contains("exist")) {
+				
+				output = input.replace("<rect id=\"_EA37E573-396E-40AB-977C-50BB516005E5frame\" oryx:resize=\"vertical horizontal\" oryx:anchors=\"bottom top right left\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:none;stroke:#000000;stroke-width:4\" />",
+						"<rect id=\"_EA37E573-396E-40AB-977C-50BB516005E5frame\" oryx:resize=\"vertical horizontal\" oryx:anchors=\"bottom top right left\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:none;stroke:#00FF00;stroke-width:4\" />");
+				
+			}
 			
 			break;
 		}
@@ -127,6 +167,11 @@ private static final Logger logger = Logger.getLogger(FileUtil.class.getName());
 				output = input.replace("<rect id=\"_50E71468-5EE8-4172-BFB5-7E80F484E994frame\" oryx:resize=\"vertical horizontal\" oryx:anchors=\"bottom top right left\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:none;stroke:#000000;stroke-width:4\" />",
 						"<rect id=\"_50E71468-5EE8-4172-BFB5-7E80F484E994frame\" oryx:resize=\"vertical horizontal\" oryx:anchors=\"bottom top right left\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:none;stroke:#00FF00;stroke-width:4\" />");
 			}
+			else if (processName.toLowerCase().contains("exist")) {
+				
+				output = input.replace("<rect id=\"_49407B96-9644-4699-9E13-E3B7C6EA42FCframe\" oryx:resize=\"vertical horizontal\" oryx:anchors=\"bottom top right left\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:none;stroke:#000000;stroke-width:4\" />",
+						"<rect id=\"_49407B96-9644-4699-9E13-E3B7C6EA42FCframe\" oryx:resize=\"vertical horizontal\" oryx:anchors=\"bottom top right left\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"fill:none;stroke:#00FF00;stroke-width:4\" />");	
+			}
 			break;
 		}
 		default: {
@@ -134,6 +179,7 @@ private static final Logger logger = Logger.getLogger(FileUtil.class.getName());
 			break;
 		}
 		}
+}
 
 		// convert String into InputStream
 		 InputStream outputStream = new ByteArrayInputStream(output.getBytes());
