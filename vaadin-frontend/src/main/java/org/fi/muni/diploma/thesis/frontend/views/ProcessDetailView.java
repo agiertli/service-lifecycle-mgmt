@@ -41,6 +41,8 @@ public class ProcessDetailView extends VerticalLayout implements View {
 	private JaxbProcessInstanceLog selectedProcess;
 	private Embedded currentImage;
 	private String processState;
+	private Boolean servicesQueried = false;
+	private Boolean passedTests = true;
 
 	private static final Logger logger = Logger.getLogger(ProcessDetailView.class.getName());
 
@@ -135,7 +137,11 @@ public class ProcessDetailView extends VerticalLayout implements View {
 
 				}
 				
-				InputStream altered = util.processSvg(is,ProcessDetailView.this.selectedProcess.getProcessName(),ProcessDetailView.this.processState);
+				InputStream altered = util.processSvg(is,
+						ProcessDetailView.this.selectedProcess.getProcessName(),
+						ProcessDetailView.this.processState,
+						ProcessDetailView.this.servicesQueried,
+						ProcessDetailView.this.passedTests);
 
 				// new ByteArrayInputStream("".getBytes());
 				
@@ -220,6 +226,25 @@ public class ProcessDetailView extends VerticalLayout implements View {
 			}
 
 			cont.addItem(counter);
+			
+			//for generating the diagram
+			if (var.getVariableId().contains("srampServiceList")) {
+				
+				servicesQueried = true;
+			} else {
+				
+				servicesQueried = false;
+			}
+			
+			
+			if (var.getVariableId().contains("passedIntegrationTests")) {
+				
+				if (var.getValue().contains("false")) {
+					
+					passedTests = false;
+				} 
+				}
+			
 
 			cont.getContainerProperty(counter, "Variable Name").setValue(var.getVariableId());
 			cont.getContainerProperty(counter, "Variable Value").setValue(var.getValue());
