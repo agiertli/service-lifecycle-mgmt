@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 
 import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterDecorator;
 import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterGenerator;
-import org.fi.muni.diploma.thesis.utils.ProcessStateMap;
-import org.fi.muni.diploma.thesis.utils.RuntimeEngineWrapper;
+import org.fi.muni.diploma.thesis.utils.jbpm.ProcessStateMap;
+import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
 import org.kie.services.client.serialization.jaxb.impl.audit.JaxbProcessInstanceLog;
 import org.tepi.filtertable.FilterTable;
 import org.tepi.filtertable.paged.PagedFilterControlConfig;

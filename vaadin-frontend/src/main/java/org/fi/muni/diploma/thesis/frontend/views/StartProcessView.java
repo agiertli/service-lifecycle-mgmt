@@ -2,7 +2,7 @@ package org.fi.muni.diploma.thesis.frontend.views;
 
 import java.util.logging.Logger;
 
-import org.fi.muni.diploma.thesis.utils.RuntimeEngineWrapper;
+import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
 import org.kie.api.runtime.process.ProcessInstance;
 
 import com.vaadin.navigator.Navigator;

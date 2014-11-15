@@ -3,9 +3,9 @@ package org.fi.muni.diploma.thesis.frontend.views;
 import java.util.logging.Logger;
 
 import org.fi.muni.diploma.thesis.frontend.views.humantaskform.HumanTaskForm;
-import org.fi.muni.diploma.thesis.utils.TaskServiceWrapper;
 import org.fi.muni.diploma.thesis.utils.humantask.HumanTaskName;
 import org.fi.muni.diploma.thesis.utils.humantask.InternalHumanTaskFactory;
+import org.fi.muni.diploma.thesis.utils.jbpm.TaskServiceWrapper;
 import org.jbpm.process.audit.AuditLogService;
 import org.kie.api.task.TaskService;
 import org.kie.api.task.model.Task;

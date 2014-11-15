@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-import org.fi.muni.diploma.thesis.utils.ProcessStateMap;
+import org.fi.muni.diploma.thesis.utils.jbpm.ProcessStateMap;
 import org.tepi.filtertable.FilterDecorator;
 import org.tepi.filtertable.numberfilter.NumberFilterPopupConfig;
 

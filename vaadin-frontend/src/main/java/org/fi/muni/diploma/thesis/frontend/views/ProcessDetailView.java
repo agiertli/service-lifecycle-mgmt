@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.fi.muni.diploma.thesis.utils.ProcessStateMap;
-import org.fi.muni.diploma.thesis.utils.RuntimeEngineWrapper;
+import org.fi.muni.diploma.thesis.utils.jbpm.ProcessStateMap;
+import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
+import org.kie.services.client.serialization.jaxb.impl.audit.JaxbNodeInstanceLog;
 import org.kie.services.client.serialization.jaxb.impl.audit.JaxbProcessInstanceLog;
 import org.kie.services.client.serialization.jaxb.impl.audit.JaxbVariableInstanceLog;
 import org.tepi.filtertable.FilterTable;
@@ -57,6 +58,8 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		// Get process metadata
 		JaxbProcessInstanceLog selectedProcess = (JaxbProcessInstanceLog) RuntimeEngineWrapper.getEngine().getAuditLogService()
 				.findProcessInstance(processId);
+		
+
 
 		if (selectedProcess == null) {
 
@@ -69,6 +72,8 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		// Get Process Variables
 		List<JaxbVariableInstanceLog> varLog = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
 				.findVariableInstances(processId);
+
+		
 
 		// Build process details table
 		processDetailsTable = buildProcessDetailsTable(selectedProcess);
@@ -184,6 +189,12 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		image.setMimeType("image/svg+xml");
 		layout.addComponent(image);
 		layout.setComponentAlignment(image, Alignment.MIDDLE_LEFT);
+		
+		JaxbNodeInstanceLog l;
+		JaxbProcessInstanceLog p;
+		
+		
+		
 
 		addComponent(layout);
 

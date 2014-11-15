@@ -6,8 +6,8 @@ import java.util.logging.Logger;
 
 import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterDecorator;
 import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterGenerator;
-import org.fi.muni.diploma.thesis.utils.RuntimeEngineWrapper;
-import org.fi.muni.diploma.thesis.utils.TaskServiceWrapper;
+import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
+import org.fi.muni.diploma.thesis.utils.jbpm.TaskServiceWrapper;
 import org.kie.api.task.TaskService;
 import org.kie.api.task.model.TaskSummary;
 import org.kie.services.client.serialization.jaxb.impl.audit.JaxbProcessInstanceLog;

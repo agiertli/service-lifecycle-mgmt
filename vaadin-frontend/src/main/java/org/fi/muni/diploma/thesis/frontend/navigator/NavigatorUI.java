@@ -9,7 +9,7 @@ import javax.servlet.annotation.WebInitParam;
 
 import org.fi.muni.diploma.thesis.frontend.views.MainView;
 import org.fi.muni.diploma.thesis.frontend.views.StartView;
-import org.fi.muni.diploma.thesis.utils.RuntimeEngineWrapper;
+import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
