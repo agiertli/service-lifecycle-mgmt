@@ -1,17 +1,14 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
+import org.fi.muni.diploma.thesis.utils.file.FileUtil;
 import org.fi.muni.diploma.thesis.utils.jbpm.ProcessStateMap;
 import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
-import org.kie.services.client.serialization.jaxb.impl.audit.JaxbNodeInstanceLog;
 import org.kie.services.client.serialization.jaxb.impl.audit.JaxbProcessInstanceLog;
 import org.kie.services.client.serialization.jaxb.impl.audit.JaxbVariableInstanceLog;
 import org.tepi.filtertable.FilterTable;
@@ -25,15 +22,9 @@ import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.PopupView.PopupVisibilityEvent;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.PopupView;
-import com.vaadin.ui.PopupView.PopupVisibilityListener;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.BaseTheme;
 
 public class ProcessDetailView extends VerticalLayout implements View {
 
@@ -47,6 +38,10 @@ public class ProcessDetailView extends VerticalLayout implements View {
 	private FilterTable processDetailsTable;
 	private FilterTable processVariablesTable;
 	private Long processId;
+	private String selectedProcessName;
+	private Embedded currentImage;
+	
+	private static final Logger logger = Logger.getLogger(ProcessDetailView.class.getName());
 
 	@SuppressWarnings("unchecked")
 	public ProcessDetailView(Long processId, Navigator navigator) {
@@ -58,8 +53,6 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		// Get process metadata
 		JaxbProcessInstanceLog selectedProcess = (JaxbProcessInstanceLog) RuntimeEngineWrapper.getEngine().getAuditLogService()
 				.findProcessInstance(processId);
-		
-
 
 		if (selectedProcess == null) {
 
@@ -69,11 +62,11 @@ public class ProcessDetailView extends VerticalLayout implements View {
 			return;
 		}
 
+		this.selectedProcessName = selectedProcess.getProcessName();
+
 		// Get Process Variables
 		List<JaxbVariableInstanceLog> varLog = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
 				.findVariableInstances(processId);
-
-		
 
 		// Build process details table
 		processDetailsTable = buildProcessDetailsTable(selectedProcess);
@@ -108,108 +101,43 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		layout.setComponentAlignment(processDetailsTableHeader, Alignment.MIDDLE_LEFT);
 		layout.setComponentAlignment(processVariablesHeader, Alignment.MIDDLE_LEFT);
 
-		Button diagramButton = new Button("Display process diagram");
-		diagramButton.addStyleName(BaseTheme.BUTTON_LINK);
-
-		diagramButton.addClickListener(new Button.ClickListener() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			public void buttonClick(ClickEvent event) {
-
-				Embedded image = new Embedded("test", new StreamResource(new StreamSource() {
-
-					private static final long serialVersionUID = 1;
-
-					public InputStream getStream() {
-						InputStream is = null;
-						try {
-							is = new FileInputStream("/home/osiris/Downloads/test.svg");
-						} catch (FileNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-						// new ByteArrayInputStream("".getBytes());
-						return is;
-					}
-				}, "output.svg"));
-
-				image.setMimeType("image/svg+xml");
-
-				PopupView popup = new PopupView("process diagram", image);
-
-				popup.setPopupVisible(true);
-				popup.setHideOnMouseOut(false);
-
-				addComponent(popup);
-				setComponentAlignment(popup, Alignment.TOP_LEFT);
-				popup.addPopupVisibilityListener(new PopupVisibilityListener() {
-
-					/**
-					 * 
-					 */
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void popupVisibilityChange(PopupVisibilityEvent event) {
-						if (event.isPopupVisible() == false) {
-
-							removeComponent(event.getPopupView());
-						}
-
-					}
-				});
-
-			}
-		});
-
-		//layout.addComponent(diagramButton);
+		// process diagram
+		layout.addComponent(gap);
+		Label processDiagramHeader = new Label("Process diagram");
+		processDiagramHeader.setSizeUndefined();
+		processDiagramHeader.setStyleName("h2");
+		layout.addComponent(processDiagramHeader);
+		layout.setComponentAlignment(processDiagramHeader, Alignment.MIDDLE_LEFT);
 		
-		Embedded image = new Embedded("test", new StreamResource(new StreamSource() {
+		if (currentImage!=null) {
+			
+			layout.removeComponent(currentImage);
+		}
+
+		// load the embedded image
+		Embedded image = new Embedded("", new StreamResource(new StreamSource() {
 
 			private static final long serialVersionUID = 1;
 
 			public InputStream getStream() {
-				InputStream is = null;
-				try {
-					is = new FileInputStream("/home/osiris/Downloads/test.svg");
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+
+				FileUtil util = new FileUtil();
+
+				// select corresponding svg source file
+				logger.info("selected process name:"+ProcessDetailView.this.selectedProcessName);
+				InputStream is = util.getFileFromClasspath(ProcessDetailView.this.selectedProcessName);
 
 				// new ByteArrayInputStream("".getBytes());
 				return is;
 			}
-		}, "output.svg"));
+		}, ProcessDetailView.this.selectedProcessName+".svg"));
 
 		image.setMimeType("image/svg+xml");
 		layout.addComponent(image);
 		layout.setComponentAlignment(image, Alignment.MIDDLE_LEFT);
-		
-		JaxbNodeInstanceLog l;
-		JaxbProcessInstanceLog p;
-		
-		
-		
+		this.currentImage = image;
 
 		addComponent(layout);
-
-		// build process diagram
-		// Resource res = new ThemeResource("img/reindeer.svg");
-
-		// new StreamSource(new StringReader(str))
-		/**
-		 * Embedded image = new Embedded(); image.setMimeType("image/svg+xml"); //also unnecessary here :p
-		 * layout.addComponent(image); StreamSource source = //define your source image.setSource(new
-		 * StreamResource(source, "image.svg")); object.setMimeType("image/svg+xml"); // Unnecessary
-		 * layout.addComponent(object);
-		 */
-		// Embedded image = new Embedded();
-		// image.setSource(new StreamSource(new StringReader("")));
 
 	}
 
@@ -368,6 +296,22 @@ public class ProcessDetailView extends VerticalLayout implements View {
 
 	public void setProcessId(Long processId) {
 		this.processId = processId;
+	}
+
+	public String getSelectedProcessName() {
+		return selectedProcessName;
+	}
+
+	public void setSelectedProcessName(String selectedProcessName) {
+		this.selectedProcessName = selectedProcessName;
+	}
+
+	public Embedded getCurrentImage() {
+		return currentImage;
+	}
+
+	public void setCurrentImage(Embedded currentImage) {
+		this.currentImage = currentImage;
 	}
 
 }
