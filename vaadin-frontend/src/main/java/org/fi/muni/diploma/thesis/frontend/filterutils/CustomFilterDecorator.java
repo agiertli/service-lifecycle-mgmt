@@ -19,9 +19,9 @@ public class CustomFilterDecorator implements FilterDecorator, Serializable {
 	@Override
 	public String getEnumFilterDisplayName(Object propertyId, Object value) {
 		
-		logger.info("property id:"+propertyId);
-		logger.info("value:"+value);
-        logger.info("value to string:"+value.toString());
+//		logger.info("property id:"+propertyId);
+//		logger.info("value:"+value);
+ //       logger.info("value to string:"+value.toString());
 		
 		
 		if ("Process State".equals(propertyId)) {
