@@ -13,7 +13,7 @@ import javax.naming.NamingException;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
-import org.fi.muni.diploma.thesis.utils.DatabaseUtil;
+import org.fi.muni.diploma.thesis.utils.database.DatabaseUtil;
 import org.fi.muni.diploma.thesis.utils.properties.RTGovProperties;
 import org.overlord.rtgov.activity.model.ActivityType;
 import org.overlord.rtgov.activity.model.soa.RequestReceived;

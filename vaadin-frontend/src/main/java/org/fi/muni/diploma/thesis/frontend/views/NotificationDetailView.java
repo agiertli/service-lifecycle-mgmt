@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 
-import org.fi.muni.diploma.thesis.utils.DatabaseUtil;
+import org.fi.muni.diploma.thesis.utils.database.DatabaseUtil;
 import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
 import org.fi.muni.diploma.thesis.utils.rtgov.Notification;
 

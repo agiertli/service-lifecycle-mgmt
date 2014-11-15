@@ -1,4 +1,4 @@
-package org.fi.muni.diploma.thesis.utils;
+package org.fi.muni.diploma.thesis.utils.database;
 
 import java.io.IOException;
 import java.sql.Connection;
