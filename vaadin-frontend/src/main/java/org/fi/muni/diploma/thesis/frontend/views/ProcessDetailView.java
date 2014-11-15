@@ -124,7 +124,7 @@ public class ProcessDetailView extends VerticalLayout implements View {
 				FileUtil util = new FileUtil();
 
 				// select corresponding svg source file
-				logger.info("selected process name:"+ProcessDetailView.this.selectedProcessName);
+			//	logger.info("selected process name:"+ProcessDetailView.this.selectedProcessName);
 				InputStream is = util.getFileFromClasspath(ProcessDetailView.this.selectedProcessName);
 
 				// new ByteArrayInputStream("".getBytes());
