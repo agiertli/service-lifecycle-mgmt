@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 
 import org.fi.muni.diploma.thesis.frontend.views.MainView;
-import org.fi.muni.diploma.thesis.frontend.views.StartView;
+import org.fi.muni.diploma.thesis.frontend.views.LoginView;
 import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
 
 import com.vaadin.annotations.Theme;
@@ -43,23 +43,12 @@ public class NavigatorUI extends UI {
 		navigator = new Navigator(this, this);
 
 		// Create and register the views
-		navigator.addView(StartView.NAME, new StartView(navigator));
+		navigator.addView(LoginView.NAME, new LoginView(navigator));
 		navigator.addView(MainView.NAME, new MainView(navigator));
 		this.setNavigator(navigator);
 
-		// we won't need to call this anymore
-		try {
+		
 
-			RuntimeEngineWrapper.getInstance();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		//
 		// We use a view change handler to ensure the user is always redirected
 		// to the login view if the user is not logged in.
 		//
@@ -75,12 +64,12 @@ public class NavigatorUI extends UI {
 
 				// Check if a user has logged in
 				boolean isLoggedIn = getSession().getAttribute("username") != null;
-				boolean isLoginView = event.getNewView() instanceof StartView;
+				boolean isLoginView = event.getNewView() instanceof LoginView;
 
 				if (!isLoggedIn && !isLoginView) {
 					// Redirect to login view always if a user has not yet
 					// logged in
-					getNavigator().navigateTo(StartView.NAME);
+					getNavigator().navigateTo(LoginView.NAME);
 					return false;
 
 				} else if (isLoggedIn && isLoginView) {

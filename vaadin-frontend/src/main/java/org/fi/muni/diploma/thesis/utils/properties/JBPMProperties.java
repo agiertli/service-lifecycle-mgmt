@@ -16,8 +16,6 @@ public class JBPMProperties {
 	private final static Logger logger = Logger.getLogger(JBPMProperties.class.getName());
 
 	private URL url;
-	private String username; // user which will be logging into business-central
-	private String password;
 	private String deploymentId;
 	private String processIdNewService;
 	private String processIdExistingService;
@@ -34,20 +32,16 @@ public class JBPMProperties {
 
 		// load the properties
 		this.url = new URL(props.getProperty("jbpm.url"));
-		this.username = props.getProperty("jbpm.username");
-		this.password = props.getProperty("jbpm.password");
 		this.deploymentId = props.getProperty("jbpm.deploymentid");
 		this.processIdNewService = props.getProperty("jbpm.processid.newservice");
 		this.processIdExistingService = props.getProperty("jbpm.processid.existingservice");
 		this.processIdNotification = props.getProperty("jbpm.processid.notification");
-		
-		logger.info("username:"+this.getUsername());
-		logger.info("password:"+this.getPassword());
-		logger.info("deploymentid:"+this.getDeploymentId());
-		logger.info("new service id:"+this.getProcessIdNewService());
-		logger.info("existing service id:"+this.getProcessIdExistingService());
-		logger.info("url:"+this.getUrl().toString());
-		logger.info("notificatino id:"+this.getProcessIdNotification());
+
+		logger.info("deploymentid:" + this.getDeploymentId());
+		logger.info("new service id:" + this.getProcessIdNewService());
+		logger.info("existing service id:" + this.getProcessIdExistingService());
+		logger.info("url:" + this.getUrl().toString());
+		logger.info("notificatino id:" + this.getProcessIdNotification());
 
 	}
 
@@ -57,22 +51,6 @@ public class JBPMProperties {
 
 	public void setUrl(URL url) {
 		this.url = url;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getDeploymentId() {

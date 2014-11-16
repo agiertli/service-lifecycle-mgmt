@@ -1,10 +1,12 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Logger;
 
+import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
 import org.fi.muni.diploma.thesis.utils.properties.ApplicationUserProperties;
 
 import com.vaadin.data.validator.AbstractValidator;
@@ -21,7 +23,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 /** A start view for navigating to the main view */
-public class StartView extends VerticalLayout implements View {
+public class LoginView extends VerticalLayout implements View {
 	private static final long serialVersionUID = -3398565663865641952L;
 
 	private Navigator navigator = null;
@@ -31,9 +33,9 @@ public class StartView extends VerticalLayout implements View {
 	private final PasswordField password;
 
 	private final Button loginButton;
-	private final static Logger logger = Logger.getLogger(StartView.class.getName());
+	private final static Logger logger = Logger.getLogger(LoginView.class.getName());
 
-	public StartView(Navigator navigator) {
+	public LoginView(Navigator navigator) {
 		this.setNavigator(navigator);
 		setSizeFull();
 
@@ -134,14 +136,14 @@ public class StartView extends VerticalLayout implements View {
 				return;
 			}
 
-			String username = StartView.this.user.getValue();
-			String password = StartView.this.password.getValue();
+			String username = LoginView.this.user.getValue();
+			String password = LoginView.this.password.getValue();
 
 			try {
 
 				String securityString = username + ":ApplicationRealm:" + password;
 
-				String responseString = StartView.this.getMD5Hash(securityString);
+				String responseString = LoginView.this.getMD5Hash(securityString);
 
 				ApplicationUserProperties props = new ApplicationUserProperties();
 
@@ -161,15 +163,22 @@ public class StartView extends VerticalLayout implements View {
 
 				// Store the current user in the service session
 				getSession().setAttribute("username", username);
+				
+				try {
+					RuntimeEngineWrapper.getInstance(username,password);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 				// Navigate to main view
-				getUI().getNavigator().navigateTo(MainView.NAME);//
+				getUI().getNavigator().navigateTo(MainView.NAME);
 
 			} else {
 
 				// Wrong password clear the password field and refocuses it
-				StartView.this.password.setValue(null);
-				StartView.this.password.focus();
+				LoginView.this.password.setValue(null);
+				LoginView.this.password.focus();
 
 			}
 		}
