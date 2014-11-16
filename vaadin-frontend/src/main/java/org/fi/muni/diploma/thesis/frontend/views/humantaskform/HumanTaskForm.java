@@ -33,8 +33,6 @@ import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.data.util.converter.Converter.ConversionException;
-import com.vaadin.event.FieldEvents.FocusEvent;
-import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -268,7 +266,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public HumanTaskForm(Long taskId, String username,InternalHumanTask newInternalHumanTask, Navigator navigator) {
+	public HumanTaskForm(Long taskId, String username, InternalHumanTask newInternalHumanTask, Navigator navigator) {
 		this.humanTask = newInternalHumanTask;
 		this.taskid = taskId;
 		this.navigator = navigator;
@@ -481,47 +479,19 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			case TEXT_AREA: {
 
 				TextArea textArea = new TextArea(output.getLabel());
+				
 
 				textArea.setRequired(true);
 				textArea.setEnabled(true);
 
 				textArea.setRequiredError("This field is required");
-				textArea.addFocusListener(new FocusListener() {
 
-					/**
-					 * 
-					 */
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void focus(FocusEvent event) {
-
-						if (((TextArea) event.getComponent()).getValue().equals("Enter some description or URL pointing to the resource")) {
-
-							((TextArea) event.getComponent()).setValue("");
-
-						}
-
-					}
-
-				});
-				// this is stupid - it won't be possible to let an empty value, and it should be possible
-				// textArea.addBlurListener(new BlurListener() {
-				//
-				// /**
-				// *
-				// */
-				// private static final long serialVersionUID = 1L;
-				//
-				// @Override
-				// public void blur(BlurEvent event) {
-				// ((TextArea) event.getComponent()).setValue("Enter some description or URL pointing to the resource");
-				//
-				// }
-				// });
+				
 
 				this.getItemset().addItemProperty(output.getOutputIdentifier(),
-						new ObjectProperty<String>("Enter some description or URL pointing to the resource"));
+						new ObjectProperty<String>(""));
+				
+				textArea.setInputPrompt("Enter some description or URL pointing to the resource");
 				this.getBinder().bind(textArea, output.getOutputIdentifier());
 				if (this.getHumanTask().getName().equals(HumanTaskName.EVALUATE_TEST_RESULTS.toString())) {
 
@@ -677,7 +647,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 	@Override
 	public void enter(ViewChangeEvent event) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

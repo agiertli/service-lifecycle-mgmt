@@ -68,7 +68,6 @@ public class TaskListView extends VerticalLayout implements View {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	public TaskListView(Navigator navigator, String username) {
 
 		this.setNavigator(navigator);
@@ -183,15 +182,9 @@ public class TaskListView extends VerticalLayout implements View {
 		return cont;
 	}
 
-	public TaskListView(Long id) {
-		// TODO Auto-generated constructor stub
-	}
 
 	@Override
-	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
-
-	}
+	public void enter(ViewChangeEvent event) {}
 
 	public Navigator getNavigator() {
 		return navigator;
