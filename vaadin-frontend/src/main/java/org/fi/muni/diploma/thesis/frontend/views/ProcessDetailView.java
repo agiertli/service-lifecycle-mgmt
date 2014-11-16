@@ -43,6 +43,7 @@ public class ProcessDetailView extends VerticalLayout implements View {
 	private String processState;
 	private Boolean servicesQueried = false;
 	private Boolean passedTests = true;
+	private Boolean serviceSelected = false;
 
 	private static final Logger logger = Logger.getLogger(ProcessDetailView.class.getName());
 
@@ -50,6 +51,8 @@ public class ProcessDetailView extends VerticalLayout implements View {
 	public ProcessDetailView(Long processId, Navigator navigator) {
 		this.navigator = navigator;
 		this.processId = processId;
+		
+		
 
 		VerticalLayout layout = new VerticalLayout();
 
@@ -141,7 +144,8 @@ public class ProcessDetailView extends VerticalLayout implements View {
 						ProcessDetailView.this.selectedProcess.getProcessName(),
 						ProcessDetailView.this.processState,
 						ProcessDetailView.this.servicesQueried,
-						ProcessDetailView.this.passedTests);
+						ProcessDetailView.this.passedTests,
+						ProcessDetailView.this.serviceSelected);
 
 				// new ByteArrayInputStream("".getBytes());
 				
@@ -223,6 +227,12 @@ public class ProcessDetailView extends VerticalLayout implements View {
 			if (var.getVariableId().equals("ServiceState") || var.getVariableId().equals("taskGroup")) {
 
 				continue;
+			}
+			
+			if (var.getVariableId().contains("serviceSRAMPUUID")) {
+				
+				serviceSelected = true;
+				
 			}
 
 			cont.addItem(counter);

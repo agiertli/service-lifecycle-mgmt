@@ -34,8 +34,8 @@ private static final Logger logger = Logger.getLogger(FileUtil.class.getName());
 		Boolean processSvg = true;
 		
 		
-	logger.info("process name svg:"+processName);
-	logger.info("process state svg:"+processState);
+	//logger.info("process name svg:"+processName);
+	//logger.info("process state svg:"+processState);
 	
 	//first task
 	if (processState == null && processName.toLowerCase().contains("exist")) {

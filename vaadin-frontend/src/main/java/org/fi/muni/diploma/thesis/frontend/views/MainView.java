@@ -48,7 +48,6 @@ public class MainView extends VerticalLayout implements View {
 		public void buttonClick(ClickEvent event) {
 
 			MainView.this.navigator.navigateTo("main" + "/" + menuitem);
-			logger.info("main view button click");
 		}
 	}
 
@@ -110,7 +109,8 @@ public class MainView extends VerticalLayout implements View {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				MainView.this.getNavigator().navigateTo("");
+				getSession().setAttribute("username", null);
+				getUI().getNavigator().navigateTo("");
 			}
 		});
 		addComponent(logout);
@@ -154,7 +154,7 @@ public class MainView extends VerticalLayout implements View {
 		// Redirect to Task List View
 		else if (event.getParameters().equalsIgnoreCase(TaskListView.NAME)) {
 
-			panelContent.addComponent(new TaskListView(this.getNavigator()));
+			panelContent.addComponent(new TaskListView(this.getNavigator(),(String)getUI().getSession().getAttribute("username")));
 			return;
 
 			// Redirect to Notification Action view
@@ -186,7 +186,7 @@ public class MainView extends VerticalLayout implements View {
 
 			Long taskId = Long.valueOf(event.getParameters().substring(event.getParameters().indexOf("id=") + 3));
 
-			panelContent.addComponent(new TaskDetailView(taskId, this.getNavigator()));
+			panelContent.addComponent(new TaskDetailView(taskId,(String)getUI().getSession().getAttribute("username"),  this.getNavigator()));
 
 		}
 

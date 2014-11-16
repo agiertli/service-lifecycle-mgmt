@@ -69,12 +69,12 @@ public class TaskListView extends VerticalLayout implements View {
 	}
 
 	@SuppressWarnings("unchecked")
-	public TaskListView(Navigator navigator) {
+	public TaskListView(Navigator navigator, String username) {
 
 		this.setNavigator(navigator);
 		taskService = new TaskServiceWrapper();
 
-		List<TaskSummary> taskList = taskService.getTasksAssignedAsPotentialOwner("anton", "en-UK");
+		List<TaskSummary> taskList = taskService.getTasksAssignedAsPotentialOwner(username, "en-UK");
 
 		VerticalLayout layout = new VerticalLayout();
 		taskListTable = buildTaskListTable(taskList);

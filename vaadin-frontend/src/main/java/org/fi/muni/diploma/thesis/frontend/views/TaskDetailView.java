@@ -41,7 +41,7 @@ public class TaskDetailView extends VerticalLayout implements View {
 
 	private Navigator navigator;
 
-	public TaskDetailView(Long id, Navigator navigator) {
+	public TaskDetailView(Long id, String username,Navigator navigator) {
 
 		this.setNavigator(navigator);
 		// auditLogService = new AuditServiceWrapper();
@@ -67,7 +67,7 @@ public class TaskDetailView extends VerticalLayout implements View {
 
 		//add Human Task Form
 		// Task  'Select Service From S-RAMP' is not working due to unsolve issues with jbpm+custom objects
-		addComponent(new HumanTaskForm(id, InternalHumanTaskFactory.newInternalHumanTask(name),this.getNavigator()));
+		addComponent(new HumanTaskForm(id,username,  InternalHumanTaskFactory.newInternalHumanTask(name),this.getNavigator()));
 
 	}
 

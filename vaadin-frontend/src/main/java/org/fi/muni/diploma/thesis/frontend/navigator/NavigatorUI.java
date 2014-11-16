@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.logging.Logger;
 
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
 
 import org.fi.muni.diploma.thesis.frontend.views.MainView;
 import org.fi.muni.diploma.thesis.frontend.views.StartView;
@@ -14,33 +14,26 @@ import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 
 @Theme("mytheme")
-// BEGIN-EXAMPLE: advanced.navigator.basic
 public class NavigatorUI extends UI {
 
 	private final static Logger logger = Logger.getLogger(NavigatorUI.class.getName());
 
-	//@WebServlet(value = "/*", asyncSupported = true)
-	@WebServlet(urlPatterns = "/*",  asyncSupported = true, initParams = { @WebInitParam(name = "widgetset", value = "org.fi.muni.diploma.thesis.frontend.AppWidgetSet") })
+	@WebServlet(urlPatterns = "/*", asyncSupported = true, initParams = { @WebInitParam(name = "widgetset", value = "org.fi.muni.diploma.thesis.frontend.AppWidgetSet") })
 	@VaadinServletConfiguration(productionMode = false, ui = NavigatorUI.class)
 	public static class Servlet extends VaadinServlet {
-
 		private static final long serialVersionUID = 1L;
 
 	}
-	
-	
 
 	private Navigator navigator;
 
 	private static final long serialVersionUID = 511085335415683713L;
-
-	protected static final String MAINVIEW = "main";
-	protected static final String STARTVIEW = "start";
 
 	@Override
 	protected void init(VaadinRequest request) {
@@ -56,8 +49,6 @@ public class NavigatorUI extends UI {
 
 		// we won't need to call this anymore
 		try {
-			
-		//	logger.info("obtaining remote runtime engine wrapper");
 
 			RuntimeEngineWrapper.getInstance();
 		} catch (MalformedURLException e) {
@@ -67,6 +58,45 @@ public class NavigatorUI extends UI {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		//
+		// We use a view change handler to ensure the user is always redirected
+		// to the login view if the user is not logged in.
+		//
+		getNavigator().addViewChangeListener(new ViewChangeListener() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean beforeViewChange(ViewChangeEvent event) {
+
+				// Check if a user has logged in
+				boolean isLoggedIn = getSession().getAttribute("username") != null;
+				boolean isLoginView = event.getNewView() instanceof StartView;
+
+				if (!isLoggedIn && !isLoginView) {
+					// Redirect to login view always if a user has not yet
+					// logged in
+					getNavigator().navigateTo(StartView.NAME);
+					return false;
+
+				} else if (isLoggedIn && isLoginView) {
+					// If someone tries to access to login view while logged in,
+					// then cancel
+					return false;
+				}
+
+				return true;
+			}
+
+			@Override
+			public void afterViewChange(ViewChangeEvent event) {
+
+			}
+		});
 
 	}
 
@@ -79,4 +109,3 @@ public class NavigatorUI extends UI {
 	}
 
 }
-// END-EXAMPLE: advanced.navigator.basic

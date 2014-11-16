@@ -36,6 +36,8 @@ import com.vaadin.data.util.converter.Converter.ConversionException;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -53,7 +55,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
-public class HumanTaskForm extends VerticalLayout {
+public class HumanTaskForm extends VerticalLayout implements View {
 
 	private static final long serialVersionUID = 1L;
 	private InternalHumanTask humanTask;
@@ -73,6 +75,7 @@ public class HumanTaskForm extends VerticalLayout {
 	private Label portError;
 	private TextField portField;
 	private CheckBox emailCheckbox;
+	private String taskUser;
 
 	public class SelectListener implements ClickListener {
 
@@ -235,8 +238,8 @@ public class HumanTaskForm extends VerticalLayout {
 				}
 			}
 
-			taskService.start(id, "anton");
-			taskService.complete(id, "anton", result);
+			taskService.start(id, HumanTaskForm.this.taskUser);
+			taskService.complete(id, HumanTaskForm.this.taskUser, result);
 
 			HumanTaskForm.this.navigator.navigateTo("main" + "/" + TaskListView.NAME);
 
@@ -265,11 +268,12 @@ public class HumanTaskForm extends VerticalLayout {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public HumanTaskForm(Long taskId, InternalHumanTask newInternalHumanTask, Navigator navigator) {
+	public HumanTaskForm(Long taskId, String username,InternalHumanTask newInternalHumanTask, Navigator navigator) {
 		this.humanTask = newInternalHumanTask;
 		this.taskid = taskId;
 		this.navigator = navigator;
 		this.taskService = new TaskServiceWrapper();
+		this.taskUser = username;
 
 		// data binding of form
 		this.setItemset(new PropertysetItem());
@@ -668,6 +672,12 @@ public class HumanTaskForm extends VerticalLayout {
 
 	public void setServiceName(TextField serviceName) {
 		this.serviceName = serviceName;
+	}
+
+	@Override
+	public void enter(ViewChangeEvent event) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
