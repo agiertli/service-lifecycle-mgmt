@@ -42,6 +42,8 @@ public class JBPMProperties {
 	//	logger.info("existing service id:" + this.getProcessIdExistingService());
 	//	logger.info("url:" + this.getUrl().toString());
 	//	logger.info("notificatino id:" + this.getProcessIdNotification());
+		
+		resourceStream.close();
 
 	}
 

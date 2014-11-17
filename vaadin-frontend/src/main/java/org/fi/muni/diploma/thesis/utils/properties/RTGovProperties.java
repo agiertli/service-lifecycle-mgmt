@@ -28,6 +28,8 @@ public class RTGovProperties {
 		this.url = new URL(props.getProperty("rtgov.url"));
 		this.username = props.getProperty("rtgov.username");
 		this.password = props.getProperty("rtgov.password");
+		
+		resourceStream.close();
 	}
 
 	public URL getUrl() {

@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 
 import org.fi.muni.diploma.thesis.utils.properties.ApplicationUserRoleProperties;
 import org.fi.muni.diploma.thesis.utils.rtgov.Notification;
-import org.fi.muni.diploma.thesis.utils.rtgov.RetiredService;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -205,7 +204,12 @@ public class MainView extends VerticalLayout implements View {
 			// parse the id=X parameter
 			Long processInstanceId = Long.valueOf(event.getParameters().substring(event.getParameters().indexOf("id=") + 3));
 
-			panelContent.addComponent(new ProcessDetailView(processInstanceId, this.getNavigator()));
+			try {
+				panelContent.addComponent(new ProcessDetailView(processInstanceId, this.getNavigator()));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 

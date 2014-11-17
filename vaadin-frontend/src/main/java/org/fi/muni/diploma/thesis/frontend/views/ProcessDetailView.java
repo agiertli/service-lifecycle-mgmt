@@ -1,5 +1,6 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,7 +49,7 @@ public class ProcessDetailView extends VerticalLayout implements View {
 	private static final Logger logger = Logger.getLogger(ProcessDetailView.class.getName());
 
 	@SuppressWarnings("unchecked")
-	public ProcessDetailView(Long processId, Navigator navigator) {
+	public ProcessDetailView(Long processId, Navigator navigator) throws IOException {
 		this.navigator = navigator;
 		this.processId = processId;
 		
@@ -158,6 +159,7 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		resource.setCacheTime(0);
 		
 		Embedded image = new Embedded("",resource);
+	
 		
 
 		image.setMimeType("image/svg+xml");
@@ -166,6 +168,9 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		this.currentImage = image;
 
 		addComponent(layout);
+		resource.getStreamSource().getStream().close();
+		
+		
 
 	}
 

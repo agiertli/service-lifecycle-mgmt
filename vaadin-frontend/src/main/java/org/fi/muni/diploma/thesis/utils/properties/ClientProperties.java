@@ -23,6 +23,8 @@ public class ClientProperties {
 		props.load(resourceStream);
 		
 		this.dsJndi = props.getProperty("database.jndi");
+		
+		resourceStream.close();
 	}
 
 	public String getDsJndi() {

@@ -2,22 +2,22 @@ package org.fi.muni.diploma.thesis.frontend.views;
 
 import java.util.logging.Logger;
 
-import org.fi.muni.diploma.thesis.frontend.views.MainView.ButtonListener;
-
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
 
+@SuppressWarnings("unused")
 public class LimitedView extends VerticalLayout implements View {
 
 	private static final long serialVersionUID = -3398565663865641952L;
+
 	private final static Logger logger = Logger.getLogger(MainView.class.getName());
 
 	public static String NAME = "limited-main";
@@ -25,10 +25,7 @@ public class LimitedView extends VerticalLayout implements View {
 	// list of components on the page
 	private Panel panel;
 	private Navigator navigator;
-	private Button startButton;
-	private Button instances;
 	private Button tasks;
-	private Button notifications;
 
 	private Label greeting;
 
@@ -119,22 +116,22 @@ public class LimitedView extends VerticalLayout implements View {
 
 			return;
 		}
-		
+
 		// Redirect to Task List View
 		else if (event.getParameters().toLowerCase().contains((TaskListView.NAME.toLowerCase()))) {
 
-			panelContent.addComponent(new TaskListView(this.getNavigator(),(String)getUI().getSession().getAttribute("username")));
+			panelContent.addComponent(new TaskListView(this.getNavigator(), (String) getUI().getSession().getAttribute("username")));
 			return;
 
 			// Redirect to Notification Action view
 		}
-		
+
 		// Redirect to Task Detail View
 		else if (event.getParameters().toLowerCase().contains(TaskDetailView.NAME.toLowerCase())) {
 
 			Long taskId = Long.valueOf(event.getParameters().substring(event.getParameters().indexOf("id=") + 3));
 
-			panelContent.addComponent(new TaskDetailView(taskId,(String)getUI().getSession().getAttribute("username"),  this.getNavigator()));
+			panelContent.addComponent(new TaskDetailView(taskId, (String) getUI().getSession().getAttribute("username"), this.getNavigator()));
 
 		}
 
