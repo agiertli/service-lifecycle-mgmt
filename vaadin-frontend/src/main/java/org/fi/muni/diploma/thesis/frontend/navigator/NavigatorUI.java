@@ -49,8 +49,6 @@ public class NavigatorUI extends UI {
 		navigator.addView(LimitedView.NAME, new LimitedView(navigator));
 		this.setNavigator(navigator);
 
-		
-
 		// We use a view change handler to ensure the user is always redirected
 		// to the login view if the user is not logged in.
 		//
@@ -66,6 +64,7 @@ public class NavigatorUI extends UI {
 
 				// Check if a user has logged in
 				boolean isLoggedIn = getSession().getAttribute("username") != null;
+
 				boolean isLoginView = event.getNewView() instanceof LoginView;
 
 				if (!isLoggedIn && !isLoginView) {
@@ -75,11 +74,21 @@ public class NavigatorUI extends UI {
 					return false;
 
 				} else if (isLoggedIn && isLoginView) {
-					// If someone tries to access to login view while logged in,
-					// then cancel
-					return false;
-				}
 
+					// this usually happens when logged user closed the application tab
+					String roles = (String) getSession().getAttribute("role");
+					logger.info("roles:"+roles);
+					if (roles.contains("SOAGovernanceSpecialist")) {
+						logger.info("navigating to main view");
+						getNavigator().navigateTo(MainView.NAME);
+						return false;
+					} else {
+						getNavigator().navigateTo(LimitedView.NAME);
+						return false;
+
+					}
+				}
+				
 				return true;
 			}
 
