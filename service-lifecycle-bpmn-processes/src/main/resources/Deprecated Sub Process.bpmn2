@@ -133,11 +133,7 @@
         <bpmn2:sourceRef>_D3E1EFC4-1366-4015-B7CF-E179FCEB67A5_outBoolconsumersInformedAboutRetirementOutputX</bpmn2:sourceRef>
         <bpmn2:targetRef>outBoolconsumersInformedAboutRetirement_sub</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
-      <bpmn2:potentialOwner id="_Y2ZSN2KFEeSjX6EBs04SUg">
-        <bpmn2:resourceAssignmentExpression id="_Y2ZSOGKFEeSjX6EBs04SUg">
-          <bpmn2:formalExpression id="_Y2ZSOWKFEeSjX6EBs04SUg">anton</bpmn2:formalExpression>
-        </bpmn2:resourceAssignmentExpression>
-      </bpmn2:potentialOwner>
+     
     </bpmn2:userTask>
     <bpmn2:sequenceFlow id="_AAC8930C-CD25-47E5-BDDD-55273A1B068F" drools:bgcolor="#000000" drools:selectable="true" sourceRef="_BA0518A4-E8E0-465F-838B-1CF3048FB0C0" targetRef="_D3E1EFC4-1366-4015-B7CF-E179FCEB67A5"/>
     <bpmn2:scriptTask id="_3122D9BD-603C-41F3-BCC2-3F3A3845506F" drools:selectable="true" name="set status" scriptFormat="http://www.java.com/java">

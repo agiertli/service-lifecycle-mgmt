@@ -247,11 +247,6 @@
         <bpmn2:sourceRef>_68EBD5AD-BF67-497F-8C4C-3A8AA598B93D_t_serviceNameOutputX</bpmn2:sourceRef>
         <bpmn2:targetRef>p_serviceName</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
-      <bpmn2:potentialOwner id="_vPP_m2pREeSPwvKPiPjEmg">
-        <bpmn2:resourceAssignmentExpression id="_vPP_nGpREeSPwvKPiPjEmg">
-          <bpmn2:formalExpression id="_vPP_nWpREeSPwvKPiPjEmg">anton</bpmn2:formalExpression>
-        </bpmn2:resourceAssignmentExpression>
-      </bpmn2:potentialOwner>
     </bpmn2:userTask>
     <bpmn2:callActivity id="_D3A6A84C-E1DD-4514-963D-06907D1DCC48" drools:selectable="true" drools:independent="true" drools:waitForCompletion="true" name="Deprecate  service" calledElement="ServiceLifecycleProject.AvailableSubProcess">
       <bpmn2:incoming>_9F8E028F-73A6-49BA-8CCB-4C76622E3DB7</bpmn2:incoming>
@@ -441,11 +436,7 @@
         <bpmn2:sourceRef>_F2ABD730-49D6-47BB-95C6-C6A1E8DC2A34_out_StatusOutputX</bpmn2:sourceRef>
         <bpmn2:targetRef>ServiceState</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
-      <bpmn2:potentialOwner id="_vPP_wWpREeSPwvKPiPjEmg">
-        <bpmn2:resourceAssignmentExpression id="_vPP_wmpREeSPwvKPiPjEmg">
-          <bpmn2:formalExpression id="_vPP_w2pREeSPwvKPiPjEmg">anton</bpmn2:formalExpression>
-        </bpmn2:resourceAssignmentExpression>
-      </bpmn2:potentialOwner>
+      
     </bpmn2:userTask>
     <bpmn2:startEvent id="_D71280C7-557E-4831-AADF-E1797A47AF55" drools:bgcolor="#9acd32" drools:selectable="true" name="">
       <bpmn2:outgoing>_33CB7167-BE74-49FF-BD74-E88EAD7B7666</bpmn2:outgoing>
@@ -708,11 +699,7 @@
         <bpmn2:sourceRef>_B238152D-4F76-4D55-92A2-30F07F96D6C3_t_RetestOutputX</bpmn2:sourceRef>
         <bpmn2:targetRef>p_retest</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
-      <bpmn2:potentialOwner id="_vPQmn2pREeSPwvKPiPjEmg">
-        <bpmn2:resourceAssignmentExpression id="_vPQmoGpREeSPwvKPiPjEmg">
-          <bpmn2:formalExpression id="_vPQmoWpREeSPwvKPiPjEmg">anton</bpmn2:formalExpression>
-        </bpmn2:resourceAssignmentExpression>
-      </bpmn2:potentialOwner>
+
     </bpmn2:userTask>
     <bpmn2:exclusiveGateway id="_69CF2BF5-5667-448A-862E-D55E41E1F9C9" drools:bgcolor="#f0e68c" drools:selectable="true" drools:bordercolor="#a67f00" drools:dg="_48810FFE-2827-450E-8244-B32C25DB953E" name="test" gatewayDirection="Converging" default="_48810FFE-2827-450E-8244-B32C25DB953E">
       <bpmn2:incoming>_F6B10972-012E-47A9-AE31-43BF6EF6381E</bpmn2:incoming>

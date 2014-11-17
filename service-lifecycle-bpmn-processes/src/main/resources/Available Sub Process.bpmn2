@@ -138,11 +138,7 @@ kcontext.setVariable("ServiceState_sub","Available");]]></bpmn2:script>
         <bpmn2:sourceRef>_1BC87CED-B11A-4C58-B98F-380E853665E4_outBoolServiceConfigUpdatedOutputX</bpmn2:sourceRef>
         <bpmn2:targetRef>outServiceConfigUpdated_sub</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
-      <bpmn2:potentialOwner id="_momnOGm_EeSPwvKPiPjEmg">
-        <bpmn2:resourceAssignmentExpression id="_momnOWm_EeSPwvKPiPjEmg">
-          <bpmn2:formalExpression id="_momnOmm_EeSPwvKPiPjEmg">anton</bpmn2:formalExpression>
-        </bpmn2:resourceAssignmentExpression>
-      </bpmn2:potentialOwner>
+     
     </bpmn2:userTask>
     <bpmn2:sequenceFlow id="_B69F2624-9D21-46FC-BB62-308689EE45D1" drools:bgcolor="#000000" drools:selectable="true" sourceRef="_74358FAD-E853-45D0-A543-5255DFCEFFF3" targetRef="_1BC87CED-B11A-4C58-B98F-380E853665E4"/>
     <bpmn2:endEvent id="_5F589EA3-E495-4E66-8A46-A2D508115D71" drools:bgcolor="#ffc4d1" drools:selectable="true" name="">

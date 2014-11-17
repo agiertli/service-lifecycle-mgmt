@@ -146,11 +146,7 @@ kcontext.setVariable("ServiceState_sub","InTest");]]></bpmn2:script>
         <bpmn2:sourceRef>_641FBA26-9D60-4985-A7D9-644DD6D8D729_outBoolpassedIntegrationTestsWithServiceConsumersOutputX</bpmn2:sourceRef>
         <bpmn2:targetRef>outBoolpassedIntegrationTestsWithServiceConsumers_sub</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
-      <bpmn2:potentialOwner id="_lIeFqGdYEeSHT5ei1taazg">
-        <bpmn2:resourceAssignmentExpression id="_lIeFqWdYEeSHT5ei1taazg">
-          <bpmn2:formalExpression id="_lIeFqmdYEeSHT5ei1taazg">anton</bpmn2:formalExpression>
-        </bpmn2:resourceAssignmentExpression>
-      </bpmn2:potentialOwner>
+     
     </bpmn2:userTask>
     <bpmn2:sequenceFlow id="_084A82D9-E7CF-4F71-898F-A51AB59C6355" drools:bgcolor="#000000" drools:selectable="true" sourceRef="_6AAC15B3-8E0A-4CFD-9526-17B143528B3C" targetRef="_641FBA26-9D60-4985-A7D9-644DD6D8D729"/>
     <bpmn2:sequenceFlow id="_C81E28C0-05BD-47F3-9A0D-D4440FDE558E" drools:bgcolor="#000000" drools:selectable="true" sourceRef="_ECA1A71A-E2DD-4B3D-A765-203496045818" targetRef="_6AAC15B3-8E0A-4CFD-9526-17B143528B3C"/>

@@ -61,7 +61,7 @@ public class TaskListView extends VerticalLayout implements View {
 		@Override
 		public void buttonClick(ClickEvent event) {
 
-			logger.info("button click, redirecting to Task Details page");
+		//	logger.info("button click, redirecting to Task Details page");
 			TaskListView.this.navigator.navigateTo("main" + "/" + menuitem + "?id=" + String.valueOf((Long) event.getButton().getData()));
 
 		}
@@ -69,6 +69,8 @@ public class TaskListView extends VerticalLayout implements View {
 	}
 
 	public TaskListView(Navigator navigator, String username) {
+		
+		logger.info("task list username:"+username);
 
 		this.setNavigator(navigator);
 		taskService = new TaskServiceWrapper();
@@ -148,7 +150,7 @@ public class TaskListView extends VerticalLayout implements View {
 
 			// logger.info(String.valueOf("dafuq task id:"+taskSummary.getId()));
 			// logger.info(String.valueOf("dafuq process id:"+taskSummary.getProcessInstanceId()));
-			logger.info(taskSummary.getStatus().name());
+		//	logger.info(taskSummary.getStatus().name());
 
 			cont.getContainerProperty(i, "Task Name").setValue(taskSummary.getName());
 			cont.getContainerProperty(i, "Task ID").setValue(taskSummary.getId());

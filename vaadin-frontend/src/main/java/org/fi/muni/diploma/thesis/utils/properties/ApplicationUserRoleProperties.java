@@ -17,7 +17,7 @@ public class ApplicationUserRoleProperties {
 	public ApplicationUserRoleProperties() throws IOException {
 
 		String dir = System.getProperty("jboss.server.config.dir");
-		logger.info("dir:" + dir);
+	//	logger.info("dir:" + dir);
 
 		FileInputStream is = new FileInputStream(dir + "/application-users.properties");
 		FileInputStream is2 = new FileInputStream(dir + "/application-roles.properties");
