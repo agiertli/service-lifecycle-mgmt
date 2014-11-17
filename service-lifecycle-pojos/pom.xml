@@ -5,17 +5,18 @@
   <groupId>org.fi.muni.diploma.thesis</groupId>
   <artifactId>service-lifecycle-model</artifactId>
   <version>1.0.Final</version>
-  <packaging>kjar</packaging>
+  <packaging>jar</packaging>
   <name>Service Lifecycle POJOs</name>
   <description>Model  classes for service-lifecycle management application</description>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.kie</groupId>
-        <artifactId>kie-maven-plugin</artifactId>
-        <version>6.2.0.CR1</version>
-        <extensions>true</extensions>
-      </plugin>
-    </plugins>
-  </build>
+  
+  
+  	<repositories>
+		<repository>
+			<id>jboss community repository</id>
+			<url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+		</repository>
+	</repositories>
+
+  
+  
 </project>
