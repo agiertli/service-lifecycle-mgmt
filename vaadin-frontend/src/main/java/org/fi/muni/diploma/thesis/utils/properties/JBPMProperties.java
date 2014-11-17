@@ -37,11 +37,11 @@ public class JBPMProperties {
 		this.processIdExistingService = props.getProperty("jbpm.processid.existingservice");
 		this.processIdNotification = props.getProperty("jbpm.processid.notification");
 
-		logger.info("deploymentid:" + this.getDeploymentId());
-		logger.info("new service id:" + this.getProcessIdNewService());
-		logger.info("existing service id:" + this.getProcessIdExistingService());
-		logger.info("url:" + this.getUrl().toString());
-		logger.info("notificatino id:" + this.getProcessIdNotification());
+	//	logger.info("deploymentid:" + this.getDeploymentId());
+	//	logger.info("new service id:" + this.getProcessIdNewService());
+	//	logger.info("existing service id:" + this.getProcessIdExistingService());
+	//	logger.info("url:" + this.getUrl().toString());
+	//	logger.info("notificatino id:" + this.getProcessIdNotification());
 
 	}
 

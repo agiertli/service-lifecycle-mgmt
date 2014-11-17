@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.logging.Logger;
 
 import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
-import org.fi.muni.diploma.thesis.utils.properties.ApplicationUserProperties;
+import org.fi.muni.diploma.thesis.utils.properties.ApplicationUserRoleProperties;
 
 import com.vaadin.data.validator.AbstractValidator;
 import com.vaadin.navigator.Navigator;
@@ -76,7 +76,7 @@ public class LoginView extends VerticalLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-	//	Notification.show("Service lifecycle manager");
+		// Notification.show("Service lifecycle manager");
 	}
 
 	public Navigator getNavigator() {
@@ -131,6 +131,13 @@ public class LoginView extends VerticalLayout implements View {
 			// for wrongly entered passwords
 
 			Boolean isValid = false;
+			ApplicationUserRoleProperties props = null;
+			try {
+				props = new ApplicationUserRoleProperties();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			//
 			if (!user.isValid() || !password.isValid()) {
 				return;
@@ -138,6 +145,7 @@ public class LoginView extends VerticalLayout implements View {
 
 			String username = LoginView.this.user.getValue();
 			String password = LoginView.this.password.getValue();
+			String roles = "";
 
 			try {
 
@@ -145,12 +153,12 @@ public class LoginView extends VerticalLayout implements View {
 
 				String responseString = LoginView.this.getMD5Hash(securityString);
 
-				ApplicationUserProperties props = new ApplicationUserProperties();
+				roles = props.getRoles(username);
 
 				if (props.getPassword(username).equals(responseString)) {
 
 					isValid = true;
-				
+
 				}
 
 			} catch (Exception e) {
@@ -163,16 +171,26 @@ public class LoginView extends VerticalLayout implements View {
 
 				// Store the current user in the service session
 				getSession().setAttribute("username", username);
-				
+				getSession().setAttribute("role", roles);
+
 				try {
-					RuntimeEngineWrapper.getInstance(username,password);
+					RuntimeEngineWrapper.getInstance(username, password);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 				// Navigate to main view
-				getUI().getNavigator().navigateTo(MainView.NAME);
+
+				if (props.hasRole(username, "SOAGovernanceSpecialist")) {
+
+					getUI().getNavigator().navigateTo(MainView.NAME);
+				}
+				
+				else {
+					
+					getUI().getNavigator().navigateTo(LimitedView.NAME);
+				}
 
 			} else {
 

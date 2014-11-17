@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 
+import org.fi.muni.diploma.thesis.frontend.views.LimitedView;
 import org.fi.muni.diploma.thesis.frontend.views.MainView;
 import org.fi.muni.diploma.thesis.frontend.views.LoginView;
 import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
@@ -45,6 +46,7 @@ public class NavigatorUI extends UI {
 		// Create and register the views
 		navigator.addView(LoginView.NAME, new LoginView(navigator));
 		navigator.addView(MainView.NAME, new MainView(navigator));
+		navigator.addView(LimitedView.NAME, new LimitedView(navigator));
 		this.setNavigator(navigator);
 
 		

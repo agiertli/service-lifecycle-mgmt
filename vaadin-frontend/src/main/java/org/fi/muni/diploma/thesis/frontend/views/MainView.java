@@ -1,7 +1,9 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
+import org.fi.muni.diploma.thesis.utils.properties.ApplicationUserRoleProperties;
 import org.fi.muni.diploma.thesis.utils.rtgov.Notification;
 import org.fi.muni.diploma.thesis.utils.rtgov.RetiredService;
 
@@ -47,13 +49,13 @@ public class MainView extends VerticalLayout implements View {
 		@Override
 		public void buttonClick(ClickEvent event) {
 
-			MainView.this.navigator.navigateTo("main" + "/" + menuitem);
+			MainView.this.navigator.navigateTo(MainView.NAME + "/" + menuitem);
 		}
 	}
 
 	public MainView(Navigator navigator) {
 
-		logger.info("constructor of MainView Called");
+		// logger.info("constructor of MainView Called");
 
 		this.setNavigator(navigator);
 
@@ -118,7 +120,33 @@ public class MainView extends VerticalLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-	//	logger.info("enter method called");
+		// logger.info("enter method called");
+
+		ApplicationUserRoleProperties props = null;
+		try {
+			props = new ApplicationUserRoleProperties();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		// only SOAGovernanceSpecialist can access this
+		if (!props.hasRole((String) getUI().getSession().getAttribute("username"), "SOAGovernanceSpecialist")) {
+
+			if (event.getParameters().equalsIgnoreCase(TaskListView.NAME)) {
+
+				this.getNavigator().navigateTo(LimitedView.NAME + "/" + TaskListView.NAME);
+			} else if (event.getParameters().contains((TaskDetailView.NAME.toLowerCase()))) {
+
+				logger.info("params:"+event.getParameters());
+				
+				this.getNavigator().navigateTo(LimitedView.NAME +  "/" + event.getParameters());
+			} else {
+				this.getNavigator().navigateTo(LimitedView.NAME);
+			}
+
+		}
+
 		VerticalLayout panelContent = new VerticalLayout();
 		panelContent.setSizeFull();
 		panelContent.setMargin(true);
@@ -154,7 +182,7 @@ public class MainView extends VerticalLayout implements View {
 		// Redirect to Task List View
 		else if (event.getParameters().equalsIgnoreCase(TaskListView.NAME)) {
 
-			panelContent.addComponent(new TaskListView(this.getNavigator(),(String)getUI().getSession().getAttribute("username")));
+			panelContent.addComponent(new TaskListView(this.getNavigator(), (String) getUI().getSession().getAttribute("username")));
 			return;
 
 			// Redirect to Notification Action view
@@ -186,7 +214,7 @@ public class MainView extends VerticalLayout implements View {
 
 			Long taskId = Long.valueOf(event.getParameters().substring(event.getParameters().indexOf("id=") + 3));
 
-			panelContent.addComponent(new TaskDetailView(taskId,(String)getUI().getSession().getAttribute("username"),  this.getNavigator()));
+			panelContent.addComponent(new TaskDetailView(taskId, (String) getUI().getSession().getAttribute("username"), this.getNavigator()));
 
 		}
 
@@ -194,16 +222,16 @@ public class MainView extends VerticalLayout implements View {
 		else if (event.getParameters().contains(NotificationDetailView.NAME.toLowerCase())) {
 
 			Notification notification = (Notification) getUI().getSession().getAttribute("notification");
-			
+
 			if (notification == null) {
-				
+
 				Label notFound = new Label("Unknown notification. Please don't try to hack me anymore");
 				addComponent(notFound);
 				panelContent.addComponent(notFound);
 				panelContent.setComponentAlignment(notFound, Alignment.TOP_LEFT);
 				return;
 			}
-			
+
 			getUI().getSession().setAttribute("notification", null); // clear the value once we don't need it
 
 			panelContent.addComponent(new NotificationDetailView(this.getNavigator(), notification));
