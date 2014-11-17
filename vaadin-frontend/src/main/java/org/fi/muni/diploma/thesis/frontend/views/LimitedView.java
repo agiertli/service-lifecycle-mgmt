@@ -75,6 +75,7 @@ public class LimitedView extends VerticalLayout implements View {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				getSession().setAttribute("username", null);
+				getSession().setAttribute("role", null);
 				getUI().getNavigator().navigateTo("");
 			}
 		});
