@@ -16,6 +16,9 @@ JVM3 = server which hosts service lifecycle management application
 
 all of these servers communicates with each other via REST API and must be set separately as that was the environment in which this application has been tested.
 
+
+Prerequisite for the whole installation is, that the git repository is cloned and you have changed the directory into installation/ folder.
+
 Setting up JVM 1 - jBPM Server
 -------------------------------
 - Place [jboss-eap.6.3.0.zip](http://www.jboss.org/download-manager/file/jboss-eap-6.3.0.GA.zip) into installation folder
