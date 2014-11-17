@@ -4,10 +4,13 @@ Service Lifecycle Management Application
 The architecture consists of three JVMs
 
 JVM1 = jbpm execution server
+
 JVM2 = SOA server
+
 JVM3 = server which hosts service lifecycle management application
 
-all of these servers communicates via REST API and must be set separately as that was the environment in which this application has been tested.
+
+all of these servers communicates with each other via REST API and must be set separately as that was the environment in which this application has been tested.
 
 Setting up JVM 1 - jBPM Server
 -------------------------------
