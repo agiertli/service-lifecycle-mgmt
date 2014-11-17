@@ -1,6 +1,10 @@
 Service Lifecycle Management Application
 ======================
 
+The application, as well as the installation has been tested with:
+
+JDK 1.7.0_45 and Maven 3.0.3
+
 The architecture consists of three JVMs
 
 JVM1 = jbpm execution server
