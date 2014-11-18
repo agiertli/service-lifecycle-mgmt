@@ -58,12 +58,12 @@ Setting up JVM 3 - SOA Server
 ./post-install-soa-server.sh
 ```
 
-You should see following output in the installation folder after all thre JVMs are installed:
+You should see following output in the installation folder after all three JVMs are installed:
 
 ```
 $ pwd 
 ~/service-lifecycle-mgmt/installation
-$ tree -L 2 | grep jvm -A 2
+$ tree -L 2 | grep jvm -A 1
 |-- jvm1-jbpm
 |   `-- jboss-eap-6.3
 |-- jvm2-service-lifecycle
