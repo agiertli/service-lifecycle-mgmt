@@ -122,7 +122,12 @@ jvm3-soa-server/jboss-eap-6.3/quickstarts/bean-service/src/test/java/org/switchy
 ```
 Most likely, you will have to change port *inside* this class, so it points to the SOA server where the OrderService is deployed.
 
-Application sends emails at few points of the Service Lifecycle. If you want this email functionality to be successful it is necessary to have SMTP server configured on a localhost on port 1025.
+Application sends emails at few points of the Service Lifecycle. If you want this email functionality to be successful it is necessary to have SMTP server configured on a localhost on port 1025. If you don't configure SMTP server, the workflow will still
+proceed but numerous exceptions will be visible in the server log of the jbpm server. If this bothers you, it is still possible to use [fakesmtp server](http://nilhcem.github.com/FakeSMTP/downloads/fakeSMTP-latest.zip) and start it like this:
+```
+java -jar fakeSMTP.jar -s -b -p 1025 -a 127.0.0.1 -o ~/emailInbox
+```
+The above command will start the smtp server (-s), without gui (-b), bind it to port 1025 (-p) and ip address 127.0.0.1 (-a) and store all the emails into ~/emailInbox directory (-o)
 
 
  There are two workflows available for execution:
