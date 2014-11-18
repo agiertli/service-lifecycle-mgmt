@@ -75,6 +75,7 @@ cd jvm3-soa-server/jboss-eap-6.3/bin
  ```
  
  - Start Service Lifecycle Management Application Server
+ 
  Before starting, please make sure that all the properties are set properly in jvm2-service-lifecycle/jboss-eap-6.3/standalone/deployments/vaadin-frontend-1.0.war/WEB-INF/classes
  ```
  cd jvm2-service-lifecycle/jboss-eap-6.3/bin
@@ -110,8 +111,8 @@ Application sends emails at few points of the Service Lifecycle. If you want thi
 
  There are two workflows available for execution:
  
- 
+**Service Lifecycle - for new service** 
 ![Service Lifecycle - for new service](https://raw.githubusercontent.com/agiertli/service-lifecycle-mgmt/master/installation/newservice.png)
-
+**Service lifecycle - existing service**
 ![Service lifecycle - existing service](https://raw.githubusercontent.com/agiertli/service-lifecycle-mgmt/master/installation/existingservice.png)
  
