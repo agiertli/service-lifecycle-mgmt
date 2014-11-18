@@ -57,3 +57,61 @@ Setting up JVM 3 - SOA Server
 ```
 ./post-install-soa-server.sh
 ```
+
+Run the application
+-------------------
+- Once all three JVMs are set up, it's time to have some fun with the application!
+- Start SOA server
+
+```
+cd jvm3-soa-server/jboss-eap-6.3/bin
+./standalone.sh -Djboss.socket.binding.port-offset=400 --server-config=standalone-full.xml
+ ```
+ 
+ - Start jBPM server
+ ```
+ cd jvm1-jbpm/jboss-eap-6.3/bin
+ /standalone.sh --server-config=standalone-full.xml -Dorg.jbpm.var.log.length=2147483647
+ ```
+ 
+ - Start Service Lifecycle Management Application Server
+ Before starting, please make sure that all the properties are set properly in jvm2-service-lifecycle/jboss-eap-6.3/standalone/deployments/vaadin-frontend-1.0.war/WEB-INF/classes
+ ```
+ cd jvm2-service-lifecycle/jboss-eap-6.3/bin
+ ./standalone.sh -Djboss.socket.binding.port-offset=200
+ ```
+
+Next steps
+-----------
+- If you have carefully followed the steps above, you can access the Service Lifecycle Management Application in your browser at following address:
+```
+http://localhost:8280/vaadin-frontend-1.0/
+```
+
+Here is a list of available users and their roles which you can use:
+```
+anton=admin,analyst,user,SOAGovernanceSpecialist,ServiceAnalyst,ServiceDeveloper,QASpecialist
+anton2=SOAGovernanceSpecialist
+anton3=ServiceDeveloper,analyst
+```
+
+Password for *every* user is 'password1!'. Users with SOAGovernanceSpecialist role has access to the whole application. Other users has access only to the Lifecycle Tasks menu.
+
+The S-RAMP repository is populated with OrderService, if you finish the Service Lifecycle bound to this service and make this Service Retired, then you can explore another
+functionality - Notification Actions. It displays every invocations of a retired service and allows you to deal with them.
+If you want to invoke OrderService then just execute following class:
+```
+jvm3-soa-server/jboss-eap-6.3/quickstarts/bean-service/src/test/java/org/switchyard/quickstarts/bean/service/BeanClient.java
+```
+Most likely, you will have to change port *inside* this class, so it points to the SOA server where the OrderService is deployed.
+
+Application sends emails at few points of the Service Lifecycle. If you want this email functionality to be successful it is necessary to have SMTP server configured on a localhost on port 1025.
+
+
+ There are two workflows available for execution:
+ 
+ 
+![Service Lifecycle - for new service](https://raw.githubusercontent.com/agiertli/service-lifecycle-mgmt/master/installation/newservice.png)
+
+![Service lifecycle - existing service](https://raw.githubusercontent.com/agiertli/service-lifecycle-mgmt/master/installation/existingservice.png)
+ 
