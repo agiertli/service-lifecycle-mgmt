@@ -27,48 +27,6 @@ Setting up JVM 1 - jBPM Server
 
 ```
 ./installer-jbpm-server.sh
-
-```
-- start the jbpm server using following command 
-```
-cd /jvm1-jbpm/jboss-eap-6.3/bin
-./standalone.sh --server-config=standalone-full.xml
-```
-- Once JBoss is started, turn it off - we only needed this step so the database was created successfully
-- now alter freshly created database using following command:
-
-```
-java -cp jvm1-jbpm/jboss-eap-6.3/modules/system/layers/base/com/h2database/h2/main/h2-1.3.168.redhat-4.jar org.h2.tools.RunScript -user sa -password sa -url jdbc:h2:~/test -script database.sql
-
-```
-- We have just increased the size of a table column in which jbpm variables are going to be stored.
-- Start the server using following command:
-
-```
-cd /jvm1-jbpm/jboss-eap-6.3/bin
-./standalone.sh --server-config=standalone-full.xml -Dorg.jbpm.var.log.length=2147483647
-```
-- now the last step remains - we need to deploy bpmn processes which jbpm server will be executing. Execute following:
-```
-curl -u anton:password1! -X POST http://localhost:8080/kie-wb/rest/deployment/org.fi.muni.diploma.thesis:service-lifecycle:2.2.4:myBase:Session1/deploy
 ```
 
-The request will be accepted immediatelly, without telling you if it was finished successfully or not. If you want check the status of deployment, wait a while - to allow server process the request and then execute following:
-```
-curl -u anton:password1! -X GET http://localhost:8080/kie-wb/rest/deployment/org.fi.muni.diploma.thesis:service-lifecycle:2.2.4:myBase:Session1
-```
-
-You should see following output:
-```
-{
-    "groupId": "org.fi.muni.diploma.thesis",
-    "artifactId": "service-lifecycle",
-    "version": "2.2.4",
-    "kbaseName": "myBase",
-    "ksessionName": "Session1",
-    "strategy": "SINGLETON",
-    "status": "DEPLOYED"
-}
-```
-If this is true, it means you have successfully installed and configured jBPM server.
-
+To make sure installation will run smoothly make sure there are no other JBoss instances running on the machine and the port 8080 is open.

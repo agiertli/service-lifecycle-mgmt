@@ -57,6 +57,42 @@ echo "copying user/role/password configuration"
 cp -rf application-roles.properties jvm1-jbpm/jboss-eap-6.3/standalone/configuration/
 cp -rf application-users.properties jvm1-jbpm/jboss-eap-6.3/standalone/configuration/
 
+started="false";
+cd jvm1-jbpm/jboss-eap-6.3/bin
+echo "starting the jboss for further configuration"
+./standalone.sh --server-config=standalone-full.xml & > /dev/null
+cd ../standalone
 
+while [ $started = "false" ]; do
+echo "Waiting for jboss to start"
+sleep 20
+
+if grep -q "JBoss EAP 6.3.0.GA (AS 7.4.0.Final-redhat-19) started" log/server.log ; then
+    started="true";
+fi
+
+done
+
+echo "JBoss successfully started"
+echo "deploying kjar to jbpm execution server"
+curl -s -u anton:password1! -X POST http://localhost:8080/kie-wb/rest/deployment/org.fi.muni.diploma.thesis:service-lifecycle:2.2.4:myBase:Session1/deploy
+
+deployed="false"
+while [ $deployed = "false" ]; do
+echo "Waiting for deployment to complete"
+sleep 10
+if 
+curl -s -u anton:password1! -X GET http://localhost:8080/kie-wb/rest/deployment/org.fi.muni.diploma.thesis:service-lifecycle:2.2.4:myBase:Session1 | grep -q "<status>DEPLOYED</status>"; then
+deployed="true"
+fi
+done
+echo "deployment complete"
+echo "killing jboss instance"
+JBOSS_PID=`ps a | grep "jboss.home.dir" | grep "jvm1-jbpm" | awk '{print $1}'`
+kill -9 $JBOSS_PID
+cd ../../../
+echo "configuring database"
+java -cp jvm1-jbpm/jboss-eap-6.3/modules/system/layers/base/com/h2database/h2/main/h2-1.3.168.redhat-4.jar org.h2.tools.RunScript -user sa -password sa -url jdbc:h2:~/test -script database.sql
+echo "jbpm server installed successfully!"
 
 
