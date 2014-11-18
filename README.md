@@ -42,4 +42,18 @@ Setting up JVM 2 - Service Lifecycle Management Application Server
 ./installer-service-lifecycle-mgmt-server.sh
 ```
 
-
+Setting up JVM 3 - SOA Server
+-----------------------------
+- Make sure no other JBoss instances are running on the machine and that the port 8480 is open
+- Place [jboss-eap.6.3.0.zip](http://www.jboss.org/download-manager/file/jboss-eap-6.3.0.GA.zip) into installation folder
+- Place [switchyard-2.0.0.Alpha3-EAP6.3.0.GA.zip](http://downloads.jboss.org/switchyard/releases/v2.0.Alpha3/switchyard-2.0.0.Alpha3-EAP6.3.0.GA.zip) into installation folder and unzip it
+- Place [s-ramp-0.6.0.Final.zip](http://downloads.jboss.org/overlord/sramp/s-ramp-0.6.0.Final.zip) into installation folder and unzip it
+- Place [overlord-rtgov-2.0.0.Final.zip](http://downloads.jboss.org/overlord/rtgov/overlord-rtgov-2.0.0.Final.zip) into installation folder and unzip it
+- create jvm3-soa-server folder and unzip jboss-eap.6.3.0.zip into in
+- Install SwitchYard by following included README file
+- Install RTGov by following included README file, don't forget to write down the passsword for 'admin' user.
+- Install S-RAMP by following included README file - password for 'admin' user will be the same as the one you have specified during the RTGov installation
+- Run the post install script which will configure everything necessary:
+```
+./post-install-soa-server.sh
+```

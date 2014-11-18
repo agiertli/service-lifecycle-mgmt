@@ -22,3 +22,5 @@ echo "creating deployment marker file inside jboss"
 touch installation/jvm2-service-lifecycle/jboss-eap-6.3/standalone/deployments/vaadin-frontend-1.0.war.dodeploy
 
 echo "installation finished"
+
+exit

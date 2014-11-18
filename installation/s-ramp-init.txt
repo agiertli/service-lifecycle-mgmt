@@ -1,0 +1,2 @@
+connect localhost:8480/s-ramp-server admin password1!
+s-ramp:upload switchyard-bean-service.jar SwitchYardApplication
