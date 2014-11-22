@@ -92,8 +92,8 @@ JBOSS_PID=`ps a | grep "jboss.home.dir" | grep "jvm1-jbpm" | awk '{print $1}'`
 kill -9 $JBOSS_PID
 cd ../../../
 echo "configuring database"
-java -cp jvm1-jbpm/jboss-eap-6.3/modules/system/layers/base/com/h2database/h2/main/h2-1.3.168.redhat-4.jar org.h2.tools.RunScript -user sa -password sa -url jdbc:h2:~/test -script database.sql
-echo "jbpm server installed successfully!"
+java -cp jvm1-jbpm/jboss-eap-6.3/modules/system/layers/base/com/h2database/h2/main/h2-1.3.168.redhat-4.jar org.h2.tools.RunScript -user sa -password sa -url jdbc:h2:~/test -script database.sql 
+echo -e "jbpm server installed successfully! \n"
 
 exit
 

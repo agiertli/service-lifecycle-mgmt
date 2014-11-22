@@ -38,6 +38,7 @@ cd jvm3-soa-server/jboss-eap-6.3/bin
 
 echo "killing the jboss"
 JBOSS_PID=`ps a | grep "jboss.home.dir" | grep "jvm3-soa-server" | awk '{print $1}'`
-skill -9 $JBOSS_PID
+kill -9 $JBOSS_PID
+echo -e "soa server installed successfully! \n"
 
 exit
