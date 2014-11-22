@@ -8,19 +8,19 @@
 	<version>2.2.4</version>
 	<packaging>kjar</packaging>
 	<name>Service Lifecycle Project</name>
-	
-	
-		<repositories>
+
+
+	<repositories>
 		<repository>
 			<id>jboss community repository</id>
 			<url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
 		</repository>
-		
-			<repository>
+
+		<repository>
 			<id>jboss techpreview repository</id>
 			<url>http://maven.repository.redhat.com/techpreview/all/</url>
 		</repository>
-		
+
 		<repository>
 			<id>guvnor-m2-repo</id>
 			<name>Guvnor M2 Repo</name>
@@ -28,7 +28,7 @@
 		</repository>
 	</repositories>
 
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.fi.muni.diploma.thesis</groupId>
@@ -37,12 +37,21 @@
 		</dependency>
 
 
+		<!-- testing only -->
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-test</artifactId>
+			<version>6.2.0.CR1</version>
+			<scope>test</scope>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-bpmn2</artifactId>
 			<version>6.2.0.CR1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-workitems</artifactId>
@@ -50,11 +59,11 @@
 		</dependency>
 
 	</dependencies>
-	
+
 	<build>
 		<plugins>
-		
-					<plugin>
+
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -62,7 +71,7 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
-		
+
 			<plugin>
 				<groupId>org.kie</groupId>
 				<artifactId>kie-maven-plugin</artifactId>
