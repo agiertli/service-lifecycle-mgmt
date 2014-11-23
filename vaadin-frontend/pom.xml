@@ -224,6 +224,7 @@
 				<version>2.2</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<warName>service-lifecycle-mgmt</warName>
 				</configuration>
 			</plugin>
 			<plugin>
