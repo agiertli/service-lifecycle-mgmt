@@ -130,7 +130,7 @@ public class ProcessListView extends VerticalLayout implements View {
 		filterTable.setFilterBarVisible(true);
 		filterTable.setFilterFieldVisible("Details", false);
 		filterTable.setFilterFieldValue("Process State", ProcessStateMap.States.ACTIVE);
-		filterTable.setColumnWidth("Process State", 134);
+		filterTable.setColumnWidth("Process State", 150);
 		filterTable.setColumnWidth("End Date", 178);
 
 		return filterTable;
