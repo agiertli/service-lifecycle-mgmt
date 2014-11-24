@@ -79,7 +79,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 	private CheckBox emailCheckbox;
 	private String taskUser;
 	private final Label verticalGap = new Label("</br>", ContentMode.HTML);
-	private final Label horizontalGap = new Label("<hr>", ContentMode.HTML);
+	private final Label horizontalGap = new Label("&nbsp;", ContentMode.HTML);
 
 	private Button refreshServicesButton;
 
@@ -545,6 +545,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 		buttonLayout.addComponent(submitButton);
 		
 		if (this.refreshServicesButton != null) {
+			buttonLayout.addComponent(this.horizontalGap);
 			buttonLayout.addComponent(this.horizontalGap);
 			buttonLayout.addComponent(this.refreshServicesButton);
 		}
