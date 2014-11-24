@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.drools.core.rule.constraint.ConditionAnalyzer.ThisInvocation;
 import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterDecorator;
 import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterGenerator;
 import org.fi.muni.diploma.thesis.frontend.views.TaskDetailView;
@@ -19,8 +20,10 @@ import org.fi.muni.diploma.thesis.utils.humantask.HumanTaskName;
 import org.fi.muni.diploma.thesis.utils.humantask.HumanTaskOutput;
 import org.fi.muni.diploma.thesis.utils.humantask.HumanTaskOutputType;
 import org.fi.muni.diploma.thesis.utils.humantask.InternalHumanTask;
+import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
 import org.fi.muni.diploma.thesis.utils.jbpm.TaskServiceWrapper;
 import org.kie.api.task.TaskService;
+import org.kie.api.task.model.Task;
 import org.tepi.filtertable.paged.PagedFilterControlConfig;
 import org.tepi.filtertable.paged.PagedFilterTable;
 
@@ -75,7 +78,10 @@ public class HumanTaskForm extends VerticalLayout implements View {
 	private TextField portField;
 	private CheckBox emailCheckbox;
 	private String taskUser;
-	private final Label gap = new Label("</br>", ContentMode.HTML);
+	private final Label verticalGap = new Label("</br>", ContentMode.HTML);
+	private final Label horizontalGap = new Label("<hr>", ContentMode.HTML);
+
+	private Button refreshServicesButton;
 
 	public class SelectListener implements ClickListener {
 
@@ -143,7 +149,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 			taskService = new TaskServiceWrapper();
 			//
-			//logger.info("button clicked");
+			// logger.info("button clicked");
 
 			FieldGroup data = (FieldGroup) event.getButton().getData();
 			try {
@@ -173,14 +179,15 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			for (Iterator<Field<?>> iterator = col.iterator(); iterator.hasNext();) {
 				Field<?> field = iterator.next();
 
-		//		logger.info("output name:" + binder.getPropertyId(field));
+				// logger.info("output name:" + binder.getPropertyId(field));
 
-		//		logger.info("output value:" + field.getValue());
-		//		logger.info("output type:" + field.getType() + "property:" + field.getPropertyDataSource().getType());
+				// logger.info("output value:" + field.getValue());
+				// logger.info("output type:" + field.getType() + "property:" +
+				// field.getPropertyDataSource().getType());
 
 				// look out for Integer
 				if (binder.getPropertyId(field).toString().toLowerCase().contains("port")) {
-				//	logger.info("we have found integer output");
+					// logger.info("we have found integer output");
 
 					result.put((String) binder.getPropertyId(field), (Integer) portField.getConvertedValue());
 				} else {
@@ -211,7 +218,6 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				}
 
 			}
-		
 
 			logger.info("now the validation with s-ramp client will happen");
 			logger.info(hostname + "+" + username + "+" + password + "+" + port);
@@ -295,17 +301,17 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 			if (services == null) {
 
-			//	logger.info("services are null");
+				// logger.info("services are null");
 			} else {
 
-			//	logger.info(String.valueOf(services.size()));
-			//	logger.info(services.toString());
+				// logger.info(String.valueOf(services.size()));
+				// logger.info(services.toString());
 
 				logger.info("processing inputs");
 				for (Service service : services) {
 
-				//	logger.info("service uuid:" + service.getUUID());
-				//	logger.info("service name:" + service.getName());
+					// logger.info("service uuid:" + service.getUUID());
+					// logger.info("service name:" + service.getName());
 				}
 
 				// load the table with data
@@ -335,6 +341,22 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 			}
 
+			this.refreshServicesButton = new Button("Refresh service list");
+			this.refreshServicesButton.setData(this.taskid);
+			this.refreshServicesButton.addClickListener(new ClickListener() {
+
+				@Override
+				public void buttonClick(ClickEvent event) {
+
+					Long taskId = (Long) event.getButton().getData();
+					RuntimeEngineWrapper.getEngine().getKieSession()
+							.signalEvent("refreshEvent", null, taskService.getTaskById(taskId).getTaskData().getProcessInstanceId());
+					HumanTaskForm.this.navigator.navigateTo("main" + "/" + TaskListView.NAME);
+
+				}
+
+			});
+
 		}
 
 		FormLayout fl = new FormLayout();
@@ -363,7 +385,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 						@Override
 						public void valueChange(ValueChangeEvent event) {
-						//	logger.info("change");
+							// logger.info("change");
 
 							Iterator<Component> iterate = HumanTaskForm.this.iterator();
 
@@ -425,7 +447,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			}
 			case INTEGER: {
 
-		//		logger.info("adding integer output:" + output.getDataType() + "label:" + output.getLabel());
+				// logger.info("adding integer output:" + output.getDataType() + "label:" + output.getLabel());
 				TextField integerField = new TextField(output.getLabel());
 				integerField.setConverter(Integer.class);
 				integerField.setRequired(true);
@@ -514,31 +536,38 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			}
 
 		}
+		
+		HorizontalLayout buttonLayout = new HorizontalLayout();
+		
 		Button submitButton = new Button("Complete Task");
 		submitButton.setData(this.getBinder());
 		submitButton.addClickListener(new ButtonListener(TaskDetailView.NAME));
-		fl.addComponent(submitButton);
-		fl.setComponentAlignment(submitButton, Alignment.TOP_CENTER);
-
-	
-		addComponent(fl);
+		buttonLayout.addComponent(submitButton);
 		
+		if (this.refreshServicesButton != null) {
+			buttonLayout.addComponent(this.horizontalGap);
+			buttonLayout.addComponent(this.refreshServicesButton);
+		}
+		fl.addComponent(buttonLayout);
+		fl.setComponentAlignment(buttonLayout, Alignment.TOP_CENTER);
+
+		addComponent(fl);
+
 		String description = this.taskService.getTaskById(this.taskid).getDescription();
 
 		if (!description.isEmpty()) {
-			addComponent(gap);
+			addComponent(verticalGap);
 			Label descriptionLabel = new Label("Task description");
 			descriptionLabel.setSizeUndefined();
 			descriptionLabel.setStyleName("h2");
 			addComponent(descriptionLabel);
 			setComponentAlignment(descriptionLabel, Alignment.TOP_LEFT);
-			addComponent(gap);
+			addComponent(verticalGap);
 			Label descriptionContent = new Label(description);
 			descriptionContent.setWidth("550px");
 			addComponent(descriptionContent);
 			setComponentAlignment(descriptionContent, Alignment.TOP_LEFT);
 		}
-
 
 	}
 
