@@ -82,6 +82,8 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		// Build process variables table
 		processVariablesTable = buildProcessVariablesTable(varLog);
 		processVariablesTable.setPageLength(processVariablesTable.getContainerDataSource().size());
+		processVariablesTable.setColumnWidth("Variable Value", 500);
+		processVariablesTable.addStyleName("wordwrap-table");
 
 		Label greeting = new Label("Details of Lifecycle Instance");
 		greeting.setSizeUndefined();

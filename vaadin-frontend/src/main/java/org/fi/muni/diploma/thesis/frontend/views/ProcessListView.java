@@ -89,6 +89,8 @@ public class ProcessListView extends VerticalLayout implements View {
 
 		filterTable = buildFilterTable(allProcesses);
 		filterTable.setPageLength(filterTable.getContainerDataSource().size());
+		filterTable.setHeight(String.valueOf(43*filterTable.getContainerDataSource().size()+80)+"px");
+	//	filterTable.setColumnWidth(propertyId, width);
 
 		Label greeting = new Label("List of lifecycle instances");
 		greeting.setSizeUndefined();
@@ -119,6 +121,8 @@ public class ProcessListView extends VerticalLayout implements View {
 	private PagedFilterTable<IndexedContainer> buildFilterTable(List<JaxbProcessInstanceLog> allProcesses) {
 
 		PagedFilterTable<IndexedContainer> filterTable = new PagedFilterTable<IndexedContainer>("");
+		filterTable.setSizeUndefined();
+		
 		// filterTable.setSizeFull();
 		filterTable.setFilterDecorator(new CustomFilterDecorator());
 		filterTable.setFilterGenerator(new CustomFilterGenerator());
@@ -126,6 +130,8 @@ public class ProcessListView extends VerticalLayout implements View {
 		filterTable.setFilterBarVisible(true);
 		filterTable.setFilterFieldVisible("Details", false);
 		filterTable.setFilterFieldValue("Process State", ProcessStateMap.States.ACTIVE);
+		filterTable.setColumnWidth("Process State", 134);
+		filterTable.setColumnWidth("End Date", 178);
 
 		return filterTable;
 	}

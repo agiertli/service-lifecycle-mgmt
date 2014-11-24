@@ -40,7 +40,6 @@ public class LoginView extends VerticalLayout implements View {
 
 	public LoginView(Navigator navigator) {
 		this.setNavigator(navigator);
-	
 
 		// Create the user input field
 		user = new TextField("");
@@ -48,6 +47,8 @@ public class LoginView extends VerticalLayout implements View {
 		user.setRequired(true);
 		user.setInputPrompt("username");
 		user.setInvalidAllowed(false);
+	//	user.addStyleName("v-required-field-indicator-my");
+	
 
 		// Create the password input field
 		password = new PasswordField("");
@@ -56,26 +57,26 @@ public class LoginView extends VerticalLayout implements View {
 		password.setRequired(true);
 		password.setInputPrompt("password");
 		password.setNullRepresentation("");
+		//password.addStyleName(".mytheme.v-required-field-indicator-my");
 		
-
 		// Create login button
 		loginButton = new Button("Enter");
 		loginButton.addClickListener(new MyButtonListener());
 
 		// Add both to a panel
-		Label greeting = new Label();
+		Label greeting = new Label("anton / password1!");
 		greeting.setSizeUndefined();
-		greeting.setCaption("Please login to access the application. Sample user is anton/password1! which has all the necessary roles");
-		greeting.setStyleName("h3");
-		//greeting.addStyleName("text-align:center");
-		VerticalLayout fields = new VerticalLayout(greeting,user,password,verticalGap,loginButton);
+		greeting.setStyleName("h2");
+
+		// greeting.addStyleName("text-align:center");
+		VerticalLayout fields = new VerticalLayout(greeting, user, password, verticalGap, loginButton);
+		fields.addStyleName("mynorequiredindicator");
 
 		fields.setComponentAlignment(greeting, Alignment.MIDDLE_CENTER);
 		fields.setComponentAlignment(loginButton, Alignment.MIDDLE_CENTER);
 		fields.setComponentAlignment(user, Alignment.MIDDLE_CENTER);
 		fields.setComponentAlignment(password, Alignment.MIDDLE_CENTER);
 
-		
 		addComponent(fields);
 		setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
 		setSizeFull();
@@ -194,9 +195,9 @@ public class LoginView extends VerticalLayout implements View {
 
 					getUI().getNavigator().navigateTo(MainView.NAME);
 				}
-				
+
 				else {
-					
+
 					getUI().getNavigator().navigateTo(LimitedView.NAME);
 				}
 

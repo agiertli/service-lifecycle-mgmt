@@ -80,6 +80,7 @@ public class TaskListView extends VerticalLayout implements View {
 		VerticalLayout layout = new VerticalLayout();
 		taskListTable = buildTaskListTable(taskList);
 		taskListTable.setPageLength(taskListTable.getContainerDataSource().size());
+		taskListTable.setHeight(String.valueOf(43*taskListTable.getContainerDataSource().size()+80)+"px");
 
 		Label greeting = new Label("Lifecycle's Task");
 		greeting.setSizeUndefined();

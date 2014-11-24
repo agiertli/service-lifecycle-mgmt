@@ -319,6 +319,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				filterTable.setPageLength(filterTable.getContainerDataSource().size());
 				Label tableGreet = new Label("Services found in S-RAMP Repository");
 				tableGreet.setSizeUndefined();
+				filterTable.setHeight(String.valueOf(43*filterTable.getContainerDataSource().size()+80)+"px");
 				tableGreet.setStyleName("h3");
 				addComponent(tableGreet);
 				addComponent(filterTable);
@@ -338,6 +339,8 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				HorizontalLayout cfg = filterTable.createControls(config);
 				addComponent(cfg);
 				setComponentAlignment(cfg, Alignment.TOP_LEFT);
+				addComponent(this.verticalGap);
+				addComponent(this.verticalGap);
 
 			}
 
@@ -358,7 +361,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			});
 
 		}
-
+		addComponent(this.verticalGap);
 		FormLayout fl = new FormLayout();
 
 		List<HumanTaskOutput> outputs = new ArrayList<HumanTaskOutput>();
@@ -552,6 +555,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 		fl.addComponent(buttonLayout);
 		fl.setComponentAlignment(buttonLayout, Alignment.TOP_CENTER);
 
+		addComponent(this.verticalGap);
 		addComponent(fl);
 
 		String description = this.taskService.getTaskById(this.taskid).getDescription();
@@ -582,6 +586,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 		filterTable.setContainerDataSource(buildContainer(services));
 		filterTable.setFilterBarVisible(true);
 		filterTable.setFilterFieldVisible("Action", false);
+		
 
 		return filterTable;
 

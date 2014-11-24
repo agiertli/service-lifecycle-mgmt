@@ -62,6 +62,7 @@ public class NotificationView extends VerticalLayout implements View {
 
 			filterTable = buildFilterTable(notifications);
 			filterTable.setPageLength(filterTable.getContainerDataSource().size());
+			filterTable.setHeight(String.valueOf(43*filterTable.getContainerDataSource().size()+80)+"px");
 			layout.addComponent(filterTable);
 			layout.setComponentAlignment(greeting, Alignment.TOP_CENTER);
 			layout.setComponentAlignment(filterTable, Alignment.TOP_CENTER);
