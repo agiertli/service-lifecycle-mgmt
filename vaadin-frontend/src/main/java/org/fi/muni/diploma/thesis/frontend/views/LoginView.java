@@ -64,6 +64,7 @@ public class LoginView extends VerticalLayout implements View {
 
 		// Add both to a panel
 		Label greeting = new Label();
+		greeting.setSizeUndefined();
 		greeting.setCaption("Please login to access the application. Sample user is anton/password1! which has all the necessary roles");
 		greeting.setStyleName("h3");
 		//greeting.addStyleName("text-align:center");
