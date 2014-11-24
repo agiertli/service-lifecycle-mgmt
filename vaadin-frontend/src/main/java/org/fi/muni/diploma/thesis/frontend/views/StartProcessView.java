@@ -79,10 +79,9 @@ public class StartProcessView extends VerticalLayout implements View {
 				notif.setPosition(Position.MIDDLE_CENTER);
 
 				// Show it in the page
-
+StartProcessView.this.navigator.navigateTo("main/"+TaskListView.NAME); //redirect to Task list, so user know there is some work pending
 				notif.show(Page.getCurrent());
 
-				return;
 			} 
 		}
 	
