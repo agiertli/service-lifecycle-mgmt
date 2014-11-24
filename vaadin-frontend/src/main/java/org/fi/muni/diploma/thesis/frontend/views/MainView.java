@@ -71,16 +71,16 @@ public class MainView extends VerticalLayout implements View {
 		VerticalLayout menuContent = new VerticalLayout();
 
 		startButton = new Button("Start New Lifecycle Instance", new ButtonListener(StartProcessView.NAME));
-		startButton.setWidth("179px");
+		startButton.setWidth("230px");
 
 		instances = new Button("Lifecycle Instances", new ButtonListener(ProcessListView.NAME));
-		instances.setWidth("179px");
+		instances.setWidth("230px");
 
 		tasks = new Button("Lifecycle Tasks", new ButtonListener(TaskListView.NAME));
-		tasks.setWidth("179px");
+		tasks.setWidth("230px");
 
 		notifications = new Button("Notification Actions", new ButtonListener("notificationactions"));
-		notifications.setWidth("179px");
+		notifications.setWidth("230px");
 
 		menuContent.addComponent(startButton);
 		menuContent.addComponent(instances);
@@ -149,6 +149,7 @@ public class MainView extends VerticalLayout implements View {
 
 		VerticalLayout panelContent = new VerticalLayout();
 		panelContent.setSizeFull();
+		panelContent.setHeightUndefined();
 		panelContent.setMargin(true);
 
 		panel.setContent(panelContent); // Also clear

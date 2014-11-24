@@ -576,6 +576,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 		PagedFilterTable<IndexedContainer> filterTable = new PagedFilterTable<IndexedContainer>("");
 		// filterTable.setSizeFull();
+		filterTable.setSizeUndefined();
 		filterTable.setFilterDecorator(new CustomFilterDecorator());
 		filterTable.setFilterGenerator(new CustomFilterGenerator());
 		filterTable.setContainerDataSource(buildContainer(services));

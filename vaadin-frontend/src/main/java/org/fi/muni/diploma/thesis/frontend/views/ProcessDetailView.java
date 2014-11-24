@@ -26,6 +26,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 public class ProcessDetailView extends VerticalLayout implements View {
 
@@ -52,10 +53,12 @@ public class ProcessDetailView extends VerticalLayout implements View {
 	public ProcessDetailView(Long processId, Navigator navigator) throws IOException {
 		this.navigator = navigator;
 		this.processId = processId;
-		
-		
 
 		VerticalLayout layout = new VerticalLayout();
+		layout.setSizeFull();
+		layout.setHeightUndefined();
+		setSizeFull();
+		setHeightUndefined();
 
 		// Get process metadata
 		this.selectedProcess = (JaxbProcessInstanceLog) RuntimeEngineWrapper.getEngine().getAuditLogService().findProcessInstance(processId);
@@ -119,58 +122,51 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		}
 
 		// load the embedded image
-		
+
 		StreamResource resource = new StreamResource(new StreamSource() {
 
 			private static final long serialVersionUID = 1;
-			
-
 
 			public InputStream getStream() {
 
 				FileUtil util = new FileUtil();
 
 				// select corresponding svg source file
-			//	logger.info("selected process name:"+ProcessDetailView.this.selectedProcess.getProcessName());
+				// logger.info("selected process name:"+ProcessDetailView.this.selectedProcess.getProcessName());
 				InputStream is = util.getFileFromClasspath(ProcessDetailView.this.selectedProcess.getProcessName());
 
 				if (ProcessStateMap.getProcessStatusAsEnum(ProcessDetailView.this.selectedProcess.getStatus()).equals(
 						ProcessStateMap.States.COMPLETED)) {
-				//	logger.info("wtf");
-					return is; // don't do any additional processing and return the original process diagram 
+					// logger.info("wtf");
+					return is; // don't do any additional processing and return the original process diagram
 
 				}
-				
-				InputStream altered = util.processSvg(is,
-						ProcessDetailView.this.selectedProcess.getProcessName(),
-						ProcessDetailView.this.processState,
-						ProcessDetailView.this.servicesQueried,
-						ProcessDetailView.this.passedTests,
+
+				InputStream altered = util.processSvg(is, ProcessDetailView.this.selectedProcess.getProcessName(),
+						ProcessDetailView.this.processState, ProcessDetailView.this.servicesQueried, ProcessDetailView.this.passedTests,
 						ProcessDetailView.this.serviceSelected);
 
 				// new ByteArrayInputStream("".getBytes());
-				
+
 				return altered;
 			}
-			
-			
+
 		}, ProcessDetailView.this.selectedProcess.getProcessName() + ".svg");
-		
+
 		resource.setCacheTime(0);
-		
-		Embedded image = new Embedded("",resource);
-	
+
+		Embedded image = new Embedded("", resource);
 		
 
 		image.setMimeType("image/svg+xml");
+
 		layout.addComponent(image);
-		layout.setComponentAlignment(image, Alignment.MIDDLE_LEFT);
+		
+		// layout.setComponentAlignment(image, Alignment.MIDDLE_LEFT);
 		this.currentImage = image;
 
 		addComponent(layout);
 		resource.getStreamSource().getStream().close();
-		
-		
 
 	}
 
@@ -233,33 +229,31 @@ public class ProcessDetailView extends VerticalLayout implements View {
 
 				continue;
 			}
-			
+
 			if (var.getVariableId().contains("serviceSRAMPUUID")) {
-				
+
 				serviceSelected = true;
-				
+
 			}
 
 			cont.addItem(counter);
-			
-			//for generating the diagram
+
+			// for generating the diagram
 			if (var.getVariableId().contains("srampServiceList")) {
-				
+
 				servicesQueried = true;
 			} else {
-				
+
 				servicesQueried = false;
 			}
-			
-			
+
 			if (var.getVariableId().contains("passedIntegrationTests")) {
-				
+
 				if (var.getValue().contains("false")) {
-					
+
 					passedTests = false;
-				} 
 				}
-			
+			}
 
 			cont.getContainerProperty(counter, "Variable Name").setValue(var.getVariableId());
 			cont.getContainerProperty(counter, "Variable Value").setValue(var.getValue());
@@ -271,8 +265,8 @@ public class ProcessDetailView extends VerticalLayout implements View {
 			cont.addItem(counter);
 			cont.getContainerProperty(counter, "Variable Name").setValue("Service state");
 			cont.getContainerProperty(counter, "Variable Value").setValue(finalStateHolder.getValue());
-			
-			this.processState = finalStateHolder.getValue(); //preserve for additional processing
+
+			this.processState = finalStateHolder.getValue(); // preserve for additional processing
 
 		} else {
 			if (mainProcessStates.size() > 0) {

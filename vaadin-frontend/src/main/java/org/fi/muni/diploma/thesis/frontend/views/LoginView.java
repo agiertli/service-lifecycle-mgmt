@@ -14,9 +14,11 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
@@ -34,43 +36,48 @@ public class LoginView extends VerticalLayout implements View {
 
 	private final Button loginButton;
 	private final static Logger logger = Logger.getLogger(LoginView.class.getName());
+	private final Label verticalGap = new Label("</br>", ContentMode.HTML);
 
 	public LoginView(Navigator navigator) {
 		this.setNavigator(navigator);
-		setSizeFull();
+	
 
 		// Create the user input field
-		user = new TextField("User:");
+		user = new TextField("");
 		user.setWidth("300px");
 		user.setRequired(true);
-		user.setInputPrompt("your username");
+		user.setInputPrompt("username");
 		user.setInvalidAllowed(false);
 
 		// Create the password input field
-		password = new PasswordField("Password:");
+		password = new PasswordField("");
 		password.setWidth("300px");
 		password.addValidator(new PasswordValidator());
 		password.setRequired(true);
-		password.setValue("");
+		password.setInputPrompt("password");
 		password.setNullRepresentation("");
+		
 
 		// Create login button
-		loginButton = new Button("Login");
+		loginButton = new Button("Enter");
 		loginButton.addClickListener(new MyButtonListener());
 
 		// Add both to a panel
-		VerticalLayout fields = new VerticalLayout(user, password, loginButton);
-		fields.setCaption("Please login to access the application. Sample user is anton/password1! which has all the necessary roles");
-		fields.setSpacing(true);
-		fields.setMargin(new MarginInfo(true, true, true, false));
-		fields.setSizeUndefined();
+		Label greeting = new Label();
+		greeting.setCaption("Please login to access the application. Sample user is anton/password1! which has all the necessary roles");
+		greeting.setStyleName("h3");
+		//greeting.addStyleName("text-align:center");
+		VerticalLayout fields = new VerticalLayout(greeting,user,password,verticalGap,loginButton);
 
-		// The view root layout
-		VerticalLayout viewLayout = new VerticalLayout(fields);
-		viewLayout.setSizeFull();
-		viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
+		fields.setComponentAlignment(greeting, Alignment.MIDDLE_CENTER);
+		fields.setComponentAlignment(loginButton, Alignment.MIDDLE_CENTER);
+		fields.setComponentAlignment(user, Alignment.MIDDLE_CENTER);
+		fields.setComponentAlignment(password, Alignment.MIDDLE_CENTER);
 
-		addComponent(viewLayout);
+		
+		addComponent(fields);
+		setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
+		setSizeFull();
 
 	}
 

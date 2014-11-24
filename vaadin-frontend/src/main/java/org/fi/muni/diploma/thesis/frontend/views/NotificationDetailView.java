@@ -172,10 +172,8 @@ public class NotificationDetailView extends VerticalLayout implements View {
 		submitButton.addClickListener(new ButtonListener(NotificationView.NAME));
 		fl.addComponent(submitButton);
 
-		Label note = new Label(
-				"Submitting the form without checking the \"Send Email\" box will result in notification being processed anyway i.e. the notification won't show up in the list again, and the email won't be sent");
-		// note.setWidth("200px");
-		note.addStyleName("h4");
+		Label note = new Label("Submitting the form without checking the \"Send Email\" box will result in notification being processed anyway i.e. the notification won't show up in the list again, and the email won't be sent");
+
 		fl.addComponent(note);
 		fl.setComponentAlignment(note, Alignment.TOP_LEFT);
 
