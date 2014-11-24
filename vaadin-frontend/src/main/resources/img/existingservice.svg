@@ -1836,29 +1836,7 @@
      dy="11"
      id="tspan283">service</tspan>
 </text>
-<a
-   id="_EA37E573-396E-40AB-977C-50BB516005E5pimg"
-   onclick="ORYX.EDITOR._pluginFacade.raiseEvent({                                                                          type   : ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,                                                                                    ntype  : 'error',                                                                                                                msg         : 'Unable to open called process.',                                                                                        title       : ''                                                                                                                   });"
-   xlink:href="">
-  <g
-     id="_EA37E573-396E-40AB-977C-50BB516005E5b"
-     oryx:anchors="bottom">
-    <rect
-       id="_EA37E573-396E-40AB-977C-50BB516005E5frame3"
-       oryx:anchors="bottom"
-       x="44"
-       y="66"
-       width="14"
-       height="14"
-       style="fill:none;stroke:#000000;stroke-width:1" />
-    <path
-       id="_EA37E573-396E-40AB-977C-50BB516005E5frame4"
-       oryx:anchors="bottom"
-       d="M 51,68 V 78 M 46,73 H 56"
-       inkscape:connector-curvature="0"
-       style="fill:none;stroke:#000000;stroke-width:1" />
-  </g>
-</a>
+
 <g
    id="_EA37E573-396E-40AB-977C-50BB516005E5none" />
 
@@ -2203,29 +2181,6 @@
      dy="5"
      id="tspan368">Retire service</tspan>
 </text>
-<a
-   id="_49407B96-9644-4699-9E13-E3B7C6EA42FCpimg"
-   onclick="ORYX.EDITOR._pluginFacade.raiseEvent({                                                                          type   : ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,                                                                                    ntype  : 'error',                                                                                                                msg         : 'Unable to open called process.',                                                                                        title       : ''                                                                                                                   });"
-   xlink:href="">
-  <g
-     id="_49407B96-9644-4699-9E13-E3B7C6EA42FCb"
-     oryx:anchors="bottom">
-    <rect
-       id="_49407B96-9644-4699-9E13-E3B7C6EA42FCframe3"
-       oryx:anchors="bottom"
-       x="44"
-       y="66"
-       width="14"
-       height="14"
-       style="fill:none;stroke:#000000;stroke-width:1" />
-    <path
-       id="_49407B96-9644-4699-9E13-E3B7C6EA42FCframe4"
-       oryx:anchors="bottom"
-       d="M 51,68 V 78 M 46,73 H 56"
-       inkscape:connector-curvature="0"
-       style="fill:none;stroke:#000000;stroke-width:1" />
-  </g>
-</a>
 <g
    id="_49407B96-9644-4699-9E13-E3B7C6EA42FCnone" />
 
@@ -3829,29 +3784,6 @@
      dy="11"
      id="tspan755">For Services</tspan>
 </text>
-<a
-   id="_A6605EB9-3BE7-4496-8C26-D602750D04DCpimg"
-   onclick="ORYX.EDITOR._pluginFacade.raiseEvent({                                                                          type   : ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,                                                                                    ntype  : 'error',                                                                                                                msg         : 'Unable to open called process.',                                                                                        title       : ''                                                                                                                   });"
-   xlink:href="">
-  <g
-     id="_A6605EB9-3BE7-4496-8C26-D602750D04DCb"
-     oryx:anchors="bottom">
-    <rect
-       id="_A6605EB9-3BE7-4496-8C26-D602750D04DCframe3"
-       oryx:anchors="bottom"
-       x="44"
-       y="66"
-       width="14"
-       height="14"
-       style="fill:none;stroke:#000000;stroke-width:1" />
-    <path
-       id="_A6605EB9-3BE7-4496-8C26-D602750D04DCframe4"
-       oryx:anchors="bottom"
-       d="M 51,68 V 78 M 46,73 H 56"
-       inkscape:connector-curvature="0"
-       style="fill:none;stroke:#000000;stroke-width:1" />
-  </g>
-</a>
 <g
    id="_A6605EB9-3BE7-4496-8C26-D602750D04DCnone" />
 
@@ -5481,29 +5413,6 @@
      dy="5"
      id="tspan1181">Test Service</tspan>
 </text>
-<a
-   id="_551CFE4C-F00F-42C9-A252-F702C1A339B5pimg"
-   onclick="ORYX.EDITOR._pluginFacade.raiseEvent({                                                                          type   : ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,                                                                                    ntype  : 'error',                                                                                                                msg         : 'Unable to open called process.',                                                                                        title       : ''                                                                                                                   });"
-   xlink:href="">
-  <g
-     id="_551CFE4C-F00F-42C9-A252-F702C1A339B5b"
-     oryx:anchors="bottom">
-    <rect
-       id="_551CFE4C-F00F-42C9-A252-F702C1A339B5frame3"
-       oryx:anchors="bottom"
-       x="44"
-       y="66"
-       width="14"
-       height="14"
-       style="fill:none;stroke:#000000;stroke-width:1" />
-    <path
-       id="_551CFE4C-F00F-42C9-A252-F702C1A339B5frame4"
-       oryx:anchors="bottom"
-       d="M 51,68 V 78 M 46,73 H 56"
-       inkscape:connector-curvature="0"
-       style="fill:none;stroke:#000000;stroke-width:1" />
-  </g>
-</a>
 <g
    id="_551CFE4C-F00F-42C9-A252-F702C1A339B5none" />
 
