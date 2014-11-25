@@ -19,12 +19,16 @@ import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
+import com.vaadin.ui.themes.ValoTheme;
 
 /**
  * View which displays list of all processes
@@ -44,6 +48,7 @@ public class ProcessListView extends VerticalLayout implements View {
 	private PagedFilterTable<?> filterTable;
 	private final static Logger logger = Logger.getLogger(ProcessListView.class.getName());
 	public static final String NAME = "lifecycleinstances";
+	private final Label horizontalGap = new Label("&nbsp;", ContentMode.HTML);
 
 	class ButtonListener implements Button.ClickListener {
 
@@ -147,7 +152,7 @@ public class ProcessListView extends VerticalLayout implements View {
 
 		cont.addContainerProperty("Start Date", Date.class, null);
 		cont.addContainerProperty("End Date", Date.class, null);
-		cont.addContainerProperty("Details", Button.class, null);
+		cont.addContainerProperty("Actions", HorizontalLayout.class, null);
 
 		int i = 1;
 
@@ -160,12 +165,37 @@ public class ProcessListView extends VerticalLayout implements View {
 			cont.getContainerProperty(i, "Start Date").setValue(process.getStart());
 			cont.getContainerProperty(i, "End Date").setValue(process.getEnd());
 
+			HorizontalLayout buttons = new HorizontalLayout();
+			
 			Button detailsField = new Button("show details");
 			detailsField.setData(process.getProcessInstanceId());
 			detailsField.addClickListener(new ButtonListener(ProcessDetailView.NAME));
 			detailsField.addStyleName(BaseTheme.BUTTON_LINK);
+			
+			Button abortField = new Button("abort");
+			abortField.setData(process.getProcessInstanceId());
+			abortField.addStyleName(ValoTheme.BUTTON_LINK);
+			
+			buttons.addComponent(detailsField);
+			buttons.addComponent(horizontalGap);
+			buttons.addComponent(abortField);
+			
+			abortField.addClickListener(new ClickListener() {
 
-			cont.getContainerProperty(i, "Details").setValue(detailsField);
+				@Override
+				public void buttonClick(ClickEvent event) {
+					Long pid = (Long) event.getButton().getData();
+					RuntimeEngineWrapper.getEngine().getKieSession().abortProcessInstance(pid);
+					ProcessListView.this.navigator.navigateTo("main/"+ProcessListView.this.NAME);
+					
+					
+				}
+				
+				
+			});
+			
+
+			cont.getContainerProperty(i, "Actions").setValue(buttons);
 
 			i++;
 

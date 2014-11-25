@@ -259,7 +259,7 @@
         </bpmn2:resourceAssignmentExpression>
       </bpmn2:potentialOwner>
     </bpmn2:userTask>
-    <bpmn2:callActivity id="_28004475-0268-4F9D-9AC3-E83D22F885B0" drools:bgcolor="#CCFFFF" drools:selectable="true" drools:independent="true" drools:waitForCompletion="true" name="Initialize  Service " calledElement="ServiceLifecycleProject.InitializeSubProcess">
+    <bpmn2:callActivity id="_28004475-0268-4F9D-9AC3-E83D22F885B0" drools:bgcolor="#CCFFFF" drools:selectable="true" drools:independent="false" drools:waitForCompletion="true" name="Initialize  Service " calledElement="ServiceLifecycleProject.InitializeSubProcess">
       <bpmn2:incoming>_7ACA7453-A0E7-4C1A-87A6-7FA15BF37EC5</bpmn2:incoming>
       <bpmn2:outgoing>_5ED7ABAA-C4C6-4A1A-81A9-55C5067E98CE</bpmn2:outgoing>
       <bpmn2:ioSpecification id="_pxlBEnPBEeSQPPQD1KdZJQ">
@@ -351,7 +351,7 @@
         <bpmn2:targetRef>p_serviceName</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
     </bpmn2:userTask>
-    <bpmn2:callActivity id="_C87805AF-093C-416B-9F8C-891A9EB5A9AA" drools:bgcolor="#CCFFFF" drools:selectable="true" drools:independent="true" drools:waitForCompletion="true" name="Deprecate service" calledElement="ServiceLifecycleProject.AvailableSubProcess">
+    <bpmn2:callActivity id="_C87805AF-093C-416B-9F8C-891A9EB5A9AA" drools:bgcolor="#CCFFFF" drools:selectable="true" drools:independent="false" drools:waitForCompletion="true" name="Deprecate service" calledElement="ServiceLifecycleProject.AvailableSubProcess">
       <bpmn2:incoming>_2A64038D-6E75-4D71-8608-6659EAC0526F</bpmn2:incoming>
       <bpmn2:outgoing>_CE233E6A-8238-47E5-A243-B4898AA856A8</bpmn2:outgoing>
       <bpmn2:ioSpecification id="_pxlBKnPBEeSQPPQD1KdZJQ">
@@ -415,7 +415,7 @@
         <bpmn2:targetRef>isServiceConfigUpdated</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
     </bpmn2:callActivity>
-    <bpmn2:callActivity id="_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7" drools:bgcolor="#CCFFFF" drools:selectable="true" drools:independent="true" drools:waitForCompletion="true" name="Retire service" calledElement="ServiceLifecycleProject.DeprecatedSubProcess">
+    <bpmn2:callActivity id="_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7" drools:bgcolor="#CCFFFF" drools:selectable="true" drools:independent="false" drools:waitForCompletion="true" name="Retire service" calledElement="ServiceLifecycleProject.DeprecatedSubProcess">
       <bpmn2:incoming>_CE233E6A-8238-47E5-A243-B4898AA856A8</bpmn2:incoming>
       <bpmn2:outgoing>_8CCDEAD3-1608-45A1-B512-5A2E2E316179</bpmn2:outgoing>
       <bpmn2:ioSpecification id="_pxlBNnPBEeSQPPQD1KdZJQ">
@@ -470,7 +470,7 @@
     <bpmn2:endEvent id="_1A12FB12-421C-4C1C-B020-CA4FBC02EFD2" drools:bgcolor="#CCFFFF" drools:selectable="true" name="">
       <bpmn2:incoming>_8CCDEAD3-1608-45A1-B512-5A2E2E316179</bpmn2:incoming>
     </bpmn2:endEvent>
-    <bpmn2:callActivity id="_A3C9B89F-8C7B-475E-9C87-88F2914354E2" drools:bgcolor="#CCFFFF" drools:selectable="true" drools:independent="true" drools:waitForCompletion="true" name="Register Service " calledElement="register.sub.process">
+    <bpmn2:callActivity id="_A3C9B89F-8C7B-475E-9C87-88F2914354E2" drools:bgcolor="#CCFFFF" drools:selectable="true" drools:independent="false" drools:waitForCompletion="true" name="Register Service " calledElement="register.sub.process">
       <bpmn2:incoming>_5ED7ABAA-C4C6-4A1A-81A9-55C5067E98CE</bpmn2:incoming>
       <bpmn2:outgoing>_73BCCE3D-49AB-4DD0-89C3-4F793E751E4A</bpmn2:outgoing>
       <bpmn2:ioSpecification id="_pxloIXPBEeSQPPQD1KdZJQ">
@@ -520,7 +520,7 @@
         <bpmn2:targetRef>password</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
     </bpmn2:callActivity>
-    <bpmn2:callActivity id="_114AD430-5A7A-4FC5-AE5E-39402031501D" drools:bgcolor="#CCFFFF" drools:selectable="true" drools:independent="true" drools:waitForCompletion="true" name="Query S-RAMP For Services" calledElement="ServiceLifecycleProject.QueryS-RAMPWrapperSubProcess">
+    <bpmn2:callActivity id="_114AD430-5A7A-4FC5-AE5E-39402031501D" drools:bgcolor="#CCFFFF" drools:selectable="true" drools:independent="false" drools:waitForCompletion="true" name="Query S-RAMP For Services" calledElement="ServiceLifecycleProject.QueryS-RAMPWrapperSubProcess">
       <bpmn2:incoming>_90A0754B-59B7-4026-B67F-81F65A244FCA</bpmn2:incoming>
       <bpmn2:outgoing>_CD311E23-BDAB-49F0-ACE0-CA60550D68A9</bpmn2:outgoing>
       <bpmn2:ioSpecification id="_pxloKnPBEeSQPPQD1KdZJQ">
@@ -649,7 +649,7 @@ kcontext.setVariable("ServiceState","New");
       <bpmn2:incoming>_EEB2F144-4D9B-4EDA-B17D-BC8F2A412123</bpmn2:incoming>
       <bpmn2:outgoing>_90A0754B-59B7-4026-B67F-81F65A244FCA</bpmn2:outgoing>
     </bpmn2:exclusiveGateway>
-    <bpmn2:callActivity id="_8606FF6F-D5E5-4298-B7CA-8D8BDD4520E3" drools:bgcolor="#CCFFFF" drools:selectable="true" drools:independent="true" drools:waitForCompletion="true" name="Test Service " calledElement="ServiceLifecycleProject.TestSubprocess">
+    <bpmn2:callActivity id="_8606FF6F-D5E5-4298-B7CA-8D8BDD4520E3" drools:bgcolor="#CCFFFF" drools:selectable="true" drools:independent="false" drools:waitForCompletion="true" name="Test Service " calledElement="ServiceLifecycleProject.TestSubprocess">
       <bpmn2:incoming>_76C1F10A-BD6F-4C2F-B5E1-70D19D5F53A2</bpmn2:incoming>
       <bpmn2:outgoing>_10633011-CDE7-4BAD-AFDD-485E56C3B484</bpmn2:outgoing>
       <bpmn2:ioSpecification id="_pxloPXPBEeSQPPQD1KdZJQ">
