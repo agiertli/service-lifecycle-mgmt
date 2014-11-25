@@ -62,6 +62,7 @@
   <bpmn2:itemDefinition id="__051F43FF-2BC8-4B5E-8A3E-8CEE4156489F_sub_HostnameInputXItem" structureRef="String"/>
   <bpmn2:itemDefinition id="__051F43FF-2BC8-4B5E-8A3E-8CEE4156489F_sub_UsernameInputXItem" structureRef="String"/>
   <bpmn2:itemDefinition id="__051F43FF-2BC8-4B5E-8A3E-8CEE4156489F_sub_PasswordInputXItem" structureRef="String"/>
+   <bpmn2:itemDefinition id="__4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_servicenameInputXItem" structureRef="String"/>
   <bpmn2:itemDefinition id="__051F43FF-2BC8-4B5E-8A3E-8CEE4156489F_sub_ServiceListOutputXItem" structureRef="java.util.List"/>
   <bpmn2:itemDefinition id="__1139E0A8-BBB5-40CA-8A19-D495D9DABE4E_BodyInputXItem" structureRef="String"/>
   <bpmn2:itemDefinition id="__1139E0A8-BBB5-40CA-8A19-D495D9DABE4E_FromInputXItem" structureRef="String"/>
@@ -345,6 +346,8 @@
         <bpmn2:dataInput id="_20948329-8B26-4BC1-9861-259A0B1D7318_sub_userInputX" drools:dtype="String" itemSubjectRef="__20948329-8B26-4BC1-9861-259A0B1D7318_sub_userInputXItem" name="sub_user"/>
         <bpmn2:dataInput id="_20948329-8B26-4BC1-9861-259A0B1D7318_sub_passwordInputX" drools:dtype="String" itemSubjectRef="__20948329-8B26-4BC1-9861-259A0B1D7318_sub_passwordInputXItem" name="sub_password"/>
         <bpmn2:dataInput id="_20948329-8B26-4BC1-9861-259A0B1D7318_sub_uuidInputX" drools:dtype="String" itemSubjectRef="__20948329-8B26-4BC1-9861-259A0B1D7318_sub_uuidInputXItem" name="sub_uuid"/>
+        <bpmn2:dataInput id="_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_servicenameInputX" drools:dtype="String" itemSubjectRef="__4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_servicenameInputXItem" name="sub_servicename"/>
+       
         <bpmn2:dataOutput id="_20948329-8B26-4BC1-9861-259A0B1D7318_outBoolconsumersInformedAboutRetirement_subOutputX" drools:dtype="String" itemSubjectRef="__20948329-8B26-4BC1-9861-259A0B1D7318_outBoolconsumersInformedAboutRetirement_subOutputXItem" name="outBoolconsumersInformedAboutRetirement_sub"/>
         <bpmn2:inputSet id="_swtgVHPLEeSQPPQD1KdZJQ">
           <bpmn2:dataInputRefs>_20948329-8B26-4BC1-9861-259A0B1D7318_sub_portInputX</bpmn2:dataInputRefs>
@@ -352,6 +355,7 @@
           <bpmn2:dataInputRefs>_20948329-8B26-4BC1-9861-259A0B1D7318_sub_userInputX</bpmn2:dataInputRefs>
           <bpmn2:dataInputRefs>_20948329-8B26-4BC1-9861-259A0B1D7318_sub_passwordInputX</bpmn2:dataInputRefs>
           <bpmn2:dataInputRefs>_20948329-8B26-4BC1-9861-259A0B1D7318_sub_uuidInputX</bpmn2:dataInputRefs>
+             <bpmn2:dataInputRefs>_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_servicenameInputX</bpmn2:dataInputRefs>
         </bpmn2:inputSet>
         <bpmn2:outputSet id="_swtgVXPLEeSQPPQD1KdZJQ">
           <bpmn2:dataOutputRefs>_20948329-8B26-4BC1-9861-259A0B1D7318_outBoolconsumersInformedAboutRetirement_subOutputX</bpmn2:dataOutputRefs>
@@ -377,6 +381,12 @@
         <bpmn2:sourceRef>serviceSRAMPUUID</bpmn2:sourceRef>
         <bpmn2:targetRef>_20948329-8B26-4BC1-9861-259A0B1D7318_sub_uuidInputX</bpmn2:targetRef>
       </bpmn2:dataInputAssociation>
+      
+         <bpmn2:dataInputAssociation id="_pxlBPnPBEeSQPPQD1KdZJQ">
+        <bpmn2:sourceRef>p_serviceName</bpmn2:sourceRef>
+        <bpmn2:targetRef>_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_servicenameInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
       <bpmn2:dataOutputAssociation id="_swtgW3PLEeSQPPQD1KdZJQ">
         <bpmn2:sourceRef>_20948329-8B26-4BC1-9861-259A0B1D7318_outBoolconsumersInformedAboutRetirement_subOutputX</bpmn2:sourceRef>
         <bpmn2:targetRef>consumersInformedAboutRetirement</bpmn2:targetRef>
