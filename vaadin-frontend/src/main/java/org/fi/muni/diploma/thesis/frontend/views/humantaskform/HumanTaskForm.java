@@ -375,9 +375,13 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			switch (type) {
 			case BOOLEAN: {
 
+				HorizontalLayout checkboxLayout = new HorizontalLayout();
+				checkboxLayout.setCaption(output.getLabel());
+				//Label checkboxLabel = new Label(;
 				CheckBox checkbox = new CheckBox();
-				checkbox.setCaption(output.getLabel());
+				//checkbox.setCaption(output.getLabel());
 				checkbox.setRequired(true);
+				
 
 				// for enabling/disabling fields
 				if (output.getLabel().toLowerCase().contains("email")) {
@@ -425,8 +429,14 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				this.emailCheckbox = checkbox;
 				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<Boolean>(false));
 				this.getBinder().bind(checkbox, output.getOutputIdentifier());
-				fl.addComponent(checkbox);
-				fl.setComponentAlignment(checkbox, Alignment.TOP_LEFT);
+				
+			//	checkboxLayout.addComponent(checkboxLabel);
+				checkboxLayout.addComponent(horizontalGap);
+				checkboxLayout.addComponent(checkbox);
+			//	checkboxLayout.setComponentAlignment(checkboxLabel, Alignment.TOP_LEFT);
+				checkboxLayout.setComponentAlignment(checkbox, Alignment.TOP_LEFT);
+				fl.addComponent(checkboxLayout);
+				fl.setComponentAlignment(checkboxLayout, Alignment.TOP_LEFT);
 				break;
 			}
 
