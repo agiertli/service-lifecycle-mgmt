@@ -69,12 +69,16 @@ public class MainView extends VerticalLayout implements View {
 		menu.setHeight("100%");
 		menu.setWidth(null);
 		VerticalLayout menuContent = new VerticalLayout();
+		menuContent.addStyleName("left-allign-button-caption");
 
 		startButton = new Button("Start New Lifecycle Instance", new ButtonListener(StartProcessView.NAME));
 		startButton.setWidth("230px");
+		
+		
 
 		instances = new Button("Lifecycle Instances", new ButtonListener(ProcessListView.NAME));
 		instances.setWidth("230px");
+		
 
 		tasks = new Button("Lifecycle Tasks", new ButtonListener(TaskListView.NAME));
 		tasks.setWidth("230px");

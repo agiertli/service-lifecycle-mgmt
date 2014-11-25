@@ -42,6 +42,17 @@ display: none;
    white-space: normal;
    overflow: hidden;
 }
+
+.left-allign-button-caption .v-button-caption { 
+ text-align: left;
+}
  
+.left-allign-button-caption .v-button-wrap { 
+ text-align: left;
+}
+
+.left-allign-button-caption .v-button { 
+ text-align: left;
+} 
  
 }
