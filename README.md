@@ -77,27 +77,18 @@ $ tree -L 2 | grep jvm -A 1
 Run the application
 -------------------
 - Once all three JVMs are set up, it's time to have some fun with the application!
-- Start SOA server
 
+Just execute the startup script
+ ```
+ ./start.sh
 ```
-cd jvm3-soa-server/jboss-eap-6.3/bin
-./standalone.sh -Djboss.socket.binding.port-offset=400 --server-config=standalone-full.xml
- ```
- 
- - Start jBPM server
- ```
- cd jvm1-jbpm/jboss-eap-6.3/bin
- /standalone.sh --server-config=standalone-full.xml -Dorg.jbpm.var.log.length=2147483647
- ```
- 
- - Start Service Lifecycle Management Application Server
- 
- Before starting, please make sure that all the properties are set properly in jvm2-service-lifecycle/jboss-eap-6.3/standalone/deployments/vaadin-frontend-1.0.war/WEB-INF/classes
- ```
- cd jvm2-service-lifecycle/jboss-eap-6.3/bin
- ./standalone.sh -Djboss.socket.binding.port-offset=200
- ```
 
+And browser window will be opened once the applications loads - it can take up to 2 minutes.
+
+For turning off the application, executed the shutdown script:
+```
+./stop.sh
+```
 Next steps
 -----------
 - If you have carefully followed the steps above, you can access the Service Lifecycle Management Application in your browser at following address:
