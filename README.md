@@ -53,7 +53,7 @@ Setting up JVM 3 - SOA Server
 - Install SwitchYard by following included README file
 - Install RTGov by following included README file, don't forget to write down the passsword for 'admin' user.
 - Install S-RAMP by following included README file - password for 'admin' user will be the same as the one you have specified during the RTGov installation
-- Now you have to alter **-ramp-init.txt** script with the proper username/password which you have configured for S-RAMP administrator, once done, you can run the post installation script which will configure the rest:
+- Now you have to alter **s-ramp-init.txt** script with the proper username/password which you have configured for S-RAMP administrator, once done, you can run the post installation script which will configure the rest:
 ```
 ./post-install-soa-server.sh
 ```
