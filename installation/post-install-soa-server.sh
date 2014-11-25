@@ -37,8 +37,7 @@ cd jvm3-soa-server/jboss-eap-6.3/bin
 ./s-ramp.sh -f s-ramp-init.txt
 
 echo "killing the jboss"
-JBOSS_PID=`ps a | grep "jboss.home.dir" | grep "jvm3-soa-server" | awk '{print $1}'`
-kill -9 $JBOSS_PID
+./jboss-cli.sh --connect controller=localhost:10399 command=:shutdown /dev/null 2>&1
 echo -e "soa server installed successfully! \n"
 
 exit
