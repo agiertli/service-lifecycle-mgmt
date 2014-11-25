@@ -13,13 +13,11 @@ import com.vaadin.data.validator.AbstractValidator;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -47,8 +45,7 @@ public class LoginView extends VerticalLayout implements View {
 		user.setRequired(true);
 		user.setInputPrompt("username");
 		user.setInvalidAllowed(false);
-	//	user.addStyleName("v-required-field-indicator-my");
-	
+		// user.addStyleName("v-required-field-indicator-my");
 
 		// Create the password input field
 		password = new PasswordField("");
@@ -57,22 +54,16 @@ public class LoginView extends VerticalLayout implements View {
 		password.setRequired(true);
 		password.setInputPrompt("password");
 		password.setNullRepresentation("");
-		//password.addStyleName(".mytheme.v-required-field-indicator-my");
-		
+		// password.addStyleName(".mytheme.v-required-field-indicator-my");
+
 		// Create login button
 		loginButton = new Button("Enter");
 		loginButton.addClickListener(new MyButtonListener());
 
-		// Add both to a panel
-		Label greeting = new Label("anton / password1!");
-		greeting.setSizeUndefined();
-		greeting.setStyleName("h2");
-
 		// greeting.addStyleName("text-align:center");
-		VerticalLayout fields = new VerticalLayout(greeting, user, password, verticalGap, loginButton);
+		VerticalLayout fields = new VerticalLayout(user, password, verticalGap, loginButton);
 		fields.addStyleName("mynorequiredindicator");
 
-		fields.setComponentAlignment(greeting, Alignment.MIDDLE_CENTER);
 		fields.setComponentAlignment(loginButton, Alignment.MIDDLE_CENTER);
 		fields.setComponentAlignment(user, Alignment.MIDDLE_CENTER);
 		fields.setComponentAlignment(password, Alignment.MIDDLE_CENTER);
