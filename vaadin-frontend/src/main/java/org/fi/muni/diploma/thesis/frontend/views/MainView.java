@@ -83,7 +83,7 @@ public class MainView extends VerticalLayout implements View {
 		tasks = new Button("Lifecycle Tasks", new ButtonListener(TaskListView.NAME));
 		tasks.setWidth("230px");
 
-		notifications = new Button("Notification Actions", new ButtonListener("notificationactions"));
+		notifications = new Button("Retired Services", new ButtonListener(NotificationView.NAME));
 		notifications.setWidth("230px");
 
 		menuContent.addComponent(startButton);

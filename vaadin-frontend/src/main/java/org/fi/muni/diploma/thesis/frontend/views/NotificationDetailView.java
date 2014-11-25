@@ -43,7 +43,7 @@ public class NotificationDetailView extends VerticalLayout implements View {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public final static String NAME = "notificationdetail";
+	public final static String NAME = "retiredservicedetail";
 	private Navigator navigator;
 	private final static Logger logger = Logger.getLogger(NotificationDetailView.class.getName());
 	private Notification notification;

@@ -41,7 +41,7 @@ public class NotificationView extends VerticalLayout implements View {
 	private Navigator navigator;
 	private final static Logger logger = Logger.getLogger(NotificationView.class.getName());
 	private PagedFilterTable<?> filterTable;
-	public static final String NAME = "notificationactions";
+	public static final String NAME = "retiredservices";
 
 	private Notification currentNotification;
 
