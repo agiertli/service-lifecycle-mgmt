@@ -172,7 +172,7 @@ public class MainView extends VerticalLayout implements View {
 		// Redirect to Start Process View
 		if (event.getParameters().equalsIgnoreCase(StartProcessView.NAME)) {
 
-			panelContent.addComponent(new StartProcessView(this.getNavigator()));
+			panelContent.addComponent(new StartProcessView(this.getNavigator(), (String) getUI().getSession().getAttribute("username")));
 
 		}
 

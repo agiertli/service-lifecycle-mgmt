@@ -1,9 +1,12 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
+import org.fi.muni.diploma.thesis.utils.jbpm.TaskServiceWrapper;
 import org.kie.api.runtime.process.ProcessInstance;
+import org.kie.api.task.TaskService;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -37,6 +40,7 @@ public class StartProcessView extends VerticalLayout implements View {
 	private VerticalLayout content;
 	private Navigator navigator;
 	private RuntimeEngineWrapper runtimeEngine;
+	private final TaskService taskService = new TaskServiceWrapper();
 	public final static String NAME = "startlifecycle";
 
 	class ButtonListener implements Button.ClickListener {
@@ -78,15 +82,19 @@ public class StartProcessView extends VerticalLayout implements View {
 				notif.setDelayMsec(2500);
 				notif.setPosition(Position.MIDDLE_CENTER);
 
+		//	List<Long> taskIds = taskService.getTasksByProcessInstanceId(processInstance.getId());
+			//logger.info(String.valueOf(taskIds.size()));
+			//logger.info("task id:"+taskIds.get(0).longValue());
+				
 				// Show it in the page
-StartProcessView.this.navigator.navigateTo("main/"+TaskListView.NAME); //redirect to Task list, so user know there is some work pending
+StartProcessView.this.navigator.navigateTo("main/"+TaskDetailView.NAME+"?id="+taskService.getTasksByProcessInstanceId(processInstance.getId()).get(0)); //redirect to Task Detail View
 				notif.show(Page.getCurrent());
 
 			} 
 		}
 	
 
-	public StartProcessView(Navigator navigator) {
+	public StartProcessView(Navigator navigator, String username) {
 
 		this.navigator = navigator;
 
