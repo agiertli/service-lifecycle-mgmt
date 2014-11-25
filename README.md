@@ -53,10 +53,11 @@ Setting up JVM 3 - SOA Server
 - Install SwitchYard by following included README file
 - Install RTGov by following included README file, don't forget to write down the passsword for 'admin' user.
 - Install S-RAMP by following included README file - password for 'admin' user will be the same as the one you have specified during the RTGov installation
-- Run the post install script which will configure everything necessary:
+- Now you have to alter **-ramp-init.txt** script with the proper username/password which you have configured for S-RAMP administrator, once done, you can run the post installation script which will configure the rest:
 ```
 ./post-install-soa-server.sh
 ```
+
 
 You should see following output in the installation folder after all three JVMs are installed:
 
@@ -85,7 +86,7 @@ Just execute the startup script
 
 And browser window will be opened once the applications loads - it can take up to 2 minutes.
 
-For turning off the application, executed the shutdown script:
+For turning off the application, execute the shutdown script:
 ```
 ./stop.sh
 ```
