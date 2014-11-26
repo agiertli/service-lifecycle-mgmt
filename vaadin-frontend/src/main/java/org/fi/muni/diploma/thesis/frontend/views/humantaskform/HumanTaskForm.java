@@ -296,18 +296,17 @@ public class HumanTaskForm extends VerticalLayout implements View {
 		greeting.setStyleName("h2");
 		addComponent(greeting);
 		setComponentAlignment(greeting, Alignment.TOP_LEFT);
-		
-		//add task description
+
+		// add task description
 		String description = this.taskService.getTaskById(this.taskid).getDescription();
 
 		if (!description.isEmpty()) {
-			addComponent(verticalGap);		
+			addComponent(verticalGap);
 			Label descriptionContent = new Label(description);
 			descriptionContent.setWidth("550px");
 			addComponent(descriptionContent);
 			setComponentAlignment(descriptionContent, Alignment.TOP_LEFT);
 		}
-		
 
 		// special processing when this task is active - we need to display INPUTS to user
 		if (this.humanTask.getName().equals(HumanTaskName.SELECT_SERVICE_FROM_SRAMP.toString())) {
@@ -354,10 +353,10 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				lengths.add(500);
 				config.setPageLengthsAndCaptions(lengths);
 				HorizontalLayout cfg = filterTable.createControls(config);
+				setSpacing(true);
+				addComponent(verticalGap);
 				addComponent(cfg);
 				setComponentAlignment(cfg, Alignment.TOP_LEFT);
-				addComponent(this.verticalGap);
-				addComponent(this.verticalGap);
 
 			}
 
@@ -369,16 +368,24 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				public void buttonClick(ClickEvent event) {
 
 					Long taskId = (Long) event.getButton().getData();
-					RuntimeEngineWrapper.getEngine().getKieSession()
-							.signalEvent("refreshEvent", null, taskService.getTaskById(taskId).getTaskData().getProcessInstanceId());
-					HumanTaskForm.this.navigator.navigateTo("main" + "/" + TaskListView.NAME);
+					Long pid = taskService.getTaskById(taskId).getTaskData().getProcessInstanceId();
+					RuntimeEngineWrapper.getEngine().getKieSession().signalEvent("refreshEvent", null, pid);
+
+					/*
+					 * redirect to the latest created task instance in this process instances (refresh canceld the
+					 * current HT and created new one
+					 */
+
+					int numberOfTasks = taskService.getTasksByProcessInstanceId(pid).size();
+
+					HumanTaskForm.this.navigator.navigateTo("main" + "/" + TaskDetailView.NAME + "?id="
+							+ String.valueOf(taskService.getTasksByProcessInstanceId(pid).get(numberOfTasks - 1)));
 
 				}
 
 			});
 
 		}
-		addComponent(this.verticalGap);
 		VerticalLayout fl = new VerticalLayout();
 		fl.setSpacing(true);
 
