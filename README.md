@@ -92,9 +92,9 @@ For turning off the application, execute the shutdown script:
 ```
 Next steps
 -----------
-- If you have carefully followed the steps above, you can access the Service Lifecycle Management Application in your browser at following address:
+- If you have carefully followed the steps above the application should be automatically opened in the web browser under following url:
 ```
-http://localhost:8280/vaadin-frontend-1.0/
+http://localhost:8280/service-lifecycle-mgmt
 ```
 
 Here is a list of available users and their roles which you can use:
@@ -114,12 +114,25 @@ jvm3-soa-server/jboss-eap-6.3/quickstarts/bean-service/src/test/java/org/switchy
 ```
 Most likely, you will have to change port *inside* this class, so it points to the SOA server where the OrderService is deployed.
 
-Application sends emails at few points of the Service Lifecycle. If you want this email functionality to be successful it is necessary to have SMTP server configured on a localhost on port 1025. If you don't configure SMTP server, the workflow will still
-proceed but numerous exceptions will be visible in the server log of the jbpm server. If this bothers you, it is still possible to use [fakesmtp server](http://nilhcem.github.com/FakeSMTP/downloads/fakeSMTP-latest.zip) and start it like this:
+Application sends emails at few points of the Service Lifecycle. There **has to be smtp server installed** on the localhost and bind to port 1025 otherwise the application will not be able to proceed.
+During the developemtnt following [fakesmtp server](http://nilhcem.github.com/FakeSMTP/downloads/fakeSMTP-latest.zip) was used and it is possible to use it like this:
 ```
 java -jar fakeSMTP.jar -s -b -p 1025 -a 127.0.0.1 -o ~/emailInbox
 ```
 The above command will start the smtp server (-s), without gui (-b), bind it to port 1025 (-p) and ip address 127.0.0.1 (-a) and store all the emails into ~/emailInbox directory (-o)
+
+
+Properties file
+-----------
+There are three properties file used by the application
+
+ - **client.properties**
+*database.jndi* which serves for identifying the datasource configured in:
+
+ ```
+jvm2-service-lifecycle/jboss-eap-6.3/standalone/configuration/standalone.xml
+ ```
+ This datasource is used for storing the processed retired service invocations.
 
 
  There are two workflows available for execution:
