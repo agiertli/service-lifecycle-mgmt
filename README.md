@@ -124,17 +124,35 @@ The above command will start the smtp server (-s), without gui (-b), bind it to 
 
 Properties file
 -----------
-There are three properties file used by the application
+There are three properties file used by the application, stored in src/main/resources folder:
 
  - **client.properties**
  
-*database.jndi* 
-Identification of the datasource configured in:
-
+*database.jndi* = Identifies the datasource configured in:
  ```
 jvm2-service-lifecycle/jboss-eap-6.3/standalone/configuration/standalone.xml
  ```
  This datasource is used for storing the processed retired service invocations.
+ 
+ - **jbpm.properties**
+ 
+jbpm.url = URL which points to the jBPM execution server is deployed
+
+jbpm.processid.notification = process id of the BPMN process which sends email notification
+
+jbpm.deploymentid = deployment id of the deployment unit which includes all business resources and is deployed in the jBPM execution server
+
+jbpm.processid.newservice = process id of the BPMN process which is used for service lifecycle of a new service
+
+jbpm.processid.existingservice = process id of the BPMN process which is used for service lifecycle of a existing service
+
+- **rtgov.properties**
+
+rtgov.url= URL which points to the RTGov server, which is used for monitoring invocations of retired services
+
+rtgov.username = username
+
+rtgov.password= password
 
 
  There are two workflows available for execution:
