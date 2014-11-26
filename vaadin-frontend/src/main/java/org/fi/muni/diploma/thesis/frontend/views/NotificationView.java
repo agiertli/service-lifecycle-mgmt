@@ -23,6 +23,8 @@ import org.tepi.filtertable.paged.PagedFilterControlConfig;
 import org.tepi.filtertable.paged.PagedFilterTable;
 
 import com.vaadin.data.Container;
+import com.vaadin.data.Container.ItemSetChangeEvent;
+import com.vaadin.data.Container.ItemSetChangeListener;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -31,6 +33,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CustomTable.RowHeaderMode;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
@@ -42,6 +45,8 @@ public class NotificationView extends VerticalLayout implements View {
 	private final static Logger logger = Logger.getLogger(NotificationView.class.getName());
 	private PagedFilterTable<?> filterTable;
 	public static final String NAME = "retiredservices";
+	private final int ROW_HEIGHT = 43;
+	private final int TABLE_OFFSET = 65;
 
 	private Notification currentNotification;
 
@@ -61,8 +66,39 @@ public class NotificationView extends VerticalLayout implements View {
 		if (!notifications.isEmpty()) {
 
 			filterTable = buildFilterTable(notifications);
-			filterTable.setPageLength(filterTable.getContainerDataSource().size());
-			filterTable.setHeight(String.valueOf(43*filterTable.getContainerDataSource().size()+80)+"px");
+		
+			filterTable.setPageLength(10);
+			int rowcount = filterTable.getItemIds().size();
+			if (rowcount > filterTable.getPageLength()) {
+
+				filterTable.setHeight(String.valueOf(ROW_HEIGHT * filterTable.getPageLength() + TABLE_OFFSET) + "px");
+
+			} else {
+
+				filterTable.setHeight(String.valueOf(ROW_HEIGHT * rowcount + TABLE_OFFSET) + "px");
+			}
+
+			filterTable.addItemSetChangeListener(new ItemSetChangeListener() {
+
+				@Override
+				public void containerItemSetChange(ItemSetChangeEvent event) {
+					filterTable.setPageLength(10);
+
+					// TODO Auto-generated method stub
+					int rowcount = filterTable.getItemIds().size();
+
+					if (rowcount > filterTable.getPageLength()) {
+
+						filterTable.setHeight(String.valueOf(ROW_HEIGHT * filterTable.getPageLength() + TABLE_OFFSET) + "px");
+
+					} else {
+
+						filterTable.setHeight(String.valueOf(ROW_HEIGHT * rowcount + TABLE_OFFSET) + "px");
+					}
+				}
+			});
+			
+			
 			layout.addComponent(filterTable);
 			layout.setComponentAlignment(greeting, Alignment.TOP_CENTER);
 			layout.setComponentAlignment(filterTable, Alignment.TOP_CENTER);
@@ -91,6 +127,22 @@ public class NotificationView extends VerticalLayout implements View {
 		// filterTable.setSizeFull();
 		filterTable.setFilterDecorator(new CustomFilterDecorator());
 		filterTable.setFilterGenerator(new CustomFilterGenerator());
+		
+		filterTable.setHeightUndefined();
+		filterTable.setFilterDecorator(new CustomFilterDecorator());
+		filterTable.setFilterGenerator(new CustomFilterGenerator());
+
+		filterTable.setSelectable(false);
+		filterTable.setImmediate(true);
+		filterTable.setMultiSelect(true);
+		filterTable.setPageLength(10);
+
+		filterTable.setColumnCollapsingAllowed(true);
+		filterTable.setRowHeaderMode(RowHeaderMode.INDEX);
+
+		filterTable.setColumnReorderingAllowed(true);
+		
+		
 		filterTable.setContainerDataSource(buildContainer(notifications));
 		filterTable.setFilterBarVisible(true);
 		filterTable.setFilterFieldVisible("Action", false);

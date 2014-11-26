@@ -15,6 +15,8 @@ import org.tepi.filtertable.paged.PagedFilterControlConfig;
 import org.tepi.filtertable.paged.PagedFilterTable;
 
 import com.vaadin.data.Container;
+import com.vaadin.data.Container.ItemSetChangeEvent;
+import com.vaadin.data.Container.ItemSetChangeListener;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -24,6 +26,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CustomTable.RowHeaderMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -49,6 +52,8 @@ public class ProcessListView extends VerticalLayout implements View {
 	private final static Logger logger = Logger.getLogger(ProcessListView.class.getName());
 	public static final String NAME = "lifecycleinstances";
 	private final Label horizontalGap = new Label("&nbsp;", ContentMode.HTML);
+	private final int ROW_HEIGHT = 43;
+	private final int TABLE_OFFSET = 65;
 
 	class ButtonListener implements Button.ClickListener {
 
@@ -91,11 +96,45 @@ public class ProcessListView extends VerticalLayout implements View {
 		allProcesses.addAll(processLogNewService);
 
 		VerticalLayout layout = new VerticalLayout();
+		layout.setHeightUndefined();
+		layout.setSpacing(true);
+		layout.setMargin(true);
 
 		filterTable = buildFilterTable(allProcesses);
-		filterTable.setPageLength(filterTable.getContainerDataSource().size());
-		filterTable.setHeight(String.valueOf(43*filterTable.getContainerDataSource().size()+80)+"px");
-	//	filterTable.setColumnWidth(propertyId, width);
+		filterTable.setPageLength(10);
+		int rowcount = filterTable.getItemIds().size();
+		if (rowcount > filterTable.getPageLength()) {
+
+			filterTable.setHeight(String.valueOf(ROW_HEIGHT * filterTable.getPageLength() + TABLE_OFFSET) + "px");
+
+		} else {
+
+			filterTable.setHeight(String.valueOf(ROW_HEIGHT * rowcount + TABLE_OFFSET) + "px");
+		}
+
+		filterTable.addItemSetChangeListener(new ItemSetChangeListener() {
+
+			@Override
+			public void containerItemSetChange(ItemSetChangeEvent event) {
+				filterTable.setPageLength(10);
+
+				// TODO Auto-generated method stub
+				int rowcount = filterTable.getItemIds().size();
+
+				if (rowcount > filterTable.getPageLength()) {
+
+					filterTable.setHeight(String.valueOf(ROW_HEIGHT * filterTable.getPageLength() + TABLE_OFFSET) + "px");
+
+				} else {
+
+					filterTable.setHeight(String.valueOf(ROW_HEIGHT * rowcount + TABLE_OFFSET) + "px");
+				}
+			}
+		});
+
+		// filterTable.setPageLength(filterTable.getContainerDataSource().size());
+		// filterTable.setHeight(String.valueOf(43*filterTable.getContainerDataSource().size()+80)+"px");
+		// filterTable.setColumnWidth(propertyId, width);
 
 		Label greeting = new Label("List of lifecycle instances");
 		greeting.setSizeUndefined();
@@ -103,6 +142,7 @@ public class ProcessListView extends VerticalLayout implements View {
 
 		layout.addComponent(greeting);
 		layout.addComponent(filterTable);
+		layout.setExpandRatio(filterTable, 1);
 		layout.setComponentAlignment(greeting, Alignment.TOP_CENTER);
 		layout.setComponentAlignment(filterTable, Alignment.TOP_CENTER);
 
@@ -120,17 +160,29 @@ public class ProcessListView extends VerticalLayout implements View {
 		layout.addComponent(filterTable.createControls(config));
 
 		addComponent(layout);
+		setExpandRatio(layout, 1);
 
 	}
 
 	private PagedFilterTable<IndexedContainer> buildFilterTable(List<JaxbProcessInstanceLog> allProcesses) {
 
 		PagedFilterTable<IndexedContainer> filterTable = new PagedFilterTable<IndexedContainer>("");
-		filterTable.setSizeUndefined();
-		
+
 		// filterTable.setSizeFull();
+		filterTable.setHeightUndefined();
 		filterTable.setFilterDecorator(new CustomFilterDecorator());
 		filterTable.setFilterGenerator(new CustomFilterGenerator());
+
+		filterTable.setSelectable(false);
+		filterTable.setImmediate(true);
+		filterTable.setMultiSelect(true);
+		filterTable.setPageLength(10);
+
+		filterTable.setColumnCollapsingAllowed(true);
+		filterTable.setRowHeaderMode(RowHeaderMode.INDEX);
+
+		filterTable.setColumnReorderingAllowed(true);
+
 		filterTable.setContainerDataSource(buildContainer(allProcesses));
 		filterTable.setFilterBarVisible(true);
 		filterTable.setFilterFieldVisible("Details", false);
@@ -166,34 +218,31 @@ public class ProcessListView extends VerticalLayout implements View {
 			cont.getContainerProperty(i, "End Date").setValue(process.getEnd());
 
 			HorizontalLayout buttons = new HorizontalLayout();
-			
+
 			Button detailsField = new Button("show details");
 			detailsField.setData(process.getProcessInstanceId());
 			detailsField.addClickListener(new ButtonListener(ProcessDetailView.NAME));
 			detailsField.addStyleName(BaseTheme.BUTTON_LINK);
-			
+
 			Button abortField = new Button("abort");
 			abortField.setData(process.getProcessInstanceId());
 			abortField.addStyleName(ValoTheme.BUTTON_LINK);
-			
+
 			buttons.addComponent(detailsField);
 			buttons.addComponent(horizontalGap);
 			buttons.addComponent(abortField);
-			
+
 			abortField.addClickListener(new ClickListener() {
 
 				@Override
 				public void buttonClick(ClickEvent event) {
 					Long pid = (Long) event.getButton().getData();
 					RuntimeEngineWrapper.getEngine().getKieSession().abortProcessInstance(pid);
-					ProcessListView.this.navigator.navigateTo("main/"+ProcessListView.this.NAME);
-					
-					
+					ProcessListView.this.navigator.navigateTo("main/" + ProcessListView.this.NAME);
+
 				}
-				
-				
+
 			});
-			
 
 			cont.getContainerProperty(i, "Actions").setValue(buttons);
 

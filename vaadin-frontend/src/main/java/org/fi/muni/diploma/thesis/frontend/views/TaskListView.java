@@ -15,6 +15,8 @@ import org.tepi.filtertable.paged.PagedFilterControlConfig;
 import org.tepi.filtertable.paged.PagedFilterTable;
 
 import com.vaadin.data.Container;
+import com.vaadin.data.Container.ItemSetChangeEvent;
+import com.vaadin.data.Container.ItemSetChangeListener;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -22,6 +24,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.CustomTable.RowHeaderMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -42,6 +45,8 @@ public class TaskListView extends VerticalLayout implements View {
 	private TaskService taskService;
 	private Navigator navigator;
 	public final static String NAME = "lifecycletasks";
+	private final int ROW_HEIGHT = 43;
+	private final int TABLE_OFFSET = 65;
 
 	private PagedFilterTable<?> taskListTable;
 	private Long taskId;
@@ -61,7 +66,7 @@ public class TaskListView extends VerticalLayout implements View {
 		@Override
 		public void buttonClick(ClickEvent event) {
 
-		//	logger.info("button click, redirecting to Task Details page");
+			// logger.info("button click, redirecting to Task Details page");
 			TaskListView.this.navigator.navigateTo("main" + "/" + menuitem + "?id=" + String.valueOf((Long) event.getButton().getData()));
 
 		}
@@ -69,18 +74,53 @@ public class TaskListView extends VerticalLayout implements View {
 	}
 
 	public TaskListView(Navigator navigator, String username) {
-		
-		logger.info("task list username:"+username);
+
+		logger.info("task list username:" + username);
 
 		this.setNavigator(navigator);
 		taskService = new TaskServiceWrapper();
 
+		//there seems to be a bug in the jBPM 6.2.0.CR1 release - only 10 results are returned..
+		//this is completely out of my hands..
 		List<TaskSummary> taskList = taskService.getTasksAssignedAsPotentialOwner(username, "en-UK");
+	
+		logger.info("tsak list size:"+taskList.size());
 
 		VerticalLayout layout = new VerticalLayout();
 		taskListTable = buildTaskListTable(taskList);
-		taskListTable.setPageLength(taskListTable.getContainerDataSource().size());
-		taskListTable.setHeight(String.valueOf(43*taskListTable.getContainerDataSource().size()+80)+"px");
+
+		taskListTable = buildTaskListTable(taskList);
+		// taskListTable.setPageLength(10);
+		int rowcount = taskListTable.getItemIds().size();
+		if (rowcount > taskListTable.getPageLength()) {
+
+			taskListTable.setHeight(String.valueOf(ROW_HEIGHT * taskListTable.getPageLength() + TABLE_OFFSET) + "px");
+
+		} else {
+
+			taskListTable.setHeight(String.valueOf(ROW_HEIGHT * rowcount + TABLE_OFFSET) + "px");
+		}
+
+		taskListTable.addItemSetChangeListener(new ItemSetChangeListener() {
+
+			@Override
+			public void containerItemSetChange(ItemSetChangeEvent event) {
+				// taskListTable.setPageLength(10);
+
+				// TODO Auto-generated method stub
+				int rowcount = taskListTable.getItemIds().size();
+
+				if (rowcount > taskListTable.getPageLength()) {
+
+					taskListTable.setHeight(String.valueOf(ROW_HEIGHT * taskListTable.getPageLength() + TABLE_OFFSET) + "px");
+
+				} else {
+
+					taskListTable.setHeight(String.valueOf(ROW_HEIGHT * rowcount + TABLE_OFFSET) + "px");
+				}
+			}
+		});
+
 		taskListTable.setColumnWidth("Task ID", 80);
 
 		Label greeting = new Label("Lifecycle's Task");
@@ -118,6 +158,19 @@ public class TaskListView extends VerticalLayout implements View {
 		// filterTable.setSizeFull();
 		filterTable.setFilterDecorator(new CustomFilterDecorator());
 		filterTable.setFilterGenerator(new CustomFilterGenerator());
+
+		filterTable.setHeightUndefined();
+
+		filterTable.setSelectable(false);
+		filterTable.setImmediate(true);
+		filterTable.setMultiSelect(true);
+		// filterTable.setPageLength(10);
+
+		filterTable.setColumnCollapsingAllowed(true);
+		filterTable.setRowHeaderMode(RowHeaderMode.INDEX);
+
+		filterTable.setColumnReorderingAllowed(true);
+
 		filterTable.setContainerDataSource(buildContainer(taskList));
 		filterTable.setFilterBarVisible(true);
 		filterTable.setFilterFieldVisible("Action", false);
@@ -152,7 +205,7 @@ public class TaskListView extends VerticalLayout implements View {
 
 			// logger.info(String.valueOf("dafuq task id:"+taskSummary.getId()));
 			// logger.info(String.valueOf("dafuq process id:"+taskSummary.getProcessInstanceId()));
-		//	logger.info(taskSummary.getStatus().name());
+			// logger.info(taskSummary.getStatus().name());
 
 			cont.getContainerProperty(i, "Task Name").setValue(taskSummary.getName());
 			cont.getContainerProperty(i, "Task ID").setValue(taskSummary.getId());
@@ -186,9 +239,9 @@ public class TaskListView extends VerticalLayout implements View {
 		return cont;
 	}
 
-
 	@Override
-	public void enter(ViewChangeEvent event) {}
+	public void enter(ViewChangeEvent event) {
+	}
 
 	public Navigator getNavigator() {
 		return navigator;
