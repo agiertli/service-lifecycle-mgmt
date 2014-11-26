@@ -296,6 +296,18 @@ public class HumanTaskForm extends VerticalLayout implements View {
 		greeting.setStyleName("h2");
 		addComponent(greeting);
 		setComponentAlignment(greeting, Alignment.TOP_LEFT);
+		
+		//add task description
+		String description = this.taskService.getTaskById(this.taskid).getDescription();
+
+		if (!description.isEmpty()) {
+			addComponent(verticalGap);		
+			Label descriptionContent = new Label(description);
+			descriptionContent.setWidth("550px");
+			addComponent(descriptionContent);
+			setComponentAlignment(descriptionContent, Alignment.TOP_LEFT);
+		}
+		
 
 		// special processing when this task is active - we need to display INPUTS to user
 		if (this.humanTask.getName().equals(HumanTaskName.SELECT_SERVICE_FROM_SRAMP.toString())) {
@@ -384,7 +396,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				HorizontalLayout checkboxLayout = new HorizontalLayout();
 				Label caption = new Label();
 				caption.setValue(output.getLabel());
-			//	checkboxLayout.setCaption(output.getLabel());
+				// checkboxLayout.setCaption(output.getLabel());
 				// Label checkboxLabel = new Label(;
 				CheckBox checkbox = new CheckBox();
 				// checkbox.setCaption(output.getLabel());
@@ -634,22 +646,6 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 		addComponent(this.verticalGap);
 		addComponent(fl);
-
-		String description = this.taskService.getTaskById(this.taskid).getDescription();
-
-		if (!description.isEmpty()) {
-			addComponent(verticalGap);
-			Label descriptionLabel = new Label("Task description");
-			descriptionLabel.setSizeUndefined();
-			descriptionLabel.setStyleName("h2");
-			addComponent(descriptionLabel);
-			setComponentAlignment(descriptionLabel, Alignment.TOP_LEFT);
-		
-			Label descriptionContent = new Label(description);
-			descriptionContent.setWidth("550px");
-			addComponent(descriptionContent);
-			setComponentAlignment(descriptionContent, Alignment.TOP_LEFT);
-		}
 
 	}
 
