@@ -68,9 +68,11 @@ public class MainView extends VerticalLayout implements View {
 
 		// Have a menu on the left side of the screen
 		Panel menu = new Panel("Menu");
+		
 		menu.setHeight("100%");
 		menu.setWidth(null);
 		VerticalLayout menuContent = new VerticalLayout();
+		menuContent.setSpacing(true);
 		menuContent.addStyleName("left-allign-button-caption");
 
 		startButton = new Button("Start New Lifecycle Instance", new ButtonListener(StartProcessView.NAME));

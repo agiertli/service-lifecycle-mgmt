@@ -367,7 +367,8 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 		}
 		addComponent(this.verticalGap);
-		FormLayout fl = new FormLayout();
+		VerticalLayout fl = new VerticalLayout();
+		fl.setSpacing(true);
 
 		List<HumanTaskOutput> outputs = new ArrayList<HumanTaskOutput>();
 		outputs = this.humanTask.getOutputs();
@@ -381,7 +382,9 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			case BOOLEAN: {
 
 				HorizontalLayout checkboxLayout = new HorizontalLayout();
-				checkboxLayout.setCaption(output.getLabel());
+				Label caption = new Label();
+				caption.setValue(output.getLabel());
+			//	checkboxLayout.setCaption(output.getLabel());
 				// Label checkboxLabel = new Label(;
 				CheckBox checkbox = new CheckBox();
 				// checkbox.setCaption(output.getLabel());
@@ -439,8 +442,8 @@ public class HumanTaskForm extends VerticalLayout implements View {
 							if (HumanTaskForm.this.policyFulfilled.getValue() && HumanTaskForm.this.serviceCreated.getValue()) {
 
 								completeButton.setEnabled(true);
-							}
-							else completeButton.setEnabled(false);
+							} else
+								completeButton.setEnabled(false);
 
 						}
 					});
@@ -457,8 +460,8 @@ public class HumanTaskForm extends VerticalLayout implements View {
 							if (HumanTaskForm.this.policyFulfilled.getValue() && HumanTaskForm.this.serviceCreated.getValue()) {
 
 								completeButton.setEnabled(true);
-							}
-							else completeButton.setEnabled(false);
+							} else
+								completeButton.setEnabled(false);
 
 						}
 					});
@@ -472,11 +475,15 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 				// checkboxLayout.addComponent(checkboxLabel);
 				checkboxLayout.addComponent(horizontalGap);
+				checkboxLayout.setSpacing(true);
+				checkboxLayout.addComponent(caption);
+				checkboxLayout.addComponent(horizontalGap);
 				checkboxLayout.addComponent(checkbox);
 				// checkboxLayout.setComponentAlignment(checkboxLabel, Alignment.TOP_LEFT);
 				checkboxLayout.setComponentAlignment(checkbox, Alignment.TOP_LEFT);
 				fl.addComponent(checkboxLayout);
 				fl.setComponentAlignment(checkboxLayout, Alignment.TOP_LEFT);
+				fl.addComponent(verticalGap);
 				break;
 			}
 
@@ -495,6 +502,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 				fl.addComponent(enumSelect);
 				fl.setComponentAlignment(enumSelect, Alignment.TOP_LEFT);
+				fl.addComponent(verticalGap);
 
 				break;
 			}
@@ -509,6 +517,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				this.getBinder().bind(integerField, output.getOutputIdentifier());
 				fl.addComponent(integerField);
 				fl.setComponentAlignment(integerField, Alignment.TOP_LEFT);
+				fl.addComponent(verticalGap);
 				this.portField = integerField;
 				break;
 
@@ -522,6 +531,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				this.getBinder().bind(passwordField, output.getOutputIdentifier());
 				fl.addComponent(passwordField);
 				fl.setComponentAlignment(passwordField, Alignment.TOP_LEFT);
+				fl.addComponent(verticalGap);
 			}
 				break;
 			case STRING: {
@@ -544,6 +554,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 				fl.addComponent(stringField);
 				fl.setComponentAlignment(stringField, Alignment.TOP_LEFT);
+				fl.addComponent(verticalGap);
 
 				// we need to save the outputs of select service task explicitly due to "SELECT" functionality
 				if (this.humanTask.getName().equals(HumanTaskName.SELECT_SERVICE_FROM_SRAMP.toString())) {
@@ -578,6 +589,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 					textArea.setEnabled(false);
 				}
 				fl.addComponent(textArea);
+				fl.addComponent(verticalGap);
 				fl.setComponentAlignment(textArea, Alignment.TOP_LEFT);
 
 				break;
@@ -589,29 +601,36 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			}
 
 		}
-
+		fl.addComponent(verticalGap);
 		HorizontalLayout buttonLayout = new HorizontalLayout();
 
 		Button submitButton = new Button("Complete Task");
 		this.completeButton = submitButton;
-		
-		//if we are in register task, disable the complete button by default
-		//enable it only if both checkboxes are checked
-		if (this.policyFulfilled!=null) {
+
+		// if we are in register task, disable the complete button by default
+		// enable it only if both checkboxes are checked
+		if (this.policyFulfilled != null) {
 			this.completeButton.setEnabled(false);
 		}
-		
+
 		submitButton.setData(this.getBinder());
 		submitButton.addClickListener(new ButtonListener(TaskDetailView.NAME));
 		buttonLayout.addComponent(submitButton);
+		buttonLayout.setComponentAlignment(submitButton, Alignment.TOP_LEFT);
 
 		if (this.refreshServicesButton != null) {
 			buttonLayout.addComponent(this.horizontalGap);
 			buttonLayout.addComponent(this.horizontalGap);
 			buttonLayout.addComponent(this.refreshServicesButton);
+			fl.addComponent(buttonLayout);
+			fl.setComponentAlignment(buttonLayout, Alignment.TOP_LEFT);
+			fl.addComponent(verticalGap);
+		} else {
+			fl.addComponent(submitButton);
+			fl.setComponentAlignment(submitButton, Alignment.TOP_LEFT);
+			fl.addComponent(verticalGap);
+
 		}
-		fl.addComponent(buttonLayout);
-		fl.setComponentAlignment(buttonLayout, Alignment.TOP_CENTER);
 
 		addComponent(this.verticalGap);
 		addComponent(fl);
@@ -625,7 +644,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			descriptionLabel.setStyleName("h2");
 			addComponent(descriptionLabel);
 			setComponentAlignment(descriptionLabel, Alignment.TOP_LEFT);
-			addComponent(verticalGap);
+		
 			Label descriptionContent = new Label(description);
 			descriptionContent.setWidth("550px");
 			addComponent(descriptionContent);
