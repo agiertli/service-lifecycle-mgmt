@@ -25,6 +25,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -32,6 +33,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -46,6 +48,7 @@ public class NotificationDetailView extends VerticalLayout implements View {
 	public final static String NAME = "retiredservicedetail";
 	private Navigator navigator;
 	private final static Logger logger = Logger.getLogger(NotificationDetailView.class.getName());
+	private final Label horizontalGap = new Label("&nbsp;", ContentMode.HTML);
 	private Notification notification;
 
 	private PropertysetItem itemset;
@@ -86,12 +89,21 @@ public class NotificationDetailView extends VerticalLayout implements View {
 		// this is all based on the corresponding process definition, hardcoding it due to small number of fields
 
 		// Send email checkbox
-		CheckBox checkbox = new CheckBox("Send Email");
+		
+		HorizontalLayout sendEmail = new HorizontalLayout();
+		sendEmail.setCaption("Send Email:");	
+		
+		
+		
+		CheckBox checkbox = new CheckBox();
 		checkbox.setRequired(true);
-		this.getItemset().addItemProperty(checkbox.getCaption(), new ObjectProperty<Boolean>(false));
-		this.getBinder().bind(checkbox, checkbox.getCaption());
-		fl.addComponent(checkbox);
-		fl.setComponentAlignment(checkbox, Alignment.TOP_LEFT);
+		sendEmail.addComponent(horizontalGap);
+		sendEmail.addComponent(checkbox);
+		sendEmail.setComponentAlignment(checkbox, Alignment.TOP_LEFT);
+		this.getItemset().addItemProperty("Send Email:", new ObjectProperty<Boolean>(false));
+		this.getBinder().bind(checkbox, "Send Email:");
+		fl.addComponent(sendEmail);
+		fl.setComponentAlignment(sendEmail, Alignment.TOP_LEFT);
 
 		checkbox.addValueChangeListener(new ValueChangeListener() {
 

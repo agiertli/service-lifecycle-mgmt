@@ -59,11 +59,17 @@ public class LoginView extends VerticalLayout implements View {
 		// Create login button
 		loginButton = new Button("Enter");
 		loginButton.addClickListener(new MyButtonListener());
+		
+		Label greeting = new Label();
+		greeting.setSizeUndefined();
+		greeting.setValue("Service Lifecycle Manager");
+		greeting.setStyleName("h1");
 
 		// greeting.addStyleName("text-align:center");
-		VerticalLayout fields = new VerticalLayout(user, password, verticalGap, loginButton);
+		VerticalLayout fields = new VerticalLayout(greeting,user, password, verticalGap, loginButton);
 		fields.addStyleName("mynorequiredindicator");
 
+		fields.setComponentAlignment(greeting, Alignment.MIDDLE_CENTER);
 		fields.setComponentAlignment(loginButton, Alignment.MIDDLE_CENTER);
 		fields.setComponentAlignment(user, Alignment.MIDDLE_CENTER);
 		fields.setComponentAlignment(password, Alignment.MIDDLE_CENTER);

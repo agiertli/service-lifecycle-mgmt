@@ -129,12 +129,12 @@ public class InternalHumanTaskFactory {
 			HumanTaskOutput output1 = new HumanTaskOutput();
 			output1.setOutputIdentifier("outBoolPolicyFullfiled");
 			output1.setDataType(HumanTaskOutputType.BOOLEAN);
-			output1.setLabel("Policy Fulfilled:");
+			output1.setLabel("Do the code quality and test coverage match the policy?");
 
 			HumanTaskOutput output2 = new HumanTaskOutput();
 			output2.setOutputIdentifier("outBoolServiceCreated");
 			output2.setDataType(HumanTaskOutputType.BOOLEAN);
-			output2.setLabel("Service Created:");
+			output2.setLabel("Has the service been created?");
 
 			HumanTaskOutput output3 = new HumanTaskOutput();
 			output3.setOutputIdentifier("outHostname");

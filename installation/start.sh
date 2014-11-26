@@ -14,7 +14,7 @@ while [ $running == "false" ]; do
 echo -n "."
 
 sleep 10
-if [[ "$(./jboss-cli.sh -c --controller=localhost:10199 --command='read-attribute server-state')" == "running" && "$(./jboss-cli.sh -c --controller=localhost:9999 --command='read-attribute server-state')" == "running" && "$(./jboss-cli.sh -c --controller=localhost:10399 --command='read-attribute server-state')" == "running" ]]; 
+if [[ "$(./jboss-cli.sh -c --controller=localhost:10199 --command='read-attribute server-state' &)" == "running" && "$(./jboss-cli.sh -c --controller=localhost:9999 --command='read-attribute server-state' &)" == "running" && "$(./jboss-cli.sh -c --controller=localhost:10399 --command='read-attribute server-state'  &)" == "running" ]]; 
      then running="true"; fi;
 done
 

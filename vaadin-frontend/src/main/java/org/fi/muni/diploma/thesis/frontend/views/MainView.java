@@ -9,6 +9,7 @@ import org.fi.muni.diploma.thesis.utils.rtgov.Notification;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -22,6 +23,7 @@ public class MainView extends VerticalLayout implements View {
 
 	private static final long serialVersionUID = -3398565663865641952L;
 	private final static Logger logger = Logger.getLogger(MainView.class.getName());
+	private final Label verticalGap = new Label("</br>", ContentMode.HTML);
 
 	public static String NAME = "main";
 
@@ -85,10 +87,14 @@ public class MainView extends VerticalLayout implements View {
 
 		notifications = new Button("Retired Services", new ButtonListener(NotificationView.NAME));
 		notifications.setWidth("230px");
+		
 
 		menuContent.addComponent(startButton);
+		//menuContent.addComponent(verticalGap);
 		menuContent.addComponent(instances);
+		//menuContent.addComponent(verticalGap);
 		menuContent.addComponent(tasks);
+	//	menuContent.addComponent(verticalGap);	
 		menuContent.addComponent(notifications);
 		menuContent.setWidth(null);
 		menuContent.setMargin(true);

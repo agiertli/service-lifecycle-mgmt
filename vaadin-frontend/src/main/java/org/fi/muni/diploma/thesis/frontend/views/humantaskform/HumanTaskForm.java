@@ -81,6 +81,11 @@ public class HumanTaskForm extends VerticalLayout implements View {
 	private final Label verticalGap = new Label("</br>", ContentMode.HTML);
 	private final Label horizontalGap = new Label("&nbsp;", ContentMode.HTML);
 
+	private CheckBox policyFulfilled;
+	private CheckBox serviceCreated;
+	private Button completeButton;
+	private Boolean submitable;
+
 	private Button refreshServicesButton;
 
 	public class SelectListener implements ClickListener {
@@ -319,7 +324,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				filterTable.setPageLength(filterTable.getContainerDataSource().size());
 				Label tableGreet = new Label("Services found in S-RAMP Repository");
 				tableGreet.setSizeUndefined();
-				filterTable.setHeight(String.valueOf(43*filterTable.getContainerDataSource().size()+80)+"px");
+				filterTable.setHeight(String.valueOf(43 * filterTable.getContainerDataSource().size() + 80) + "px");
 				tableGreet.setStyleName("h3");
 				addComponent(tableGreet);
 				addComponent(filterTable);
@@ -377,11 +382,10 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 				HorizontalLayout checkboxLayout = new HorizontalLayout();
 				checkboxLayout.setCaption(output.getLabel());
-				//Label checkboxLabel = new Label(;
+				// Label checkboxLabel = new Label(;
 				CheckBox checkbox = new CheckBox();
-				//checkbox.setCaption(output.getLabel());
+				// checkbox.setCaption(output.getLabel());
 				checkbox.setRequired(true);
-				
 
 				// for enabling/disabling fields
 				if (output.getLabel().toLowerCase().contains("email")) {
@@ -425,15 +429,51 @@ public class HumanTaskForm extends VerticalLayout implements View {
 					});
 				}
 
+				// special handling for REGISTER Task
+				if (output.getLabel().toLowerCase().contains("match the policy")) {
+					this.policyFulfilled = checkbox;
+					this.policyFulfilled.addValueChangeListener(new ValueChangeListener() {
+
+						@Override
+						public void valueChange(ValueChangeEvent event) {
+							if (HumanTaskForm.this.policyFulfilled.getValue() && HumanTaskForm.this.serviceCreated.getValue()) {
+
+								completeButton.setEnabled(true);
+							}
+							else completeButton.setEnabled(false);
+
+						}
+					});
+
+				}
+
+				if (output.getLabel().toLowerCase().contains("service been created")) {
+					this.serviceCreated = checkbox;
+					this.serviceCreated.addValueChangeListener(new ValueChangeListener() {
+
+						@Override
+						public void valueChange(ValueChangeEvent event) {
+
+							if (HumanTaskForm.this.policyFulfilled.getValue() && HumanTaskForm.this.serviceCreated.getValue()) {
+
+								completeButton.setEnabled(true);
+							}
+							else completeButton.setEnabled(false);
+
+						}
+					});
+
+				}
+
 				// checkbox.setValue(true);
 				this.emailCheckbox = checkbox;
 				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<Boolean>(false));
 				this.getBinder().bind(checkbox, output.getOutputIdentifier());
-				
-			//	checkboxLayout.addComponent(checkboxLabel);
+
+				// checkboxLayout.addComponent(checkboxLabel);
 				checkboxLayout.addComponent(horizontalGap);
 				checkboxLayout.addComponent(checkbox);
-			//	checkboxLayout.setComponentAlignment(checkboxLabel, Alignment.TOP_LEFT);
+				// checkboxLayout.setComponentAlignment(checkboxLabel, Alignment.TOP_LEFT);
 				checkboxLayout.setComponentAlignment(checkbox, Alignment.TOP_LEFT);
 				fl.addComponent(checkboxLayout);
 				fl.setComponentAlignment(checkboxLayout, Alignment.TOP_LEFT);
@@ -549,14 +589,22 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			}
 
 		}
-		
+
 		HorizontalLayout buttonLayout = new HorizontalLayout();
-		
+
 		Button submitButton = new Button("Complete Task");
+		this.completeButton = submitButton;
+		
+		//if we are in register task, disable the complete button by default
+		//enable it only if both checkboxes are checked
+		if (this.policyFulfilled!=null) {
+			this.completeButton.setEnabled(false);
+		}
+		
 		submitButton.setData(this.getBinder());
 		submitButton.addClickListener(new ButtonListener(TaskDetailView.NAME));
 		buttonLayout.addComponent(submitButton);
-		
+
 		if (this.refreshServicesButton != null) {
 			buttonLayout.addComponent(this.horizontalGap);
 			buttonLayout.addComponent(this.horizontalGap);
@@ -596,7 +644,6 @@ public class HumanTaskForm extends VerticalLayout implements View {
 		filterTable.setContainerDataSource(buildContainer(services));
 		filterTable.setFilterBarVisible(true);
 		filterTable.setFilterFieldVisible("Action", false);
-		
 
 		return filterTable;
 
