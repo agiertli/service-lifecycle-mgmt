@@ -127,7 +127,9 @@ Properties file
 There are three properties file used by the application
 
  - **client.properties**
-*database.jndi* which serves for identifying the datasource configured in:
+ 
+*database.jndi* 
+Identification of the datasource configured in:
 
  ```
 jvm2-service-lifecycle/jboss-eap-6.3/standalone/configuration/standalone.xml
