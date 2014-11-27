@@ -46,14 +46,10 @@ public class ProcessListView extends VerticalLayout implements View {
 
 	private Navigator navigator;
 
-	// /private AuditLogService auditService;
-
 	private PagedFilterTable<?> filterTable;
 	private final static Logger logger = Logger.getLogger(ProcessListView.class.getName());
 	public static final String NAME = "lifecycleinstances";
 	private final Label horizontalGap = new Label("&nbsp;", ContentMode.HTML);
-	private final int ROW_HEIGHT = 43;
-	private final int TABLE_OFFSET = 65;
 
 	class ButtonListener implements Button.ClickListener {
 
@@ -105,36 +101,33 @@ public class ProcessListView extends VerticalLayout implements View {
 		int rowcount = filterTable.getItemIds().size();
 		if (rowcount > filterTable.getPageLength()) {
 
-			filterTable.setHeight(String.valueOf(ROW_HEIGHT * filterTable.getPageLength() + TABLE_OFFSET) + "px");
+			filterTable.setHeight(String.valueOf(Constants.ROW_HEIGHT * filterTable.getPageLength() + Constants.TABLE_OFFSET) + "px");
 
 		} else {
 
-			filterTable.setHeight(String.valueOf(ROW_HEIGHT * rowcount + TABLE_OFFSET) + "px");
+			filterTable.setHeight(String.valueOf(Constants.ROW_HEIGHT * rowcount + Constants.TABLE_OFFSET) + "px");
 		}
 
 		filterTable.addItemSetChangeListener(new ItemSetChangeListener() {
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void containerItemSetChange(ItemSetChangeEvent event) {
 				filterTable.setPageLength(10);
 
-				// TODO Auto-generated method stub
 				int rowcount = filterTable.getItemIds().size();
 
 				if (rowcount > filterTable.getPageLength()) {
 
-					filterTable.setHeight(String.valueOf(ROW_HEIGHT * filterTable.getPageLength() + TABLE_OFFSET) + "px");
+					filterTable.setHeight(String.valueOf(Constants.ROW_HEIGHT * filterTable.getPageLength() + Constants.TABLE_OFFSET) + "px");
 
 				} else {
 
-					filterTable.setHeight(String.valueOf(ROW_HEIGHT * rowcount + TABLE_OFFSET) + "px");
+					filterTable.setHeight(String.valueOf(Constants.ROW_HEIGHT * rowcount + Constants.TABLE_OFFSET) + "px");
 				}
 			}
 		});
-
-		// filterTable.setPageLength(filterTable.getContainerDataSource().size());
-		// filterTable.setHeight(String.valueOf(43*filterTable.getContainerDataSource().size()+80)+"px");
-		// filterTable.setColumnWidth(propertyId, width);
 
 		Label greeting = new Label("List of lifecycle instances");
 		greeting.setSizeUndefined();
@@ -230,9 +223,9 @@ public class ProcessListView extends VerticalLayout implements View {
 
 			buttons.addComponent(detailsField);
 			buttons.addComponent(horizontalGap);
-			
+
 			if (ProcessStateMap.getProcessStatusAsEnum(process.getStatus()).equals(ProcessStateMap.States.ACTIVE)) {
-			buttons.addComponent(abortField);
+				buttons.addComponent(abortField);
 			}
 
 			abortField.addClickListener(new ClickListener() {

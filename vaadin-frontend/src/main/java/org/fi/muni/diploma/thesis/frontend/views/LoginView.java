@@ -22,7 +22,13 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-/** A start view for navigating to the main view */
+/**
+ * Login view allows user to enter the application after entering correct credentials
+ * 
+ * @author osiris
+ * 
+ */
+@SuppressWarnings("unused")
 public class LoginView extends VerticalLayout implements View {
 	private static final long serialVersionUID = -3398565663865641952L;
 
@@ -33,6 +39,7 @@ public class LoginView extends VerticalLayout implements View {
 	private final PasswordField password;
 
 	private final Button loginButton;
+
 	private final static Logger logger = Logger.getLogger(LoginView.class.getName());
 	private final Label verticalGap = new Label("</br>", ContentMode.HTML);
 
@@ -45,7 +52,6 @@ public class LoginView extends VerticalLayout implements View {
 		user.setRequired(true);
 		user.setInputPrompt("username");
 		user.setInvalidAllowed(false);
-		// user.addStyleName("v-required-field-indicator-my");
 
 		// Create the password input field
 		password = new PasswordField("");
@@ -54,19 +60,17 @@ public class LoginView extends VerticalLayout implements View {
 		password.setRequired(true);
 		password.setInputPrompt("password");
 		password.setNullRepresentation("");
-		// password.addStyleName(".mytheme.v-required-field-indicator-my");
 
 		// Create login button
 		loginButton = new Button("Enter");
 		loginButton.addClickListener(new MyButtonListener());
-		
+
 		Label greeting = new Label();
 		greeting.setSizeUndefined();
 		greeting.setValue("Service Lifecycle Manager");
 		greeting.setStyleName("h1");
 
-		// greeting.addStyleName("text-align:center");
-		VerticalLayout fields = new VerticalLayout(greeting,user, password, verticalGap, loginButton);
+		VerticalLayout fields = new VerticalLayout(greeting, user, password, verticalGap, loginButton);
 		fields.addStyleName("mynorequiredindicator");
 
 		fields.setComponentAlignment(greeting, Alignment.MIDDLE_CENTER);
@@ -82,7 +86,6 @@ public class LoginView extends VerticalLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// Notification.show("Service lifecycle manager");
 	}
 
 	public Navigator getNavigator() {
@@ -96,9 +99,6 @@ public class LoginView extends VerticalLayout implements View {
 	// Validator for validating the passwords
 	private static final class PasswordValidator extends AbstractValidator<String> {
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 
 		public PasswordValidator() {
@@ -132,7 +132,7 @@ public class LoginView extends VerticalLayout implements View {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			//
-			// Validate the fields using the navigator. By using validors for the
+			// Validate the fields using the navigator. By using validators for the
 			// fields we reduce the amount of queries we have to use to the database
 			// for wrongly entered passwords
 
@@ -168,10 +168,8 @@ public class LoginView extends VerticalLayout implements View {
 				}
 
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
 			}
-			//
 
 			if (isValid) {
 
@@ -209,6 +207,13 @@ public class LoginView extends VerticalLayout implements View {
 
 	}
 
+	/**
+	 * 
+	 * @param securityString
+	 *            - username:realm:password
+	 * @return HEX(MD5(username:realm:password))
+	 * @throws NoSuchAlgorithmException
+	 */
 	private String getMD5Hash(String securityString) throws NoSuchAlgorithmException {
 
 		MessageDigest m = MessageDigest.getInstance("MD5");

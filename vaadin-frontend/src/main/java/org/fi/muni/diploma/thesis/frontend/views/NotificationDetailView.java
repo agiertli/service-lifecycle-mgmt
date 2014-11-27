@@ -41,9 +41,6 @@ import com.vaadin.ui.VerticalLayout;
 
 public class NotificationDetailView extends VerticalLayout implements View {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public final static String NAME = "retiredservicedetail";
 	private Navigator navigator;
@@ -61,9 +58,6 @@ public class NotificationDetailView extends VerticalLayout implements View {
 
 		this.navigator = navigator;
 		this.notification = notification;
-
-		logger.info("creating notification detail view");
-		logger.info("notification received in detail view:" + notification.toString());
 
 		Label greeting = new Label("Work on \'" + this.notification.getService().getName() + "\' notification");
 		greeting.setSizeUndefined();
@@ -86,15 +80,13 @@ public class NotificationDetailView extends VerticalLayout implements View {
 		this.setBinder(new FieldGroup(this.getItemset()));
 		this.setFormComponents(new ArrayList<Component>());
 
-		// this is all based on the corresponding process definition, hardcoding it due to small number of fields
+		// this form is all based on the corresponding process definition, hardcoding it due to small number of fields
 
 		// Send email checkbox
-		
+
 		HorizontalLayout sendEmail = new HorizontalLayout();
-		sendEmail.setCaption("Send Email:");	
-		
-		
-		
+		sendEmail.setCaption("Send Email:");
+
 		CheckBox checkbox = new CheckBox();
 		checkbox.setRequired(true);
 		sendEmail.addComponent(horizontalGap);
@@ -184,7 +176,8 @@ public class NotificationDetailView extends VerticalLayout implements View {
 		submitButton.addClickListener(new ButtonListener(NotificationView.NAME));
 		fl.addComponent(submitButton);
 
-		Label note = new Label("Submitting the form without checking the \"Send Email\" box will result in notification being processed anyway i.e. the notification won't show up in the list again, and the email won't be sent");
+		Label note = new Label(
+				"Submitting the form without checking the \"Send Email\" box will result in notification being processed anyway i.e. the notification won't show up in the list again, and the email won't be sent");
 
 		fl.addComponent(note);
 		fl.setComponentAlignment(note, Alignment.TOP_LEFT);
@@ -195,6 +188,7 @@ public class NotificationDetailView extends VerticalLayout implements View {
 
 	public class ButtonListener implements ClickListener {
 
+		private static final long serialVersionUID = 1L;
 		private String menuitem;
 
 		public ButtonListener(String menuitem) {
@@ -252,38 +246,29 @@ public class NotificationDetailView extends VerticalLayout implements View {
 			// start the notification bpm process
 			RuntimeEngineWrapper.getEngine().getKieSession().startProcess(RuntimeEngineWrapper.getProperties().getProcessIdNotification(), params);
 
-			com.vaadin.ui.Notification notif = new com.vaadin.ui.Notification("Notification acknowledged",
-					com.vaadin.ui.Notification.Type.HUMANIZED_MESSAGE);
-
-			// Customize it
-			notif.setDelayMsec(2500);
-			notif.setPosition(Position.MIDDLE_CENTER);
-
-	
-
-			// so many things can go wrong :(
 			// insert processed record into the database
 			try {
 				DatabaseUtil dbUtil = new DatabaseUtil();
-				dbUtil.insertProcessedNotification(notification.getService().getRetirementTimestamp(),notification.getInvocationTimestamp());
+				dbUtil.insertProcessedNotification(notification.getService().getRetirementTimestamp(), notification.getInvocationTimestamp());
 				dbUtil.close();
 			} catch (IOException | NamingException | SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			// Show it in the page
+			com.vaadin.ui.Notification notif = new com.vaadin.ui.Notification("Notification acknowledged",
+					com.vaadin.ui.Notification.Type.HUMANIZED_MESSAGE);
+
+			notif.setDelayMsec(2500);
+			notif.setPosition(Position.MIDDLE_CENTER);
 			NotificationDetailView.this.navigator.navigateTo("main" + "/" + menuitem);
 			notif.show(Page.getCurrent());
-			
+
 		}
 
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public Navigator getNavigator() {

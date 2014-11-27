@@ -15,6 +15,11 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
 @SuppressWarnings("unused")
+/**
+ * View which is presented to a user which does not have SOAGovernanceSpecialist role assigned
+ * @author osiris
+ *
+ */
 public class LimitedView extends VerticalLayout implements View {
 
 	private static final long serialVersionUID = -3398565663865641952L;
@@ -22,13 +27,11 @@ public class LimitedView extends VerticalLayout implements View {
 	private final static Logger logger = Logger.getLogger(MainView.class.getName());
 
 	public static String NAME = "limited-main";
-	private final Label horizontalGap = new Label("&nbsp;", ContentMode.HTML);
 
 	// list of components on the page
 	private Panel panel;
 	private Navigator navigator;
 	private Button tasks;
-
 	private Label greeting;
 
 	public LimitedView(Navigator navigator) {
@@ -48,7 +51,7 @@ public class LimitedView extends VerticalLayout implements View {
 		VerticalLayout menuContent = new VerticalLayout();
 
 		tasks = new Button("Lifecycle Tasks", new ButtonListener(TaskListView.NAME));
-		tasks.setWidth("179px");
+		tasks.setWidth(Constants.MENU_BUTTON_WIDTH_LIMITED);
 
 		menuContent.addComponent(tasks);
 
@@ -78,6 +81,8 @@ public class LimitedView extends VerticalLayout implements View {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				
+				//remove session data 
 				getSession().setAttribute("username", null);
 				getSession().setAttribute("role", null);
 				getUI().getNavigator().navigateTo("");
@@ -95,7 +100,7 @@ public class LimitedView extends VerticalLayout implements View {
 		});
 		buttonLayout.setSpacing(true);
 		buttonLayout.addComponent(logout);
-		buttonLayout.addComponent(horizontalGap);
+		buttonLayout.addComponent(Constants.HORIZONTAL_GAP);
 		buttonLayout.addComponent(home);
 
 		addComponent(buttonLayout);

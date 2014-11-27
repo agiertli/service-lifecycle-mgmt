@@ -11,6 +11,13 @@ import org.tepi.filtertable.numberfilter.NumberFilterPopupConfig;
 import com.vaadin.server.Resource;
 import com.vaadin.shared.ui.datefield.Resolution;
 
+/**
+ * 
+ * @author Anton Giertli
+ * 
+ *         Decoration elements for Filter Table
+ */
+
 public class CustomFilterDecorator implements FilterDecorator, Serializable {
 
 	private static final long serialVersionUID = 3964571205848401790L;
@@ -18,19 +25,13 @@ public class CustomFilterDecorator implements FilterDecorator, Serializable {
 
 	@Override
 	public String getEnumFilterDisplayName(Object propertyId, Object value) {
-		
-//		logger.info("property id:"+propertyId);
-//		logger.info("value:"+value);
- //       logger.info("value to string:"+value.toString());
-		
-		
+
 		if ("Process State".equals(propertyId)) {
 
 			ProcessStateMap.States state = (ProcessStateMap.States) value;
 			return ProcessStateMap.getProcessStatusAsString(state);
-		}
-		else if ("Process Name".equals(propertyId)) {
-			
+		} else if ("Process Name".equals(propertyId)) {
+
 			return value.toString();
 		}
 
@@ -110,7 +111,7 @@ public class CustomFilterDecorator implements FilterDecorator, Serializable {
 	@Override
 	public boolean usePopupForNumericProperty(Object propertyId) {
 		if (propertyId.equals("Process Instance ID") || propertyId.equals("Task ID")) {
-			
+
 			return true;
 		}
 		return false;

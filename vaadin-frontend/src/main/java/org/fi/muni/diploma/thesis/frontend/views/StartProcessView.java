@@ -1,6 +1,5 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
@@ -30,10 +29,7 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class StartProcessView extends VerticalLayout implements View {
 
-	/**
-	 * 
-	 */
-
+	@SuppressWarnings("unused")
 	private final static Logger logger = Logger.getLogger(StartProcessView.class.getName());
 	private static final long serialVersionUID = 7143562159977862725L;
 
@@ -45,8 +41,6 @@ public class StartProcessView extends VerticalLayout implements View {
 
 	class ButtonListener implements Button.ClickListener {
 		private static final long serialVersionUID = -4941184695301907995L;
-		
-		
 
 		String menuitem;
 
@@ -57,42 +51,33 @@ public class StartProcessView extends VerticalLayout implements View {
 		@SuppressWarnings("static-access")
 		@Override
 		public void buttonClick(ClickEvent event) {
-			
+
 			String processid = "";
 
 			if (menuitem.equals("newservice")) {
-				processid = runtimeEngine.getProperties().getProcessIdNewService(); 
+				processid = runtimeEngine.getProperties().getProcessIdNewService();
+			} else if (menuitem.equals("existingservice")) {
+
+				processid = runtimeEngine.getProperties().getProcessIdExistingService();
+			} else {
+
+				return; // don't do nothing if user hacks the url with the improper id
 			}
-				else if (menuitem.equals("existingservice")) {
-					
-					processid = runtimeEngine.getProperties().getProcessIdExistingService();
-				}
-				else {
-					
-					return; //don't do nothing if user hacks the url with the improper id
-				}
 
-				// Start the service lifecycle instance
-				ProcessInstance processInstance = runtimeEngine.getEngine().getKieSession()
-						.startProcess(processid);
-				Notification notif = new Notification("New Lifecycle with id '" + processInstance.getId()
-						+ "'  successfully started", Type.HUMANIZED_MESSAGE);
+			// Start the service lifecycle instance
+			ProcessInstance processInstance = runtimeEngine.getEngine().getKieSession().startProcess(processid);
+			Notification notif = new Notification("New Lifecycle with id '" + processInstance.getId() + "'  successfully started",
+					Type.HUMANIZED_MESSAGE);
 
-				// Customize it
-				notif.setDelayMsec(2500);
-				notif.setPosition(Position.MIDDLE_CENTER);
+			notif.setDelayMsec(2500);
+			notif.setPosition(Position.MIDDLE_CENTER);
+			StartProcessView.this.navigator.navigateTo("main/" + TaskDetailView.NAME + "?id="
+					+ taskService.getTasksByProcessInstanceId(processInstance.getId()).get(0)); // redirect to Task
+																								// Detail View
+			notif.show(Page.getCurrent());
 
-		//	List<Long> taskIds = taskService.getTasksByProcessInstanceId(processInstance.getId());
-			//logger.info(String.valueOf(taskIds.size()));
-			//logger.info("task id:"+taskIds.get(0).longValue());
-				
-				// Show it in the page
-StartProcessView.this.navigator.navigateTo("main/"+TaskDetailView.NAME+"?id="+taskService.getTasksByProcessInstanceId(processInstance.getId()).get(0)); //redirect to Task Detail View
-				notif.show(Page.getCurrent());
-
-			} 
 		}
-	
+	}
 
 	public StartProcessView(Navigator navigator, String username) {
 
@@ -105,10 +90,8 @@ StartProcessView.this.navigator.navigateTo("main/"+TaskDetailView.NAME+"?id="+ta
 		content.addComponent(startGreeting);
 		content.setComponentAlignment(startGreeting, Alignment.TOP_CENTER);
 
-		Button newServiceButton = new Button("Start Service Lifecycle - for a new service", new ButtonListener(
-				"newservice"));
-		Button existingServiceButton = new Button("Start Service Lifecycle - for existing service", new ButtonListener(
-				"existingservice"));
+		Button newServiceButton = new Button("Start Service Lifecycle - for a new service", new ButtonListener("newservice"));
+		Button existingServiceButton = new Button("Start Service Lifecycle - for existing service", new ButtonListener("existingservice"));
 
 		Label gap = new Label("");
 		gap.setHeight("200px");
@@ -129,7 +112,6 @@ StartProcessView.this.navigator.navigateTo("main/"+TaskDetailView.NAME+"?id="+ta
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -26,13 +26,10 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 
+@SuppressWarnings("unused")
 public class ProcessDetailView extends VerticalLayout implements View {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public final static String NAME = "processdetails";
 	private Navigator navigator;
@@ -134,12 +131,10 @@ public class ProcessDetailView extends VerticalLayout implements View {
 				FileUtil util = new FileUtil();
 
 				// select corresponding svg source file
-				// logger.info("selected process name:"+ProcessDetailView.this.selectedProcess.getProcessName());
 				InputStream is = util.getFileFromClasspath(ProcessDetailView.this.selectedProcess.getProcessName());
 
 				if (ProcessStateMap.getProcessStatusAsEnum(ProcessDetailView.this.selectedProcess.getStatus()).equals(
 						ProcessStateMap.States.COMPLETED)) {
-					// logger.info("wtf");
 					return is; // don't do any additional processing and return the original process diagram
 
 				}
@@ -148,23 +143,19 @@ public class ProcessDetailView extends VerticalLayout implements View {
 						ProcessDetailView.this.processState, ProcessDetailView.this.servicesQueried, ProcessDetailView.this.passedTests,
 						ProcessDetailView.this.serviceSelected);
 
-				// new ByteArrayInputStream("".getBytes());
-
 				return altered;
 			}
 
 		}, ProcessDetailView.this.selectedProcess.getProcessName() + ".svg");
 
-		resource.setCacheTime(0);
+		resource.setCacheTime(0); // since this diagram is dynamically generated, we don't want it to be cached !
 
 		Embedded image = new Embedded("", resource);
-		
 
 		image.setMimeType("image/svg+xml");
 
 		layout.addComponent(image);
-		
-		// layout.setComponentAlignment(image, Alignment.MIDDLE_LEFT);
+
 		this.currentImage = image;
 
 		addComponent(layout);
@@ -172,19 +163,27 @@ public class ProcessDetailView extends VerticalLayout implements View {
 
 	}
 
-	// build the Process Variables table
+	/**
+	 * build the Process Variables table
+	 * @param varLog list of variables of selected process
+	 * @return
+	 */
 	private FilterTable buildProcessVariablesTable(List<JaxbVariableInstanceLog> varLog) {
 
 		FilterTable filterTable = new FilterTable("");
-		// filterTable.setSizeUndefined();
 		filterTable.setContainerDataSource(buildContainerForVariablesTable(varLog));
 		filterTable.setFilterBarVisible(true);
 
 		return filterTable;
 	}
 
-	// Populate the data for Process Variables table
+	
 	@SuppressWarnings("unchecked")
+	/**
+	 *  Populate the data for Process Variables table
+	 * @param varLog list of variables of a selected process
+	 * @return
+	 */
 	private Container buildContainerForVariablesTable(List<JaxbVariableInstanceLog> varLog) {
 
 		List<JaxbVariableInstanceLog> filterSubProcessStates = new ArrayList<JaxbVariableInstanceLog>();
@@ -284,7 +283,11 @@ public class ProcessDetailView extends VerticalLayout implements View {
 
 	}
 
-	// build the Process Detail Table
+	/**
+	 *  build the Process Detail Table
+	 * @param selectedProcess 
+	 * @return
+	 */
 	private FilterTable buildProcessDetailsTable(JaxbProcessInstanceLog selectedProcess) {
 
 		FilterTable filterTable = new FilterTable("");
@@ -295,7 +298,11 @@ public class ProcessDetailView extends VerticalLayout implements View {
 		return filterTable;
 	}
 
-	// Populate the data Process Detail Table
+	/**
+	 * Populate the data Process Detail Table
+	 * @param selectedProcess 
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	private Container buildContainerForDetailsTable(JaxbProcessInstanceLog selectedProcess) {
 

@@ -27,9 +27,6 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class TaskDetailView extends VerticalLayout implements View {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public static final String NAME = "taskdetailview";
 	private TaskService taskService;
@@ -44,7 +41,6 @@ public class TaskDetailView extends VerticalLayout implements View {
 	public TaskDetailView(Long id, String username,Navigator navigator) {
 
 		this.setNavigator(navigator);
-		// auditLogService = new AuditServiceWrapper();
 		taskService = new TaskServiceWrapper();
 
 		Task task = taskService.getTaskById(id);
@@ -73,7 +69,6 @@ public class TaskDetailView extends VerticalLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
 
 	}
 

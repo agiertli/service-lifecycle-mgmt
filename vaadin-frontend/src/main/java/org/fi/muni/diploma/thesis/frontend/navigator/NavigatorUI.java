@@ -18,10 +18,22 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 
 @Theme("mytheme")
+/**
+ * 
+ * @author osiris
+ *
+ * Entry point of application
+ */
 public class NavigatorUI extends UI {
 
 	private final static Logger logger = Logger.getLogger(NavigatorUI.class.getName());
 
+	/**
+	 * 
+	 * @author osiris
+	 * 
+	 *         Specifying correct widgetset is important if addons are used
+	 */
 	@WebServlet(urlPatterns = "/*", asyncSupported = true, initParams = { @WebInitParam(name = "widgetset", value = "org.fi.muni.diploma.thesis.frontend.AppWidgetSet") })
 	@VaadinServletConfiguration(productionMode = false, ui = NavigatorUI.class)
 	public static class Servlet extends VaadinServlet {
@@ -51,9 +63,6 @@ public class NavigatorUI extends UI {
 		//
 		getNavigator().addViewChangeListener(new ViewChangeListener() {
 
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -74,7 +83,7 @@ public class NavigatorUI extends UI {
 
 					// this usually happens when logged user closed the application tab
 					String roles = (String) getSession().getAttribute("role");
-					logger.info("roles:"+roles);
+					logger.info("roles:" + roles);
 					if (roles.contains("SOAGovernanceSpecialist")) {
 						logger.info("navigating to main view");
 						getNavigator().navigateTo(MainView.NAME);
@@ -85,7 +94,7 @@ public class NavigatorUI extends UI {
 
 					}
 				}
-				
+
 				return true;
 			}
 

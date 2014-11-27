@@ -27,13 +27,17 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
-/** Main view with a menu */
+/**
+ * Main navigation menu - includes left navigation button and right panel with actual content
+ * 
+ * @author osiris
+ * 
+ */
+@SuppressWarnings("unused")
 public class MainView extends VerticalLayout implements View {
 
 	private static final long serialVersionUID = -3398565663865641952L;
 	private final static Logger logger = Logger.getLogger(MainView.class.getName());
-	private final Label verticalGap = new Label("</br>", ContentMode.HTML);
-	private final Label horizontalGap = new Label("&nbsp;", ContentMode.HTML);
 
 	public static String NAME = "main";
 
@@ -67,8 +71,6 @@ public class MainView extends VerticalLayout implements View {
 
 	public MainView(Navigator navigator) {
 
-		// logger.info("constructor of MainView Called");
-
 		this.setNavigator(navigator);
 
 		setSizeFull();
@@ -87,23 +89,20 @@ public class MainView extends VerticalLayout implements View {
 		menuContent.addStyleName("left-allign-button-caption");
 
 		startButton = new Button("Start New Lifecycle Instance", new ButtonListener(StartProcessView.NAME));
-		startButton.setWidth("230px");
+		startButton.setWidth(Constants.MENU_BUTTON_WIDTH_MAIN);
 
 		instances = new Button("Lifecycle Instances", new ButtonListener(ProcessListView.NAME));
-		instances.setWidth("230px");
+		instances.setWidth(Constants.MENU_BUTTON_WIDTH_MAIN);
 
 		tasks = new Button("Lifecycle Tasks", new ButtonListener(TaskListView.NAME));
-		tasks.setWidth("230px");
+		tasks.setWidth(Constants.MENU_BUTTON_WIDTH_MAIN);
 
 		notifications = new Button("Retired Services", new ButtonListener(NotificationView.NAME));
-		notifications.setWidth("230px");
+		notifications.setWidth(Constants.MENU_BUTTON_WIDTH_MAIN);
 
 		menuContent.addComponent(startButton);
-		// menuContent.addComponent(verticalGap);
 		menuContent.addComponent(instances);
-		// menuContent.addComponent(verticalGap);
 		menuContent.addComponent(tasks);
-		// menuContent.addComponent(verticalGap);
 		menuContent.addComponent(notifications);
 		menuContent.setWidth(null);
 		menuContent.setMargin(true);
@@ -147,7 +146,7 @@ public class MainView extends VerticalLayout implements View {
 		});
 		buttonLayout.setSpacing(true);
 		buttonLayout.addComponent(logout);
-		buttonLayout.addComponent(horizontalGap);
+		buttonLayout.addComponent(Constants.HORIZONTAL_GAP);
 		buttonLayout.addComponent(home);
 
 		addComponent(buttonLayout);
@@ -155,13 +154,11 @@ public class MainView extends VerticalLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// logger.info("enter method called");
 
 		ApplicationUserRoleProperties props = null;
 		try {
 			props = new ApplicationUserRoleProperties();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -194,8 +191,7 @@ public class MainView extends VerticalLayout implements View {
 			fancyImage = new FancyImage();
 			fancyImage.setSizeFull();
 			fancyImage.setHeight("800px");
-			
-			
+
 			greeting = new Label("Service Lifecycle Manager");
 			greeting.setSizeUndefined();
 			greeting.setStyleName("h1");
@@ -206,13 +202,14 @@ public class MainView extends VerticalLayout implements View {
 			buttons.setSizeUndefined();
 
 			Button create = new Button("start");
-			create.setData(getImageResources().get(2));
+			create.setData(getImageResource(Constants.CREATE_BUTTON_IMAGE));
 
 			create.addClickListener(new ClickListener() {
 
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public void buttonClick(ClickEvent event) {
-					// TODO Auto-generated method stub
 
 					com.vaadin.server.Resource resource = (com.vaadin.server.Resource) event.getButton().getData();
 					fancyImage.showResource(resource);
@@ -226,12 +223,13 @@ public class MainView extends VerticalLayout implements View {
 			delimiter.setValue("|");
 
 			Button execute = new Button("execute");
-			execute.setData(getImageResources().get(0));
+			execute.setData(Constants.EXECUTE_BUTTON_IMAGE);
 			execute.addClickListener(new ClickListener() {
 
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public void buttonClick(ClickEvent event) {
-					// TODO Auto-generated method stub
 
 					com.vaadin.server.Resource resource = (com.vaadin.server.Resource) event.getButton().getData();
 					fancyImage.showResource(resource);
@@ -241,14 +239,14 @@ public class MainView extends VerticalLayout implements View {
 
 			});
 
-			
 			Button monitor = new Button("monitor");
-			monitor.setData(getImageResources().get(1));
+			monitor.setData(Constants.MONITOR_BUTTON_IMAGE);
 			monitor.addClickListener(new ClickListener() {
 
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public void buttonClick(ClickEvent event) {
-					// TODO Auto-generated method stub
 
 					com.vaadin.server.Resource resource = (com.vaadin.server.Resource) event.getButton().getData();
 					fancyImage.showResource(resource);
@@ -257,12 +255,12 @@ public class MainView extends VerticalLayout implements View {
 				}
 
 			});
-			
+
 			panelContent.addComponent(greeting);
-			panelContent.setComponentAlignment(greeting, Alignment.MIDDLE_CENTER);			
+			panelContent.setComponentAlignment(greeting, Alignment.MIDDLE_CENTER);
 
 			buttons.addComponent(create);
-			buttons.addComponent(execute);		
+			buttons.addComponent(execute);
 			buttons.addComponent(monitor);
 			panelContent.addComponent(buttons);
 			panelContent.setComponentAlignment(buttons, Alignment.MIDDLE_CENTER);
@@ -270,24 +268,21 @@ public class MainView extends VerticalLayout implements View {
 			// //// fancy image
 
 			// Setting images used
-			final List<Resource> resources = getImageResources();
+			final List<Resource> resources = getAllImageResources();
 
 			for (Resource resource : resources) {
 
 				fancyImage.addResource(resource);
 			}
-			
+
 			fancyImage.setFadeTransition(true);
 			fancyImage.setRotateTransition(true, false);
 			fancyImage.setVisible(false);
-			
-			
 
 			panelContent.addComponent(fancyImage);
 			panelContent.setComponentAlignment(fancyImage, Alignment.MIDDLE_CENTER);
 
 			// //// fancy image
-
 
 			return;
 		}
@@ -319,10 +314,8 @@ public class MainView extends VerticalLayout implements View {
 			try {
 				panelContent.addComponent(new NotificationView(this.getNavigator()));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// todo - add Notification Actions view
 			return;
 
 		}
@@ -336,7 +329,6 @@ public class MainView extends VerticalLayout implements View {
 			try {
 				panelContent.addComponent(new ProcessDetailView(processInstanceId, this.getNavigator()));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -375,16 +367,31 @@ public class MainView extends VerticalLayout implements View {
 
 	}
 
-	private List<Resource> getImageResources() {
-		// TODO Auto-generated method stub
+	/**
+	 * Loads the image from the WEB-INF/images folder
+	 * @param resourceName full file name including extension
+	 * @return
+	 */
+	private Resource getImageResource(String resourceName) {
+
+		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+		FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/" + resourceName));
+		return resource;
+	}
+
+	/**
+	 * Gets all images from WEB-INF/images folder
+	 * @return List of images
+	 */
+	private List<Resource> getAllImageResources() {
 
 		List<Resource> list = new ArrayList<Resource>();
 
 		// Find the application directory
 		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
-		FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/execute.png"));
-		FileResource resource1 = new FileResource(new File(basepath + "/WEB-INF/images/monitor.png"));
-		FileResource resource2 = new FileResource(new File(basepath + "/WEB-INF/images/start.png"));
+		FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/" + Constants.EXECUTE_BUTTON_IMAGE));
+		FileResource resource1 = new FileResource(new File(basepath + "/WEB-INF/images/" + Constants.MONITOR_BUTTON_IMAGE));
+		FileResource resource2 = new FileResource(new File(basepath + "/WEB-INF/images/" + Constants.CREATE_BUTTON_IMAGE));
 
 		list.add(resource);
 		list.add(resource1);

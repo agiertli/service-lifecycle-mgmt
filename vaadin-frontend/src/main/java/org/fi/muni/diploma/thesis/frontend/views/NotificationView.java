@@ -45,8 +45,6 @@ public class NotificationView extends VerticalLayout implements View {
 	private final static Logger logger = Logger.getLogger(NotificationView.class.getName());
 	private PagedFilterTable<?> filterTable;
 	public static final String NAME = "retiredservices";
-	private final int ROW_HEIGHT = 43;
-	private final int TABLE_OFFSET = 65;
 
 	private Notification currentNotification;
 
@@ -66,39 +64,39 @@ public class NotificationView extends VerticalLayout implements View {
 		if (!notifications.isEmpty()) {
 
 			filterTable = buildFilterTable(notifications);
-		
+
 			filterTable.setPageLength(10);
 			int rowcount = filterTable.getItemIds().size();
 			if (rowcount > filterTable.getPageLength()) {
 
-				filterTable.setHeight(String.valueOf(ROW_HEIGHT * filterTable.getPageLength() + TABLE_OFFSET) + "px");
+				filterTable.setHeight(String.valueOf(Constants.ROW_HEIGHT * filterTable.getPageLength() + Constants.TABLE_OFFSET) + "px");
 
 			} else {
 
-				filterTable.setHeight(String.valueOf(ROW_HEIGHT * rowcount + TABLE_OFFSET) + "px");
+				filterTable.setHeight(String.valueOf(Constants.ROW_HEIGHT * rowcount + Constants.TABLE_OFFSET) + "px");
 			}
 
 			filterTable.addItemSetChangeListener(new ItemSetChangeListener() {
+
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				public void containerItemSetChange(ItemSetChangeEvent event) {
 					filterTable.setPageLength(10);
 
-					// TODO Auto-generated method stub
 					int rowcount = filterTable.getItemIds().size();
 
 					if (rowcount > filterTable.getPageLength()) {
 
-						filterTable.setHeight(String.valueOf(ROW_HEIGHT * filterTable.getPageLength() + TABLE_OFFSET) + "px");
+						filterTable.setHeight(String.valueOf(Constants.ROW_HEIGHT * filterTable.getPageLength() + Constants.TABLE_OFFSET) + "px");
 
 					} else {
 
-						filterTable.setHeight(String.valueOf(ROW_HEIGHT * rowcount + TABLE_OFFSET) + "px");
+						filterTable.setHeight(String.valueOf(Constants.ROW_HEIGHT * rowcount + Constants.TABLE_OFFSET) + "px");
 					}
 				}
 			});
-			
-			
+
 			layout.addComponent(filterTable);
 			layout.setComponentAlignment(greeting, Alignment.TOP_CENTER);
 			layout.setComponentAlignment(filterTable, Alignment.TOP_CENTER);
@@ -124,10 +122,10 @@ public class NotificationView extends VerticalLayout implements View {
 	private PagedFilterTable<?> buildFilterTable(Set<Notification> notifications) {
 
 		PagedFilterTable<IndexedContainer> filterTable = new PagedFilterTable<IndexedContainer>("");
-		// filterTable.setSizeFull();
+
 		filterTable.setFilterDecorator(new CustomFilterDecorator());
 		filterTable.setFilterGenerator(new CustomFilterGenerator());
-		
+
 		filterTable.setHeightUndefined();
 		filterTable.setFilterDecorator(new CustomFilterDecorator());
 		filterTable.setFilterGenerator(new CustomFilterGenerator());
@@ -141,12 +139,10 @@ public class NotificationView extends VerticalLayout implements View {
 		filterTable.setRowHeaderMode(RowHeaderMode.INDEX);
 
 		filterTable.setColumnReorderingAllowed(true);
-		
-		
+
 		filterTable.setContainerDataSource(buildContainer(notifications));
 		filterTable.setFilterBarVisible(true);
 		filterTable.setFilterFieldVisible("Action", false);
-		// filterTable.setFilterFieldValue("Process State", ProcessStateMap.States.ACTIVE);
 
 		return filterTable;
 	}
@@ -196,9 +192,6 @@ public class NotificationView extends VerticalLayout implements View {
 
 	class ButtonListener implements ClickListener {
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 
 		private String menuitem;
@@ -222,7 +215,14 @@ public class NotificationView extends VerticalLayout implements View {
 
 	}
 
-	public Set<Notification> getNotifications() throws IOException, NamingException, SQLException {
+	/**
+	 * 
+	 * @return List of retired service invocations, which is maintained by RTGov Server
+	 * @throws IOException
+	 * @throws NamingException
+	 * @throws SQLException
+	 */
+	private Set<Notification> getNotifications() throws IOException, NamingException, SQLException {
 
 		Set<RetiredService> retiredServices = new HashSet<RetiredService>();
 		Set<Notification> notifications = new HashSet<Notification>();
@@ -232,12 +232,10 @@ public class NotificationView extends VerticalLayout implements View {
 		List<JaxbVariableInstanceLog> varLog = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
 				.findVariableInstancesByNameAndValue("ServiceState_sub", "Retired", false);
 
-		logger.info("number of retired servicestate_sub" + varLog.size());
-
 		// look for service names which is stored in the same sub process
-		for (JaxbVariableInstanceLog var : varLog) {
+		RTGovClient client = new RTGovClient(new RTGovProperties());
 
-			logger.info("looping through following sub process instance:" + var.getProcessInstanceId());
+		for (JaxbVariableInstanceLog var : varLog) {
 
 			@SuppressWarnings("unchecked")
 			List<JaxbVariableInstanceLog> serviceNames = (List<JaxbVariableInstanceLog>) RuntimeEngineWrapper.getEngine().getAuditLogService()
@@ -246,8 +244,6 @@ public class NotificationView extends VerticalLayout implements View {
 			if (!serviceNames.isEmpty()) {
 				// created retiredservice object - servicename and time of retiremend
 				retiredServices.add(new RetiredService(serviceNames.get(0).getValue(), var.getDate().getTime()));
-
-				RTGovClient client = new RTGovClient(new RTGovProperties());
 
 				for (RetiredService service : retiredServices) {
 

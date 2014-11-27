@@ -30,17 +30,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
-/**
- * List of active tasks assigned to Anton
- * 
- * @author osiris
- * 
- */
 public class TaskListView extends VerticalLayout implements View {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private TaskService taskService;
 	private Navigator navigator;
@@ -66,7 +57,6 @@ public class TaskListView extends VerticalLayout implements View {
 		@Override
 		public void buttonClick(ClickEvent event) {
 
-			// logger.info("button click, redirecting to Task Details page");
 			TaskListView.this.navigator.navigateTo("main" + "/" + menuitem + "?id=" + String.valueOf((Long) event.getButton().getData()));
 
 		}
@@ -80,17 +70,16 @@ public class TaskListView extends VerticalLayout implements View {
 		this.setNavigator(navigator);
 		taskService = new TaskServiceWrapper();
 
-		//there seems to be a bug in the jBPM 6.2.0.CR1 release - only 10 results are returned..
-		//this is completely out of my hands..
+		// there seems to be a bug in the jBPM 6.2.0.CR1 release - only 10 results are returned..
+		// this is completely out of my hands..
 		List<TaskSummary> taskList = taskService.getTasksAssignedAsPotentialOwner(username, "en-UK");
-	
-		logger.info("tsak list size:"+taskList.size());
+
+		logger.info("tsak list size:" + taskList.size());
 
 		VerticalLayout layout = new VerticalLayout();
 		taskListTable = buildTaskListTable(taskList);
 
 		taskListTable = buildTaskListTable(taskList);
-		// taskListTable.setPageLength(10);
 		int rowcount = taskListTable.getItemIds().size();
 		if (rowcount > taskListTable.getPageLength()) {
 
@@ -103,11 +92,11 @@ public class TaskListView extends VerticalLayout implements View {
 
 		taskListTable.addItemSetChangeListener(new ItemSetChangeListener() {
 
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void containerItemSetChange(ItemSetChangeEvent event) {
-				// taskListTable.setPageLength(10);
 
-				// TODO Auto-generated method stub
 				int rowcount = taskListTable.getItemIds().size();
 
 				if (rowcount > taskListTable.getPageLength()) {
@@ -197,15 +186,10 @@ public class TaskListView extends VerticalLayout implements View {
 			// dirty hack, bug in kie-wb creates "dead" process instance with id 1, and starts the task, with id 1..
 			// it's not possible to work on this task, so we are excluding it
 			if (taskSummary.getId() == 1 && taskSummary.getStatus().name().equals("InProgress")) {
-				// logger.info("podmienka true");
 				continue;
 			}
 
 			cont.addItem(i);
-
-			// logger.info(String.valueOf("dafuq task id:"+taskSummary.getId()));
-			// logger.info(String.valueOf("dafuq process id:"+taskSummary.getProcessInstanceId()));
-			// logger.info(taskSummary.getStatus().name());
 
 			cont.getContainerProperty(i, "Task Name").setValue(taskSummary.getName());
 			cont.getContainerProperty(i, "Task ID").setValue(taskSummary.getId());
