@@ -42,6 +42,7 @@ public class TaskListView extends VerticalLayout implements View {
 	private PagedFilterTable<?> taskListTable;
 	private Long taskId;
 
+	@SuppressWarnings("unused")
 	private final static Logger logger = Logger.getLogger(TaskListView.class.getName());
 
 	class ButtonListener implements Button.ClickListener {
@@ -65,8 +66,6 @@ public class TaskListView extends VerticalLayout implements View {
 
 	public TaskListView(Navigator navigator, String username) {
 
-		logger.info("task list username:" + username);
-
 		this.setNavigator(navigator);
 		taskService = new TaskServiceWrapper();
 
@@ -74,9 +73,9 @@ public class TaskListView extends VerticalLayout implements View {
 		// this is completely out of my hands..
 		List<TaskSummary> taskList = taskService.getTasksAssignedAsPotentialOwner(username, "en-UK");
 
-		logger.info("tsak list size:" + taskList.size());
-
 		VerticalLayout layout = new VerticalLayout();
+		layout.setSpacing(true);
+		layout.setMargin(true);
 		taskListTable = buildTaskListTable(taskList);
 
 		taskListTable = buildTaskListTable(taskList);
@@ -129,6 +128,7 @@ public class TaskListView extends VerticalLayout implements View {
 
 		layout.addComponent(greeting);
 		layout.addComponent(taskListTable);
+		layout.addComponent(Constants.VERTICAL_GAP);
 
 		HorizontalLayout h = taskListTable.createControls(config);
 

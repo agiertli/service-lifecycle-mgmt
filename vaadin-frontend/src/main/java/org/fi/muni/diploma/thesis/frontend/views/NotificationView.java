@@ -53,6 +53,8 @@ public class NotificationView extends VerticalLayout implements View {
 		this.navigator = navigator;
 
 		VerticalLayout layout = new VerticalLayout();
+		layout.setSpacing(true);
+		layout.setMargin(true);
 		Set<Notification> notifications = this.getNotifications();
 
 		Label greeting = new Label("List of retired service invocations");
