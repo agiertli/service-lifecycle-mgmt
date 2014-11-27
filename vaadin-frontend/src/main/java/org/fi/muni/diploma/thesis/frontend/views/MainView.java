@@ -223,7 +223,7 @@ public class MainView extends VerticalLayout implements View {
 			delimiter.setValue("|");
 
 			Button execute = new Button("execute");
-			execute.setData(Constants.EXECUTE_BUTTON_IMAGE);
+			execute.setData(getImageResource(Constants.EXECUTE_BUTTON_IMAGE));
 			execute.addClickListener(new ClickListener() {
 
 				private static final long serialVersionUID = 1L;
@@ -240,7 +240,7 @@ public class MainView extends VerticalLayout implements View {
 			});
 
 			Button monitor = new Button("monitor");
-			monitor.setData(Constants.MONITOR_BUTTON_IMAGE);
+			monitor.setData(getImageResource(Constants.MONITOR_BUTTON_IMAGE));
 			monitor.addClickListener(new ClickListener() {
 
 				private static final long serialVersionUID = 1L;

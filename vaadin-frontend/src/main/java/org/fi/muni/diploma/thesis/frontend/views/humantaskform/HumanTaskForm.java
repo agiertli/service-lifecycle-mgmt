@@ -45,7 +45,6 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
-import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeSelect;
@@ -55,6 +54,12 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
+@SuppressWarnings("unused")
+/**
+ * Human Task form which is calculated from the number / types / names of the Human Task Inputs and Outputs
+ * @author osiris
+ *
+ */
 public class HumanTaskForm extends VerticalLayout implements View {
 
 	private static final long serialVersionUID = 1L;
@@ -88,9 +93,6 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 	public class SelectListener implements ClickListener {
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -115,9 +117,6 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 	public class ButtonListener implements ClickListener {
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 
 		String menuitem;
@@ -131,18 +130,20 @@ public class HumanTaskForm extends VerticalLayout implements View {
 		public void buttonClick(ClickEvent event) {
 
 			if (HumanTaskForm.this.portField != null) {
+				Integer portValue = null;
 				try {
-					Integer convertedValue = (Integer) HumanTaskForm.this.portField.getConvertedValue();
-				} catch (ConversionException e) {
-
+				portValue = Integer.valueOf(portField.getValue());
+				} catch (NumberFormatException e) {
+					
 					HumanTaskForm.this.removeComponents(HumanTaskForm.this.errorLabel, HumanTaskForm.this.portError,
 							HumanTaskForm.this.srampErrorLabel);
 
-					HumanTaskForm.this.portError = new Label("Enter valid port value [0-65535]");
-					addComponent(HumanTaskForm.this.errorLabel);
-					setComponentAlignment(HumanTaskForm.this.portError, Alignment.BOTTOM_LEFT);
-					return;
+					HumanTaskForm.this.errorLabel = new Label("Fill in valid port value - integer number from 0 to 65535");
+					addComponent(errorLabel);
+					setComponentAlignment(errorLabel, Alignment.BOTTOM_LEFT);
+					return; // end the processing
 				}
+				
 			}
 
 			String hostname = "";
@@ -151,16 +152,12 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			Integer port = 0;
 
 			taskService = new TaskServiceWrapper();
-			//
-			// logger.info("button clicked");
 
 			FieldGroup data = (FieldGroup) event.getButton().getData();
 			try {
 				data.commit();
 			} catch (CommitException e) {
 				e.printStackTrace();
-
-				logger.info("GET CAUSE:" + e.getCause().toString());
 
 				if (e.getCause().toString().contains("EmptyValueException")) {
 					HumanTaskForm.this.removeComponents(HumanTaskForm.this.errorLabel, HumanTaskForm.this.portError,
@@ -182,17 +179,36 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			for (Iterator<Field<?>> iterator = col.iterator(); iterator.hasNext();) {
 				Field<?> field = iterator.next();
 
-				// logger.info("output name:" + binder.getPropertyId(field));
-
-				// logger.info("output value:" + field.getValue());
-				// logger.info("output type:" + field.getType() + "property:" +
-				// field.getPropertyDataSource().getType());
-
 				// look out for Integer
 				if (binder.getPropertyId(field).toString().toLowerCase().contains("port")) {
-					// logger.info("we have found integer output");
 
-					result.put((String) binder.getPropertyId(field), (Integer) portField.getConvertedValue());
+					Integer portValue = null;
+					try {
+					portValue = Integer.valueOf(portField.getValue());
+					} catch (NumberFormatException e) {
+						
+						HumanTaskForm.this.removeComponents(HumanTaskForm.this.errorLabel, HumanTaskForm.this.portError,
+								HumanTaskForm.this.srampErrorLabel);
+
+						HumanTaskForm.this.errorLabel = new Label("Fill in valid port value - integer number from 0 to 65535");
+						addComponent(errorLabel);
+						setComponentAlignment(errorLabel, Alignment.BOTTOM_LEFT);
+						return; // end the processing
+					}
+					
+					if (portValue > 65535) {
+						
+						HumanTaskForm.this.removeComponents(HumanTaskForm.this.errorLabel, HumanTaskForm.this.portError,
+								HumanTaskForm.this.srampErrorLabel);
+
+						HumanTaskForm.this.errorLabel = new Label("Fill in valid port value - integer number from 0 to 65535");
+						addComponent(errorLabel);
+						setComponentAlignment(errorLabel, Alignment.BOTTOM_LEFT);
+						return; // end the processing
+						
+					}
+					
+					result.put((String) binder.getPropertyId(field), portValue);
 				} else {
 					result.put((String) binder.getPropertyId(field), field.getValue());
 				}
@@ -201,8 +217,6 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				// VALID data for http connection
 				if (humanTask.getName().equals(HumanTaskName.REGISTER.toString())
 						|| humanTask.getName().equals(HumanTaskName.REGISTER_EXISTING_SERVICE.toString())) {
-
-					List<HumanTaskOutput> outputs = HumanTaskForm.this.humanTask.getOutputs();
 
 					if (((String) binder.getPropertyId(field)).toLowerCase().contains("host")) {
 
@@ -215,7 +229,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 						username = (String) field.getValue();
 					} else if (((String) binder.getPropertyId(field)).toLowerCase().contains("port")) {
 
-						port = (Integer) portField.getConvertedValue();
+						port = Integer.valueOf(portField.getValue());
 					}
 
 				}
@@ -315,18 +329,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 			if (services == null) {
 
-				// logger.info("services are null");
 			} else {
-
-				// logger.info(String.valueOf(services.size()));
-				// logger.info(services.toString());
-
-				logger.info("processing inputs");
-				for (Service service : services) {
-
-					// logger.info("service uuid:" + service.getUUID());
-					// logger.info("service name:" + service.getName());
-				}
 
 				// load the table with data
 				filterTable = buildFilterTable(services);
@@ -362,6 +365,8 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			this.refreshServicesButton.setData(this.taskid);
 			this.refreshServicesButton.addClickListener(new ClickListener() {
 
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public void buttonClick(ClickEvent event) {
 
@@ -384,7 +389,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			});
 
 		}
-		
+
 		VerticalLayout fl = new VerticalLayout();
 		fl.setSpacing(true);
 
@@ -455,6 +460,8 @@ public class HumanTaskForm extends VerticalLayout implements View {
 					this.policyFulfilled = checkbox;
 					this.policyFulfilled.addValueChangeListener(new ValueChangeListener() {
 
+						private static final long serialVersionUID = 1L;
+
 						@Override
 						public void valueChange(ValueChangeEvent event) {
 							if (HumanTaskForm.this.policyFulfilled.getValue() && HumanTaskForm.this.serviceCreated.getValue()) {
@@ -471,6 +478,8 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				if (output.getLabel().toLowerCase().contains("service been created")) {
 					this.serviceCreated = checkbox;
 					this.serviceCreated.addValueChangeListener(new ValueChangeListener() {
+
+						private static final long serialVersionUID = 1L;
 
 						@Override
 						public void valueChange(ValueChangeEvent event) {
@@ -528,10 +537,9 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 				// logger.info("adding integer output:" + output.getDataType() + "label:" + output.getLabel());
 				TextField integerField = new TextField(output.getLabel());
-				integerField.setConverter(Integer.class);
 				integerField.setRequired(true);
 				integerField.setRequiredError("This field is required");
-				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<Integer>(0));
+				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<String>(""));
 				this.getBinder().bind(integerField, output.getOutputIdentifier());
 				fl.addComponent(integerField);
 				fl.setComponentAlignment(integerField, Alignment.TOP_LEFT);
@@ -709,6 +717,14 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 	}
 
+	/**
+	 * 'Ping' the S-RAMP server and checks whether the connection was established successfully
+	 * @param username
+	 * @param password
+	 * @param hostname
+	 * @param port
+	 * @throws Exception
+	 */
 	private void verifySrampConnection(String username, String password, String hostname, Integer port) throws Exception {
 
 		try {
@@ -791,7 +807,6 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
 
 	}
 
