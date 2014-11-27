@@ -1,5 +1,6 @@
 package org.fi.muni.diploma.thesis.frontend.views;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -9,11 +10,14 @@ import org.fi.muni.diploma.thesis.utils.rtgov.Notification;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.FileResource;
+import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
@@ -24,6 +28,7 @@ public class MainView extends VerticalLayout implements View {
 	private static final long serialVersionUID = -3398565663865641952L;
 	private final static Logger logger = Logger.getLogger(MainView.class.getName());
 	private final Label verticalGap = new Label("</br>", ContentMode.HTML);
+	private final Label horizontalGap = new Label("&nbsp;", ContentMode.HTML);
 
 	public static String NAME = "main";
 
@@ -115,7 +120,8 @@ public class MainView extends VerticalLayout implements View {
 
 		addComponent(hLayout);
 		setExpandRatio(hLayout, 1.0f);
-
+		
+		HorizontalLayout buttonLayout = new HorizontalLayout();
 		// Allow going back to the start
 		Button logout = new Button("Logout", new Button.ClickListener() {
 			private static final long serialVersionUID = -1809072471885383781L;
@@ -127,7 +133,22 @@ public class MainView extends VerticalLayout implements View {
 				getUI().getNavigator().navigateTo("");
 			}
 		});
-		addComponent(logout);
+
+		// Allow going back to the start
+		Button home = new Button("Home", new Button.ClickListener() {
+			private static final long serialVersionUID = -1809072471885383781L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				getUI().getNavigator().navigateTo(MainView.NAME);
+			}
+		});
+		buttonLayout.setSpacing(true);
+		buttonLayout.addComponent(logout);
+		buttonLayout.addComponent(horizontalGap);
+		buttonLayout.addComponent(home);
+
+		addComponent(buttonLayout);
 	}
 
 	@Override
@@ -160,19 +181,49 @@ public class MainView extends VerticalLayout implements View {
 		}
 
 		VerticalLayout panelContent = new VerticalLayout();
+		panelContent.setSpacing(true);
 		panelContent.setSizeFull();
 		panelContent.setHeightUndefined();
 		panelContent.setMargin(true);
 
 		panel.setContent(panelContent); // Also clear
+		
 
 		if (event.getParameters() == null || event.getParameters().isEmpty()) {
-			greeting = new Label("Welcome to Service Lifecycle Management Application");
+			greeting = new Label("Service Lifecycle Manager");
 			greeting.setSizeUndefined();
-			greeting.setStyleName("h2");
+			greeting.setStyleName("h1");
+			
+			Label description = new Label("create | execute | monitor");
+			description.setSizeUndefined();
+			description.setStyleName("h2");
+			
+			Label description2 = new Label("service lifecycle");
+			description2.setSizeUndefined();
+			description2.setStyleName("h2");
 
 			panelContent.addComponent(greeting);
 			panelContent.setComponentAlignment(greeting, Alignment.MIDDLE_CENTER);
+			
+			panelContent.addComponent(description);
+			panelContent.setComponentAlignment(description, Alignment.MIDDLE_CENTER);
+			
+			panelContent.addComponent(description2);
+			panelContent.setComponentAlignment(description2, Alignment.MIDDLE_CENTER);
+			
+			// Find the application directory
+			String basepath = VaadinService.getCurrent()
+			                  .getBaseDirectory().getAbsolutePath();
+
+			// Image as a file resource
+			FileResource resource = new FileResource(new File(basepath +
+			                        "/WEB-INF/images/logo.png"));
+
+			// Show the image in the application
+			Image image = new Image("", resource);
+			panelContent.addComponent(image);
+			panelContent.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
+			
 
 			return;
 		}

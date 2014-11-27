@@ -1,16 +1,13 @@
 package org.fi.muni.diploma.thesis.frontend.navigator;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.logging.Logger;
 
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 
 import org.fi.muni.diploma.thesis.frontend.views.LimitedView;
-import org.fi.muni.diploma.thesis.frontend.views.MainView;
 import org.fi.muni.diploma.thesis.frontend.views.LoginView;
-import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
+import org.fi.muni.diploma.thesis.frontend.views.MainView;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;

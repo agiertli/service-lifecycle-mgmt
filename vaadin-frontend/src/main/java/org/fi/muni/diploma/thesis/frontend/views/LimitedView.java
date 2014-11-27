@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -21,6 +22,7 @@ public class LimitedView extends VerticalLayout implements View {
 	private final static Logger logger = Logger.getLogger(MainView.class.getName());
 
 	public static String NAME = "limited-main";
+	private final Label horizontalGap = new Label("&nbsp;", ContentMode.HTML);
 
 	// list of components on the page
 	private Panel panel;
@@ -68,6 +70,8 @@ public class LimitedView extends VerticalLayout implements View {
 		addComponent(hLayout);
 		setExpandRatio(hLayout, 1.0f);
 
+		HorizontalLayout buttonLayout = new HorizontalLayout();
+
 		// Allow going back to the start
 		Button logout = new Button("Logout", new Button.ClickListener() {
 			private static final long serialVersionUID = -1809072471885383781L;
@@ -79,7 +83,22 @@ public class LimitedView extends VerticalLayout implements View {
 				getUI().getNavigator().navigateTo("");
 			}
 		});
-		addComponent(logout);
+
+		// Allow going back to the start
+		Button home = new Button("Home", new Button.ClickListener() {
+			private static final long serialVersionUID = -1809072471885383781L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				getUI().getNavigator().navigateTo(MainView.NAME);
+			}
+		});
+		buttonLayout.setSpacing(true);
+		buttonLayout.addComponent(logout);
+		buttonLayout.addComponent(horizontalGap);
+		buttonLayout.addComponent(home);
+
+		addComponent(buttonLayout);
 	}
 
 	// Menu navigation button listener
