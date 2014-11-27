@@ -677,7 +677,7 @@
         <bpmn2:targetRef>passedIntegrationTestsWithServiceConsumers</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
     </bpmn2:callActivity>
-    <bpmn2:userTask id="_B238152D-4F76-4D55-92A2-30F07F96D6C3" drools:selectable="true" drools:scriptFormat="http://www.java.com/java" name="Evaluate tests  result">
+    <bpmn2:userTask id="_B238152D-4F76-4D55-92A2-30F07F96D6C3" drools:selectable="true" drools:scriptFormat="http://www.java.com/java" name="Evaluate tests result">
       <bpmn2:extensionElements>
         <drools:onEntry-script scriptFormat="http://www.java.com/java">
           <drools:script><![CDATA[kcontext.setVariable("taskGroup","QASpecialist");]]></drools:script>
