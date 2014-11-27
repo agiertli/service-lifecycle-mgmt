@@ -1,5 +1,10 @@
 package org.fi.muni.diploma.thesis.utils.humantask;
 
+/**
+ * Enum of possible output data types (there are more possible values, but only these are used in the processes in this app)
+ * @author osiris
+ *
+ */
 public enum HumanTaskOutputType {
 	
 	STRING("string"),

@@ -1,5 +1,10 @@
 package org.fi.muni.diploma.thesis.utils.jbpm;
 
+/**
+ * Enum of possible process state - to be honest, I have observed only ACTIVE / COMPLETED / ABORTED, others are here for completion
+ * @author osiris
+ *
+ */
 public class ProcessStateMap {
 
 	public enum States {

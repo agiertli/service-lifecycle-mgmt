@@ -12,7 +12,8 @@ import org.kie.internal.runtime.manager.audit.query.ProcessInstanceLogQueryBuild
 import org.kie.internal.runtime.manager.audit.query.VariableInstanceLogQueryBuilder;
 
 /**
- * audit service wrapper - uses runtimeengine under the hood
+ * audit service wrapper - uses runtimeengine under the hood, documentation available at:
+ * http://docs.jboss.org/drools/release/6.2.0.CR2/kie-api-javadoc/org/kie/api/runtime/manager/audit/AuditService.html
  * @author osiris
  *
  */

@@ -1,5 +1,10 @@
 package org.fi.muni.diploma.thesis.utils.humantask;
 
+/**
+ * Single instance of Human Task output identified by a data type / label / actual human task output identifier specified in BPMN process definition
+ * @author osiris
+ *
+ */
 public class HumanTaskOutput {
 	
 	private HumanTaskOutputType dataType;

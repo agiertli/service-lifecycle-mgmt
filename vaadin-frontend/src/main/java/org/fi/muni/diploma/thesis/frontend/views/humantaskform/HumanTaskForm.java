@@ -132,9 +132,9 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			if (HumanTaskForm.this.portField != null) {
 				Integer portValue = null;
 				try {
-				portValue = Integer.valueOf(portField.getValue());
+					portValue = Integer.valueOf(portField.getValue());
 				} catch (NumberFormatException e) {
-					
+
 					HumanTaskForm.this.removeComponents(HumanTaskForm.this.errorLabel, HumanTaskForm.this.portError,
 							HumanTaskForm.this.srampErrorLabel);
 
@@ -143,7 +143,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 					setComponentAlignment(errorLabel, Alignment.BOTTOM_LEFT);
 					return; // end the processing
 				}
-				
+
 			}
 
 			String hostname = "";
@@ -184,9 +184,9 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 					Integer portValue = null;
 					try {
-					portValue = Integer.valueOf(portField.getValue());
+						portValue = Integer.valueOf(portField.getValue());
 					} catch (NumberFormatException e) {
-						
+
 						HumanTaskForm.this.removeComponents(HumanTaskForm.this.errorLabel, HumanTaskForm.this.portError,
 								HumanTaskForm.this.srampErrorLabel);
 
@@ -195,9 +195,9 @@ public class HumanTaskForm extends VerticalLayout implements View {
 						setComponentAlignment(errorLabel, Alignment.BOTTOM_LEFT);
 						return; // end the processing
 					}
-					
+
 					if (portValue > 65535) {
-						
+
 						HumanTaskForm.this.removeComponents(HumanTaskForm.this.errorLabel, HumanTaskForm.this.portError,
 								HumanTaskForm.this.srampErrorLabel);
 
@@ -205,9 +205,9 @@ public class HumanTaskForm extends VerticalLayout implements View {
 						addComponent(errorLabel);
 						setComponentAlignment(errorLabel, Alignment.BOTTOM_LEFT);
 						return; // end the processing
-						
+
 					}
-					
+
 					result.put((String) binder.getPropertyId(field), portValue);
 				} else {
 					result.put((String) binder.getPropertyId(field), field.getValue());
@@ -279,7 +279,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 	 * 
 	 * @param components
 	 */
-	public void removeComponents(Component... components) {
+	private void removeComponents(Component... components) {
 
 		for (Component c : components) {
 
@@ -495,7 +495,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 				}
 
-				// checkbox.setValue(true);
+
 				this.emailCheckbox = checkbox;
 				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<Boolean>(false));
 				this.getBinder().bind(checkbox, output.getOutputIdentifier());
@@ -535,7 +535,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			}
 			case INTEGER: {
 
-				// logger.info("adding integer output:" + output.getDataType() + "label:" + output.getLabel());
+
 				TextField integerField = new TextField(output.getLabel());
 				integerField.setRequired(true);
 				integerField.setRequiredError("This field is required");
@@ -719,6 +719,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 	/**
 	 * 'Ping' the S-RAMP server and checks whether the connection was established successfully
+	 * 
 	 * @param username
 	 * @param password
 	 * @param hostname

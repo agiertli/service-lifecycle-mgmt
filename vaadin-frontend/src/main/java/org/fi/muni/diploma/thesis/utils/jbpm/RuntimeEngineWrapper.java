@@ -8,7 +8,6 @@ import org.kie.api.runtime.KieSession;
 import org.kie.services.client.api.RemoteRestRuntimeEngineFactory;
 import org.kie.services.client.api.command.RemoteRuntimeEngine;
 
-
 /**
  * Wrapper of RemoteRuntimeEngine which gives us access to all important services such as
  * 
@@ -22,56 +21,38 @@ import org.kie.services.client.api.command.RemoteRuntimeEngine;
 public class RuntimeEngineWrapper {
 
 	private static RuntimeEngineWrapper instance = null;
-	private static RemoteRuntimeEngine engine;
+	private static RemoteRuntimeEngine engine; // provides access to KieSession / TaskService / AuditService
 	private static JBPMProperties properties;
 	private static String username;
+	@SuppressWarnings("unused")
 	private static String password;
 
+	@SuppressWarnings("unused")
 	private final static Logger logger = Logger.getLogger(RuntimeEngineWrapper.class.getName());
 
 	protected RuntimeEngineWrapper() {
 		// Exists only to defeat instantiation.
 	}
-	
+
 	public static RuntimeEngineWrapper getInstance() {
-		
+
 		return instance;
 	}
 
-	public static RuntimeEngineWrapper getInstance(String username,String password)
-			throws IOException {
-		
-		
-		//if another user is logged, create new runtimeengine for him
+	public static RuntimeEngineWrapper getInstance(String username, String password) throws IOException {
+
+		// if another user is logged, create new runtimeengine for him
 		if (instance == null || RuntimeEngineWrapper.username != username) {
 			instance = new RuntimeEngineWrapper();
 			properties = new JBPMProperties();
 
-			logger.info("building factory");
+			RemoteRestRuntimeEngineFactory factory = RemoteRestRuntimeEngineFactory.newBuilder().addDeploymentId(properties.getDeploymentId())
+					.addUrl(properties.getUrl()).addUserName(username).addPassword(password).buildFactory();
 
-			RemoteRestRuntimeEngineFactory factory = RemoteRestRuntimeEngineFactory.newBuilder()
-					.addDeploymentId(properties.getDeploymentId()).addUrl(properties.getUrl()).addUserName(username).addPassword(password)
-					.buildFactory();
-			
 			RuntimeEngineWrapper.username = username;
 			RuntimeEngineWrapper.password = password;
 
 			RuntimeEngineWrapper.setEngine(factory.newRuntimeEngine());
-
-			try {
-
-				KieSession kSession = RuntimeEngineWrapper.getEngine().getKieSession();
-
-				if (kSession == null) {
-
-					logger.info("ksession is null");
-				}
-
-			} catch (Exception e) {
-
-				e.printStackTrace();
-
-			}
 
 		}
 		return instance;

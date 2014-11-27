@@ -15,6 +15,8 @@ import org.kie.api.task.model.TaskSummary;
 /**
  * TaskService wrapper - uses RemoteRuntimeEngine internally and delegates actual implementation to TaskService
  * 
+ * Documented here: http://docs.jboss.org/drools/release/6.2.0.CR1/kie-api-javadoc/org/kie/api/task/TaskService.html
+ * 
  * @author osiris
  * 
  */
