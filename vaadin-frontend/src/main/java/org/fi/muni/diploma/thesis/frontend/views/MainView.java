@@ -2,20 +2,25 @@ package org.fi.muni.diploma.thesis.frontend.views;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.fi.muni.diploma.thesis.utils.properties.ApplicationUserRoleProperties;
 import org.fi.muni.diploma.thesis.utils.rtgov.Notification;
+import org.vaadin.alump.fancylayouts.FancyImage;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
+import com.vaadin.server.Resource;
 import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
@@ -39,6 +44,7 @@ public class MainView extends VerticalLayout implements View {
 	private Button instances;
 	private Button tasks;
 	private Button notifications;
+	private FancyImage fancyImage;
 
 	private Label greeting;
 
@@ -73,7 +79,7 @@ public class MainView extends VerticalLayout implements View {
 
 		// Have a menu on the left side of the screen
 		Panel menu = new Panel("Menu");
-		
+
 		menu.setHeight("100%");
 		menu.setWidth(null);
 		VerticalLayout menuContent = new VerticalLayout();
@@ -82,26 +88,22 @@ public class MainView extends VerticalLayout implements View {
 
 		startButton = new Button("Start New Lifecycle Instance", new ButtonListener(StartProcessView.NAME));
 		startButton.setWidth("230px");
-		
-		
 
 		instances = new Button("Lifecycle Instances", new ButtonListener(ProcessListView.NAME));
 		instances.setWidth("230px");
-		
 
 		tasks = new Button("Lifecycle Tasks", new ButtonListener(TaskListView.NAME));
 		tasks.setWidth("230px");
 
 		notifications = new Button("Retired Services", new ButtonListener(NotificationView.NAME));
 		notifications.setWidth("230px");
-		
 
 		menuContent.addComponent(startButton);
-		//menuContent.addComponent(verticalGap);
+		// menuContent.addComponent(verticalGap);
 		menuContent.addComponent(instances);
-		//menuContent.addComponent(verticalGap);
+		// menuContent.addComponent(verticalGap);
 		menuContent.addComponent(tasks);
-	//	menuContent.addComponent(verticalGap);	
+		// menuContent.addComponent(verticalGap);
 		menuContent.addComponent(notifications);
 		menuContent.setWidth(null);
 		menuContent.setMargin(true);
@@ -120,7 +122,7 @@ public class MainView extends VerticalLayout implements View {
 
 		addComponent(hLayout);
 		setExpandRatio(hLayout, 1.0f);
-		
+
 		HorizontalLayout buttonLayout = new HorizontalLayout();
 		// Allow going back to the start
 		Button logout = new Button("Logout", new Button.ClickListener() {
@@ -171,9 +173,9 @@ public class MainView extends VerticalLayout implements View {
 				this.getNavigator().navigateTo(LimitedView.NAME + "/" + TaskListView.NAME);
 			} else if (event.getParameters().contains((TaskDetailView.NAME.toLowerCase()))) {
 
-				logger.info("params:"+event.getParameters());
-				
-				this.getNavigator().navigateTo(LimitedView.NAME +  "/" + event.getParameters());
+				logger.info("params:" + event.getParameters());
+
+				this.getNavigator().navigateTo(LimitedView.NAME + "/" + event.getParameters());
 			} else {
 				this.getNavigator().navigateTo(LimitedView.NAME);
 			}
@@ -183,47 +185,109 @@ public class MainView extends VerticalLayout implements View {
 		VerticalLayout panelContent = new VerticalLayout();
 		panelContent.setSpacing(true);
 		panelContent.setSizeFull();
-		panelContent.setHeightUndefined();
 		panelContent.setMargin(true);
+		panelContent.setHeightUndefined();
 
 		panel.setContent(panelContent); // Also clear
-		
 
 		if (event.getParameters() == null || event.getParameters().isEmpty()) {
+			fancyImage = new FancyImage();
+			fancyImage.setSizeFull();
+			fancyImage.setHeight("800px");
+			
+			
 			greeting = new Label("Service Lifecycle Manager");
 			greeting.setSizeUndefined();
 			greeting.setStyleName("h1");
-			
-			Label description = new Label("create | execute | monitor");
-			description.setSizeUndefined();
-			description.setStyleName("h2");
-			
-			Label description2 = new Label("service lifecycle");
-			description2.setSizeUndefined();
-			description2.setStyleName("h2");
 
+			HorizontalLayout buttons = new HorizontalLayout();
+			buttons.setSpacing(true);
+			buttons.setMargin(true);
+			buttons.setSizeUndefined();
+
+			Button create = new Button("start");
+			create.setData(getImageResources().get(2));
+
+			create.addClickListener(new ClickListener() {
+
+				@Override
+				public void buttonClick(ClickEvent event) {
+					// TODO Auto-generated method stub
+
+					com.vaadin.server.Resource resource = (com.vaadin.server.Resource) event.getButton().getData();
+					fancyImage.showResource(resource);
+					fancyImage.setVisible(true);
+
+				}
+
+			});
+
+			Label delimiter = new Label();
+			delimiter.setValue("|");
+
+			Button execute = new Button("execute");
+			execute.setData(getImageResources().get(0));
+			execute.addClickListener(new ClickListener() {
+
+				@Override
+				public void buttonClick(ClickEvent event) {
+					// TODO Auto-generated method stub
+
+					com.vaadin.server.Resource resource = (com.vaadin.server.Resource) event.getButton().getData();
+					fancyImage.showResource(resource);
+					fancyImage.setVisible(true);
+
+				}
+
+			});
+
+			
+			Button monitor = new Button("monitor");
+			monitor.setData(getImageResources().get(1));
+			monitor.addClickListener(new ClickListener() {
+
+				@Override
+				public void buttonClick(ClickEvent event) {
+					// TODO Auto-generated method stub
+
+					com.vaadin.server.Resource resource = (com.vaadin.server.Resource) event.getButton().getData();
+					fancyImage.showResource(resource);
+					fancyImage.setVisible(true);
+
+				}
+
+			});
+			
 			panelContent.addComponent(greeting);
-			panelContent.setComponentAlignment(greeting, Alignment.MIDDLE_CENTER);
-			
-			panelContent.addComponent(description);
-			panelContent.setComponentAlignment(description, Alignment.MIDDLE_CENTER);
-			
-			panelContent.addComponent(description2);
-			panelContent.setComponentAlignment(description2, Alignment.MIDDLE_CENTER);
-			
-			// Find the application directory
-			String basepath = VaadinService.getCurrent()
-			                  .getBaseDirectory().getAbsolutePath();
+			panelContent.setComponentAlignment(greeting, Alignment.MIDDLE_CENTER);			
 
-			// Image as a file resource
-			FileResource resource = new FileResource(new File(basepath +
-			                        "/WEB-INF/images/logo.png"));
+			buttons.addComponent(create);
+			buttons.addComponent(execute);		
+			buttons.addComponent(monitor);
+			panelContent.addComponent(buttons);
+			panelContent.setComponentAlignment(buttons, Alignment.MIDDLE_CENTER);
 
-			// Show the image in the application
-			Image image = new Image("", resource);
-			panelContent.addComponent(image);
-			panelContent.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
+			// //// fancy image
+
+			// Setting images used
+			final List<Resource> resources = getImageResources();
+
+			for (Resource resource : resources) {
+
+				fancyImage.addResource(resource);
+			}
 			
+			fancyImage.setFadeTransition(true);
+			fancyImage.setRotateTransition(true, false);
+			fancyImage.setVisible(false);
+			
+			
+
+			panelContent.addComponent(fancyImage);
+			panelContent.setComponentAlignment(fancyImage, Alignment.MIDDLE_CENTER);
+
+			// //// fancy image
+
 
 			return;
 		}
@@ -309,6 +373,24 @@ public class MainView extends VerticalLayout implements View {
 
 		return;
 
+	}
+
+	private List<Resource> getImageResources() {
+		// TODO Auto-generated method stub
+
+		List<Resource> list = new ArrayList<Resource>();
+
+		// Find the application directory
+		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+		FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/execute.png"));
+		FileResource resource1 = new FileResource(new File(basepath + "/WEB-INF/images/monitor.png"));
+		FileResource resource2 = new FileResource(new File(basepath + "/WEB-INF/images/start.png"));
+
+		list.add(resource);
+		list.add(resource1);
+		list.add(resource2);
+
+		return list;
 	}
 
 	public Navigator getNavigator() {

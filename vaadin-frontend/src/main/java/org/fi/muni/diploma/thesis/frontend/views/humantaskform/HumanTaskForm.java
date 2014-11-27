@@ -384,6 +384,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 			});
 
 		}
+		
 		VerticalLayout fl = new VerticalLayout();
 		fl.setSpacing(true);
 

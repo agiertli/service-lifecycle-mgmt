@@ -131,11 +131,17 @@
 		</dependency>
 
 		<!-- vaadin dependencies -->
-		
+		<!-- addons -->
 		<dependency>
    <groupId>org.vaadin.addons</groupId>
    <artifactId>filteringtable</artifactId>
    <version>0.9.11.v7</version>
+</dependency>
+
+<dependency>
+   <groupId>org.vaadin.alump.fancylayouts</groupId>
+   <artifactId>fancylayouts-addon</artifactId>
+   <version>1.0.1</version>
 </dependency>
 		
 		<dependency>
