@@ -14,6 +14,8 @@
   <bpmn2:itemDefinition id="_isServiceCreatedItem" structureRef="Boolean"/>
   <bpmn2:itemDefinition id="_usernameItem" structureRef="String"/>
   <bpmn2:itemDefinition id="_hostnameItem" structureRef="String"/>
+    <bpmn2:itemDefinition id="_p_retirementAnnoucementItem" structureRef="String"/>
+   <bpmn2:itemDefinition id="__14C5DA46-541B-4304-A023-0A1C57080471_sub_retirementAnnoucementOutputXItem" structureRef="String"/>
   <bpmn2:itemDefinition id="_portItem" structureRef="Integer"/>
   <bpmn2:itemDefinition id="_passwordItem" structureRef="String"/>
   <bpmn2:itemDefinition id="_serviceSRAMPUUIDItem" structureRef="String"/>
@@ -90,6 +92,7 @@
   <bpmn2:process id="service-lifecycle-existing-service" drools:packageName="org.jbpm" drools:version="1.0" name="Service Lifecycle Process - existing service" isExecutable="true">
     <bpmn2:property id="serviceDescription" itemSubjectRef="_serviceDescriptionItem"/>
     <bpmn2:property id="isContractDefined" itemSubjectRef="_isContractDefinedItem"/>
+        <bpmn2:property id="p_retirementAnnoucement" itemSubjectRef="_p_retirementAnnoucementItem"/>
     <bpmn2:property id="isPolicyFulfilled" itemSubjectRef="_isPolicyFulfilledItem"/>
     <bpmn2:property id="passedIntegrationTestsWithComponents" itemSubjectRef="_passedIntegrationTestsWithComponentsItem"/>
     <bpmn2:property id="passedIntegrationTestsWithServiceConsumers" itemSubjectRef="_passedIntegrationTestsWithServiceConsumersItem"/>
@@ -349,6 +352,8 @@
         <bpmn2:dataInput id="_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_servicenameInputX" drools:dtype="String" itemSubjectRef="__4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_servicenameInputXItem" name="sub_servicename"/>
        
         <bpmn2:dataOutput id="_20948329-8B26-4BC1-9861-259A0B1D7318_outBoolconsumersInformedAboutRetirement_subOutputX" drools:dtype="String" itemSubjectRef="__20948329-8B26-4BC1-9861-259A0B1D7318_outBoolconsumersInformedAboutRetirement_subOutputXItem" name="outBoolconsumersInformedAboutRetirement_sub"/>
+                <bpmn2:dataOutput id="_14C5DA46-541B-4304-A023-0A1C57080471_sub_retirementAnnoucementOutputX" drools:dtype="String" itemSubjectRef="__14C5DA46-541B-4304-A023-0A1C57080471_sub_retirementAnnoucementOutputXItem" name="sub_retirementAnnoucement"/>
+        
         <bpmn2:inputSet id="_swtgVHPLEeSQPPQD1KdZJQ">
           <bpmn2:dataInputRefs>_20948329-8B26-4BC1-9861-259A0B1D7318_sub_portInputX</bpmn2:dataInputRefs>
           <bpmn2:dataInputRefs>_20948329-8B26-4BC1-9861-259A0B1D7318_sub_hostInputX</bpmn2:dataInputRefs>
@@ -359,6 +364,7 @@
         </bpmn2:inputSet>
         <bpmn2:outputSet id="_swtgVXPLEeSQPPQD1KdZJQ">
           <bpmn2:dataOutputRefs>_20948329-8B26-4BC1-9861-259A0B1D7318_outBoolconsumersInformedAboutRetirement_subOutputX</bpmn2:dataOutputRefs>
+     <bpmn2:dataOutputRefs>_14C5DA46-541B-4304-A023-0A1C57080471_sub_retirementAnnoucementOutputX</bpmn2:dataOutputRefs>
         </bpmn2:outputSet>
       </bpmn2:ioSpecification>
       <bpmn2:dataInputAssociation id="_swtgVnPLEeSQPPQD1KdZJQ">
@@ -386,6 +392,11 @@
         <bpmn2:sourceRef>p_serviceName</bpmn2:sourceRef>
         <bpmn2:targetRef>_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_servicenameInputX</bpmn2:targetRef>
       </bpmn2:dataInputAssociation>
+      
+       <bpmn2:dataOutputAssociation id="_gbYSXXYoEeSPLM3jramNwg">
+        <bpmn2:sourceRef>_14C5DA46-541B-4304-A023-0A1C57080471_sub_retirementAnnoucementOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>p_retirementAnnoucement</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
       
       <bpmn2:dataOutputAssociation id="_swtgW3PLEeSQPPQD1KdZJQ">
         <bpmn2:sourceRef>_20948329-8B26-4BC1-9861-259A0B1D7318_outBoolconsumersInformedAboutRetirement_subOutputX</bpmn2:sourceRef>

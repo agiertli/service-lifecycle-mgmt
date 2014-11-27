@@ -13,6 +13,7 @@
   <bpmn2:itemDefinition id="_isDocumentationWrittenItem" structureRef="String"/>
   <bpmn2:itemDefinition id="_isServiceCreatedItem" structureRef="Boolean"/>
   <bpmn2:itemDefinition id="_usernameItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="_p_retirementAnnoucementItem" structureRef="String"/>
   <bpmn2:itemDefinition id="_hostnameItem" structureRef="String"/>
   <bpmn2:itemDefinition id="_portItem" structureRef="Integer"/>
   <bpmn2:itemDefinition id="_passwordItem" structureRef="String"/>
@@ -117,6 +118,7 @@
     <bpmn2:property id="currentTaskOutput" itemSubjectRef="_currentTaskOutputItem"/>
     <bpmn2:property id="p_retest" itemSubjectRef="_p_retestItem"/>
     <bpmn2:property id="p_sendemail" itemSubjectRef="_p_sendemailItem"/>
+    <bpmn2:property id="p_retirementAnnoucement" itemSubjectRef="_p_retirementAnnoucementItem"/>
     <bpmn2:property id="p_body" itemSubjectRef="_p_bodyItem"/>
     <bpmn2:property id="p_from" itemSubjectRef="_p_fromItem"/>
     <bpmn2:property id="p_subject" itemSubjectRef="_p_subjectItem"/>
@@ -426,6 +428,8 @@
         <bpmn2:dataInput id="_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_uuidInputX" drools:dtype="String" itemSubjectRef="__4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_uuidInputXItem" name="sub_uuid"/>
         <bpmn2:dataInput id="_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_servicenameInputX" drools:dtype="String" itemSubjectRef="__4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_servicenameInputXItem" name="sub_servicename"/>
         <bpmn2:dataOutput id="_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_outBoolconsumersInformedAboutRetirement_subOutputX" drools:dtype="String" itemSubjectRef="__4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_outBoolconsumersInformedAboutRetirement_subOutputXItem" name="outBoolconsumersInformedAboutRetirement_sub"/>
+         <bpmn2:dataOutput id="_7F6E09E4-C749-464F-AD04-31D727434AA5_sub_retirementAnnoucementOutputX" drools:dtype="String" itemSubjectRef="__7F6E09E4-C749-464F-AD04-31D727434AA5_sub_retirementAnnoucementOutputXItem" name="sub_retirementAnnoucement"/>
+        
         <bpmn2:inputSet id="_pxlBN3PBEeSQPPQD1KdZJQ">
           <bpmn2:dataInputRefs>_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_portInputX</bpmn2:dataInputRefs>
           <bpmn2:dataInputRefs>_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_sub_hostInputX</bpmn2:dataInputRefs>
@@ -436,6 +440,7 @@
         </bpmn2:inputSet>
         <bpmn2:outputSet id="_pxlBOHPBEeSQPPQD1KdZJQ">
           <bpmn2:dataOutputRefs>_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_outBoolconsumersInformedAboutRetirement_subOutputX</bpmn2:dataOutputRefs>
+           <bpmn2:dataOutputRefs>_7F6E09E4-C749-464F-AD04-31D727434AA5_sub_retirementAnnoucementOutputX</bpmn2:dataOutputRefs>
         </bpmn2:outputSet>
       </bpmn2:ioSpecification>
       <bpmn2:dataInputAssociation id="_pxlBOXPBEeSQPPQD1KdZJQ">
@@ -466,6 +471,12 @@
         <bpmn2:sourceRef>_4D233174-DC43-4AF6-A313-B4CB6C8EBCF7_outBoolconsumersInformedAboutRetirement_subOutputX</bpmn2:sourceRef>
         <bpmn2:targetRef>consumersInformedAboutRetirement</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
+      
+            <bpmn2:dataOutputAssociation id="_z-v2MnYmEeSPLM3jramNwg">
+        <bpmn2:sourceRef>_7F6E09E4-C749-464F-AD04-31D727434AA5_sub_retirementAnnoucementOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>p_retirementAnnoucement</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
     </bpmn2:callActivity>
     <bpmn2:endEvent id="_1A12FB12-421C-4C1C-B020-CA4FBC02EFD2" drools:bgcolor="#CCFFFF" drools:selectable="true" name="">
       <bpmn2:incoming>_8CCDEAD3-1608-45A1-B512-5A2E2E316179</bpmn2:incoming>

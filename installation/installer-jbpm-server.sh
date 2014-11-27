@@ -75,14 +75,14 @@ done
 
 echo "JBoss successfully started"
 echo "deploying kjar to jbpm execution server"
-curl -s -u anton:password1! -X POST http://localhost:8080/kie-wb/rest/deployment/org.fi.muni.diploma.thesis:service-lifecycle:2.3.8:myBase:Session1/deploy
+curl -s -u anton:password1! -X POST http://localhost:8080/kie-wb/rest/deployment/org.fi.muni.diploma.thesis:service-lifecycle:2.4.0:myBase:Session1/deploy
 
 deployed="false"
 while [ $deployed = "false" ]; do
 echo "Waiting for deployment to complete"
 sleep 10
 if 
-curl -s -u anton:password1! -X GET http://localhost:8080/kie-wb/rest/deployment/org.fi.muni.diploma.thesis:service-lifecycle:2.3.8:myBase:Session1 | grep -q "<status>DEPLOYED</status>"; then
+curl -s -u anton:password1! -X GET http://localhost:8080/kie-wb/rest/deployment/org.fi.muni.diploma.thesis:service-lifecycle:2.4.0:myBase:Session1 | grep -q "<status>DEPLOYED</status>"; then
 deployed="true"
 fi
 done
