@@ -230,7 +230,10 @@ public class ProcessListView extends VerticalLayout implements View {
 
 			buttons.addComponent(detailsField);
 			buttons.addComponent(horizontalGap);
+			
+			if (ProcessStateMap.getProcessStatusAsEnum(process.getStatus()).equals(ProcessStateMap.States.ACTIVE)) {
 			buttons.addComponent(abortField);
+			}
 
 			abortField.addClickListener(new ClickListener() {
 
