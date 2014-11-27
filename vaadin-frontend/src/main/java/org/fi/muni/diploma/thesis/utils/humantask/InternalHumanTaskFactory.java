@@ -46,7 +46,7 @@ public class InternalHumanTaskFactory {
 			HumanTaskOutput output2 = new HumanTaskOutput();
 			output2.setDataType(HumanTaskOutputType.TEXT_AREA);
 			output2.setOutputIdentifier("outBoolServiceConfigUpdated");
-			output2.setLabel("Updated service configuration:");
+			output2.setLabel("Service deprecation announcement:");
 
 			outputs.add(output1);
 			outputs.add(output3);
@@ -237,9 +237,37 @@ public class InternalHumanTaskFactory {
 			HumanTaskOutput output1 = new HumanTaskOutput();
 			output1.setDataType(HumanTaskOutputType.BOOLEAN);
 			output1.setOutputIdentifier("outBoolconsumersInformedAboutRetirement");
-			output1.setLabel("Consumers informed about service retirement:");
+			output1.setLabel("Inform consumers about service retirement:");
+			
+			HumanTaskOutput output2 = new HumanTaskOutput();
+			output2.setLabel("From:");
+			output2.setDataType(HumanTaskOutputType.STRING);
+			output2.setOutputIdentifier("t_recipient");
+			
+			HumanTaskOutput output3 = new HumanTaskOutput();
+			output3.setLabel("To:");
+			output3.setDataType(HumanTaskOutputType.STRING);
+			output3.setOutputIdentifier("t_sender");
+			
+			HumanTaskOutput output4 = new HumanTaskOutput();
+			output4.setLabel("Subject:");
+			output4.setDataType(HumanTaskOutputType.STRING);
+			output4.setOutputIdentifier("t_subject");
+			
+			HumanTaskOutput output5 = new HumanTaskOutput();
+			output5.setLabel("Service retirement announcement:");
+			output5.setDataType(HumanTaskOutputType.TEXT_AREA);
+			output5.setOutputIdentifier("t_service_retirement");
+			
+			
 
 			outputs.add(output1);
+			outputs.add(output2);
+			outputs.add(output3);
+			outputs.add(output4);
+			outputs.add(output5);
+
+			
 
 			humanTask.setOutputs(outputs);
 

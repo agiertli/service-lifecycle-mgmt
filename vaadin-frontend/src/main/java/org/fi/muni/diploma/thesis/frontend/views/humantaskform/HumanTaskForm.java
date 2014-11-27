@@ -564,8 +564,9 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 				// email is not mandatory
 				if (this.getHumanTask().getName().equals(HumanTaskName.EVALUATE_TEST_RESULTS.toString()) ||
-						
-						this.getHumanTask().getName().equals(HumanTaskName.DEPRECATE_SERVICE.toString())) {
+
+				this.getHumanTask().getName().equals(HumanTaskName.DEPRECATE_SERVICE.toString())
+						|| this.getHumanTask().getName().equals(HumanTaskName.RETIRE_SERVICE.toString())) {
 
 					stringField.setRequired(false);
 					stringField.setEnabled(false);
@@ -602,9 +603,11 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 				textArea.setInputPrompt("Enter some description or URL pointing to the resource");
 				this.getBinder().bind(textArea, output.getOutputIdentifier());
-	if (this.getHumanTask().getName().equals(HumanTaskName.EVALUATE_TEST_RESULTS.toString()) ||
-						
-						this.getHumanTask().getName().equals(HumanTaskName.DEPRECATE_SERVICE.toString())) {
+
+				if (this.getHumanTask().getName().equals(HumanTaskName.EVALUATE_TEST_RESULTS.toString()) ||
+
+				this.getHumanTask().getName().equals(HumanTaskName.DEPRECATE_SERVICE.toString())
+						|| this.getHumanTask().getName().equals(HumanTaskName.RETIRE_SERVICE.toString())) {
 
 					textArea.setRequired(false);
 					textArea.setEnabled(false);
