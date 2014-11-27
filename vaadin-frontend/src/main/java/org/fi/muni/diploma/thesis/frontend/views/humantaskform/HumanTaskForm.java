@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.drools.core.rule.constraint.ConditionAnalyzer.ThisInvocation;
 import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterDecorator;
 import org.fi.muni.diploma.thesis.frontend.filterutils.CustomFilterGenerator;
 import org.fi.muni.diploma.thesis.frontend.views.TaskDetailView;
@@ -23,7 +22,6 @@ import org.fi.muni.diploma.thesis.utils.humantask.InternalHumanTask;
 import org.fi.muni.diploma.thesis.utils.jbpm.RuntimeEngineWrapper;
 import org.fi.muni.diploma.thesis.utils.jbpm.TaskServiceWrapper;
 import org.kie.api.task.TaskService;
-import org.kie.api.task.model.Task;
 import org.tepi.filtertable.paged.PagedFilterControlConfig;
 import org.tepi.filtertable.paged.PagedFilterTable;
 
@@ -410,7 +408,7 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				checkbox.setRequired(true);
 
 				// for enabling/disabling fields
-				if (output.getLabel().toLowerCase().contains("email")) {
+				if (output.getLabel().toLowerCase().contains("email") || output.getLabel().toLowerCase().contains("inform")) {
 
 					checkbox.addValueChangeListener(new ValueChangeListener() {
 
@@ -425,9 +423,9 @@ public class HumanTaskForm extends VerticalLayout implements View {
 							while (iterate.hasNext()) {
 
 								Component c = iterate.next();
-								if (c instanceof FormLayout) {
+								if (c instanceof VerticalLayout) {
 
-									Iterator<Component> formIterator = ((FormLayout) c).iterator();
+									Iterator<Component> formIterator = ((VerticalLayout) c).iterator();
 
 									while (formIterator.hasNext()) {
 
@@ -565,7 +563,9 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				this.getBinder().bind(stringField, output.getOutputIdentifier());
 
 				// email is not mandatory
-				if (this.getHumanTask().getName().equals(HumanTaskName.EVALUATE_TEST_RESULTS.toString())) {
+				if (this.getHumanTask().getName().equals(HumanTaskName.EVALUATE_TEST_RESULTS.toString()) ||
+						
+						this.getHumanTask().getName().equals(HumanTaskName.DEPRECATE_SERVICE.toString())) {
 
 					stringField.setRequired(false);
 					stringField.setEnabled(false);
@@ -602,7 +602,9 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 				textArea.setInputPrompt("Enter some description or URL pointing to the resource");
 				this.getBinder().bind(textArea, output.getOutputIdentifier());
-				if (this.getHumanTask().getName().equals(HumanTaskName.EVALUATE_TEST_RESULTS.toString())) {
+	if (this.getHumanTask().getName().equals(HumanTaskName.EVALUATE_TEST_RESULTS.toString()) ||
+						
+						this.getHumanTask().getName().equals(HumanTaskName.DEPRECATE_SERVICE.toString())) {
 
 					textArea.setRequired(false);
 					textArea.setEnabled(false);

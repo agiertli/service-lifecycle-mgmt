@@ -26,14 +26,32 @@ public class InternalHumanTaskFactory {
 			HumanTaskOutput output1 = new HumanTaskOutput();
 			output1.setDataType(HumanTaskOutputType.BOOLEAN);
 			output1.setOutputIdentifier("outBoolconsumersInformedAboutDeprecation");
-			output1.setLabel("Consumers informed about service deprecation:");
+			output1.setLabel("Inform consumers about service deprecation?:");
+
+			HumanTaskOutput output3 = new HumanTaskOutput();
+			output3.setDataType(HumanTaskOutputType.STRING);
+			output3.setLabel("To:");
+			output3.setOutputIdentifier("outRecipient");
+
+			HumanTaskOutput output4 = new HumanTaskOutput();
+			output4.setDataType(HumanTaskOutputType.STRING);
+			output4.setLabel("From:");
+			output4.setOutputIdentifier("outSender");
+
+			HumanTaskOutput output5 = new HumanTaskOutput();
+			output5.setDataType(HumanTaskOutputType.STRING);
+			output5.setLabel("Subject:");
+			output5.setOutputIdentifier("outSubject");
 
 			HumanTaskOutput output2 = new HumanTaskOutput();
 			output2.setDataType(HumanTaskOutputType.TEXT_AREA);
-			output2.setOutputIdentifier("outServiceConfigUpdated");
-			output2.setLabel("Service configuration updated:");
+			output2.setOutputIdentifier("outBoolServiceConfigUpdated");
+			output2.setLabel("Updated service configuration:");
 
 			outputs.add(output1);
+			outputs.add(output3);
+			outputs.add(output4);
+			outputs.add(output5);
 			outputs.add(output2);
 
 			humanTask.setOutputs(outputs);
@@ -93,9 +111,9 @@ public class InternalHumanTaskFactory {
 			output1.setOutputIdentifier("outServiceDescription");
 			output1.setDataType(HumanTaskOutputType.TEXT_AREA);
 			output1.setLabel("Service Description:");
-			
+
 			outputs.add(output1);
-			
+
 			humanTask.setOutputs(outputs);
 
 			break;
@@ -235,7 +253,7 @@ public class InternalHumanTaskFactory {
 			output1.setOutputIdentifier("outServiceSrampUUID");
 			output1.setDataType(HumanTaskOutputType.STRING);
 			output1.setLabel("Service UUID:");
-			
+
 			HumanTaskOutput output2 = new HumanTaskOutput();
 			output2.setOutputIdentifier("t_serviceName");
 			output2.setDataType(HumanTaskOutputType.STRING);
