@@ -6,8 +6,14 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+/**
+ * Configuration of remote RTGov Server
+ * @author osiris
+ *
+ */
 public class RTGovProperties {
 	
+	@SuppressWarnings("unused")
 	private final static Logger logger = Logger.getLogger(RTGovProperties.class.getName());
 
 	

@@ -1,11 +1,10 @@
 package org.fi.muni.diploma.thesis.utils.rtgov;
 
+
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -18,6 +17,11 @@ import org.fi.muni.diploma.thesis.utils.properties.RTGovProperties;
 import org.overlord.rtgov.activity.model.ActivityType;
 import org.overlord.rtgov.activity.model.soa.RequestReceived;
 
+/**
+ * Rest client for RTGov Server interaction
+ * @author osiris
+ *
+ */
 public class RTGovClient {
 	private final static Logger logger = Logger.getLogger(RTGovClient.class.getName());
 
@@ -27,6 +31,17 @@ public class RTGovClient {
 		this.properties = properties;
 	}
 
+	/**
+	 *
+	 * Check the invocations of this retired service - it excludes invocations which has been already processed by SOAGovernanceSpecialist
+	 * by checking the database
+	 * 
+	 * @param service
+	 * @return Set of Retired Service Invocations (Notifications)
+	 * @throws IOException
+	 * @throws NamingException
+	 * @throws SQLException
+	 */
 	public Set<Notification> getRetiredInvocation(RetiredService service) throws IOException, NamingException, SQLException {
 
 		DatabaseUtil dbUtil;

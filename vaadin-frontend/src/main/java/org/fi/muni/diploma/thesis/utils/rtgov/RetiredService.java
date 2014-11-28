@@ -1,5 +1,9 @@
 package org.fi.muni.diploma.thesis.utils.rtgov;
 
+/**
+ * Retired service entity, identified by it's name and date of the retirement
+ *
+ */
 public class RetiredService {
 	
 	public String name;

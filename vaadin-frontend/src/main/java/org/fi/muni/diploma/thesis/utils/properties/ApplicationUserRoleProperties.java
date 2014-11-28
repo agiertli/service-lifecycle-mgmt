@@ -7,8 +7,17 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+/** Representation of
+ * application-users.properties
+ * application-roles.properties
+ * 
+ * as we know them from JBoss 
+ * @author Anton Giertli
+ *
+ */
 public class ApplicationUserRoleProperties {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ApplicationUserRoleProperties.class.getName());
 
 	private Properties userProperties;
@@ -16,6 +25,7 @@ public class ApplicationUserRoleProperties {
 
 	public ApplicationUserRoleProperties() throws IOException {
 
+		
 		String dir = System.getProperty("jboss.server.config.dir");
 
 		FileInputStream is = new FileInputStream(dir + "/application-users.properties");
@@ -43,6 +53,15 @@ public class ApplicationUserRoleProperties {
 		return (String)this.roleProperties.get(user);
 	}
 	
+	/**
+	 * Roles are stored in the following format in the properties file:
+	 * 
+	 * user=role1,role2
+	 * 
+	 * @param user
+	 * @param role
+	 * @return true if user has the role assigned in properties file, false otherwise
+	 */
 	public boolean hasRole(String user, String role) {
 
 		boolean hasRole = false;

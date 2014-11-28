@@ -1,5 +1,10 @@
 package org.fi.muni.diploma.thesis.utils.rtgov;
 
+/**
+ * Actual retired service invocation
+ * @author Anton Giertli
+ *
+ */
 public class Notification {
 	
 	private RetiredService service;

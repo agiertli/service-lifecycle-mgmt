@@ -2,12 +2,18 @@ package org.fi.muni.diploma.thesis.utils.properties;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+/**
+ * Representation of client.properties file, which includes properties specific 
+ * for the client application (service lifecycle mgmt), currently only stores jndi property
+ * @author osiris
+ *
+ */
 public class ClientProperties {
 	
+	@SuppressWarnings("unused")
 	private final static Logger logger = Logger.getLogger(ClientProperties.class.getName());
 
 
