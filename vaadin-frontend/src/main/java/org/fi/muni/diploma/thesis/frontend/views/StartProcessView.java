@@ -74,6 +74,8 @@ public class StartProcessView extends VerticalLayout implements View {
 			StartProcessView.this.navigator.navigateTo("main/" + TaskDetailView.NAME + "?id="
 					+ taskService.getTasksByProcessInstanceId(processInstance.getId()).get(0)); // redirect to Task
 																								// Detail View
+			
+			logger.info("service lifecycle instance started:"+processInstance.getId()+"name:"+processInstance.getProcessId());
 			notif.show(Page.getCurrent());
 
 		}

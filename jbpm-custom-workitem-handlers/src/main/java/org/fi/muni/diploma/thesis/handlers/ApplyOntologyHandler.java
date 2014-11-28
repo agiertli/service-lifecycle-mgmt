@@ -9,56 +9,46 @@ import org.overlord.sramp.client.SrampClientException;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * This handler applies ontology classifier to an artifact with a given UUID stored in S-RAMP Repository
+ * @author osiris
+ *
+ */
 public class ApplyOntologyHandler implements WorkItemHandler {
 
-    private final static Logger log = Logger.getLogger(ApplyOntologyHandler.class.getName());
-    private SRAMPClient srampClient;
+	private final static Logger log = Logger.getLogger(ApplyOntologyHandler.class.getName());
+	private SRAMPClient srampClient;
 
-    public void abortWorkItem(WorkItem wi, WorkItemManager wm) {
-        // TODO Auto-generated method stub
+	public void abortWorkItem(WorkItem wi, WorkItemManager wm) {
 
-    }
+	}
 
-    public void executeWorkItem(WorkItem wi, WorkItemManager wm) {
-        // TODO Auto-generated method stub
+	public void executeWorkItem(WorkItem wi, WorkItemManager wm) {
 
-        System.out.println("Executing Apply Ontology Handler");
+		Map<String, Object> params = wi.getParameters();
+		
+		log.info("Executing ApplyOntologyHandler");
 
+		try {
+			srampClient = new SRAMPClient((String) params.get("inUsername"), (String) params.get("inPassword"), (Integer) params.get("inPort"),
+					(String) params.get("inHost"));
+		} catch (SrampClientException e) {
+			e.printStackTrace();
+		} catch (SrampAtomException e) {
+			e.printStackTrace();
+		}
 
-        Map<String, Object> params = wi.getParameters();
+		try {
+			log.info("handler uuid:" + params.get("inUuid"));
+			srampClient.classifyArtifact((String) params.get("inUuid"), (String) params.get("inValue"));
+		} catch (SrampClientException e) {
+			e.printStackTrace();
+		} catch (SrampAtomException e) {
+			e.printStackTrace();
+		}
 
+		wm.completeWorkItem(wi.getId(), null);
 
-        try {
-            srampClient = new SRAMPClient((String) params.get("inUsername"), (String) params.get("inPassword"), (Integer) params.get("inPort"),
-                    (String) params.get("inHost"));
-        } catch (SrampClientException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SrampAtomException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        try {
-        	log.info("handler uuid:"+params.get("inUuid"));
-            srampClient.classifyArtifact((String) params.get("inUuid"),(String)params.get("inValue"));
-        } catch (SrampClientException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SrampAtomException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-
-            log.info("[" + key + "] [" + value + "]");
-        }
-
-        wm.completeWorkItem(wi.getId(), null);
-
-    }
+	}
 
 }

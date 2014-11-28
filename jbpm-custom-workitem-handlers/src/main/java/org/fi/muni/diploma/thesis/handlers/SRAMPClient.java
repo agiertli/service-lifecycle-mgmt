@@ -16,168 +16,172 @@ import java.util.logging.Logger;
 
 /**
  * Wrapper for SrampAtomApiClient
- *
+ * 
  * @author osiris
  */
 public class SRAMPClient {
 
-    private SrampAtomApiClient client;
-    private String username;
-    private String password;
-    private Integer port;
-    private String host;
+	private SrampAtomApiClient client;
+	private String username;
+	private String password;
+	private Integer port;
+	private String host;
 
-    private final static Logger log = Logger.getLogger(SRAMPClient.class.getName());
+	private final static Logger log = Logger.getLogger(SRAMPClient.class.getName());
 
-    /**
-     * list of used queries
-     */
-    private final static String getAllServices = "/s-ramp/ext/SwitchYardService";
-    private final static String applyOntology = "/s-ramp[@uuid = ?]";
+	/**
+	 * list of used queries
+	 */
+	private final static String getAllServices = "/s-ramp/ext/SwitchYardService";
+	private final static String applyOntology = "/s-ramp[@uuid = ?]";
 
+	/**
+	 * Creates Sramp Atom Api Client provided by the Overlord
+	 * 
+	 * @param username
+	 * @param password
+	 * @param port
+	 * @param host
+	 * @throws SrampClientException
+	 * @throws SrampAtomException
+	 */
+	public SRAMPClient(String username, String password, Integer port, String host) throws SrampClientException, SrampAtomException {
 
-    /**
-     * Creates Sramp Atom Api Client provided by the Overlord
-     *
-     * @param username
-     * @param password
-     * @param port
-     * @param host
-     * @throws SrampClientException
-     * @throws SrampAtomException
-     */
-    public SRAMPClient(String username, String password, Integer port, String host) throws SrampClientException, SrampAtomException {
+		this.host = host;
+		this.password = password;
+		this.username = username;
+		this.port = port;
+		
+	
 
-        this.host = host;
-        this.password = password;
-        this.username = username;
-        this.port = port;
-        
-        if (host != null) log.info("host:"+host);
-        if (password != null) log.info("password:"+password);
-        if (username != null) log.info("username:"+username);
-        if (port != null) log.info("port:"+port);
-        
-        
-        String endpoint = "http://" + this.getHost() + ":" + this.getPort().toString() + "/s-ramp-server";
-        this.client = new SrampAtomApiClient(endpoint, this.username, this.password, true);
+		String endpoint = "http://" + this.getHost() + ":" + this.getPort().toString() + "/s-ramp-server";
+		this.client = new SrampAtomApiClient(endpoint, this.username, this.password, true);
+		
+		log.info("S-RAMP Client created with following parameters: "+host+","+port+","+","+username+","+password);
 
-    }
+	}
 
-    public void classifyArtifact(String UUID, String state) throws SrampClientException, SrampAtomException {
+	/**
+	 * Sets an ontology classifier
+	 * 
+	 * @param UUID
+	 *            identifier of S-RAMP Artefact
+	 * @param state
+	 *            classifier which will be set
+	 * @throws SrampClientException
+	 * @throws SrampAtomException
+	 */
+	public void classifyArtifact(String UUID, String state) throws SrampClientException, SrampAtomException {
 
-    	log.info("srampclient uuid:"+UUID);
-    	
-        this.installOntology();
-        for (ArtifactSummary sum : client.buildQuery(applyOntology).parameter(UUID).query()) {
+		this.installOntology();
+		for (ArtifactSummary sum : client.buildQuery(applyOntology).parameter(UUID).query()) {
 
+			BaseArtifactType metaData = this.client.getArtifactMetaData(sum);
+			metaData.getClassifiedBy().add("http://www.jboss.org/overlord/service-lifecycle.owl#" + state);
 
-            BaseArtifactType metaData = this.client.getArtifactMetaData(sum);
-            metaData.getClassifiedBy().add("http://www.jboss.org/overlord/service-lifecycle.owl#"+state);
+			this.client.updateArtifactMetaData(metaData);
+			
+			log.info("Artifact classified with uuid:"+UUID+", and value:"+state);
 
-            this.client.updateArtifactMetaData(metaData);
+		}
+	}
 
-            List<String> ont = metaData.getClassifiedBy();
+	/**
+	 * 
+	 * Queries S-RAMP repository for SwitchYardApplication artifacts
+	 * 
+	 * @return List of Services identified by Name and UUID
+	 * @throws SrampClientException
+	 * @throws SrampAtomException
+	 */
+	public List<Service> getServices() throws SrampClientException, SrampAtomException {
 
-            for (String onto : ont) {
+		List<Service> serviceList = new ArrayList<Service>();
 
-            	log.info("classificaion:" + onto);
-            }
+		for (ArtifactSummary sum : client.buildQuery(getAllServices).query()) {
 
-        }
-    }
+			serviceList.add(new Service(sum.getName(), sum.getUuid()));
 
-    public List<Service> getServices() throws SrampClientException, SrampAtomException {
+		}
+		
+		log.info("List of services returned from S-RAMP repository :"+serviceList.size());
+		log.info(serviceList.toString());
 
-        List<Service> serviceList = new ArrayList<Service>();
+		return serviceList;
+	}
 
+	/**
+	 * Installs (or ensures that it already exists) the Service Lifecycle S-RAMP ontology in the S-RAMP repository.
+	 * 
+	 * @throws SrampAtomException
+	 * @throws SrampClientException
+	 */
+	public void installOntology() throws SrampClientException, SrampAtomException {
 
-        for (ArtifactSummary sum : client.buildQuery(
-                getAllServices).query()) {
+		boolean alreadyExists = false;
+		List<OntologySummary> ontologies = this.client.getOntologies();
+		for (OntologySummary ontology : ontologies) {
+			if ("http://www.jboss.org/overlord/service-lifecycle.owl".equals(ontology.getBase())) {
+				alreadyExists = true;
+				break;
+			}
+		}
 
-            log.info("Artifact name:" + sum.getName());
-            log.info("Artifact UUID:" + sum.getUuid());
-            serviceList.add(new Service(sum.getName(), sum.getUuid()));
+		if (!alreadyExists) {
+			InputStream resourceAsStream = SRAMPClient.class.getResourceAsStream("/service-lifecycle-ontology.xml");
 
-        }
+			if (resourceAsStream == null) {
+				System.out.println("service-lifecycle-ontology.xml not found");
+				return;
+			}
 
+			client.uploadOntology(resourceAsStream);
+			IOUtils.closeQuietly(resourceAsStream);
+			log.info("ontology service-lifecycle-ontology.xml installed");
+			return;
+		}
+		log.info("Ontology service-lifecycle-ontology.xml has been installed previously, so just passing by");
 
-        return serviceList;
-    }
+	}
 
-    /**
-     * Installs (or ensures that it already exists) the Service Lifecycle S-RAMP ontology in
-     * the S-RAMP repository.
-     *
-     * @param client
-     * @throws SrampAtomException
-     * @throws SrampClientException
-     * @throws Exception
-     */
-    public void installOntology() throws SrampClientException, SrampAtomException {
+	public SrampAtomApiClient getClient() {
+		return client;
+	}
 
-        boolean alreadyExists = false;
-        List<OntologySummary> ontologies = this.client.getOntologies();
-        for (OntologySummary ontology : ontologies) {
-            if ("http://www.jboss.org/overlord/service-lifecycle.owl".equals(ontology.getBase())) {
-                alreadyExists = true;
-                break;
-            }
-        }
+	public void setClient(SrampAtomApiClient client) {
+		this.client = client;
+	}
 
-        if (!alreadyExists) {
-            InputStream resourceAsStream = SRAMPClient.class.getResourceAsStream("/service-lifecycle-ontology.xml");
-            
-            if (resourceAsStream == null) System.out.println("service-lifecycle-ontology.xml not found"); 
-            
-            client.uploadOntology(resourceAsStream);
-            IOUtils.closeQuietly(resourceAsStream);
-            log.info("The 'service-lifecycle-ontology.xml' ontology has been installed.");
-        } else {
-        	log.info("The 'regions.owl' ontology was already installed (ok!).");
-        }
+	public String getUsername() {
+		return username;
+	}
 
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
+	public String getPassword() {
+		return password;
+	}
 
-    public SrampAtomApiClient getClient() {
-        return client;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setClient(SrampAtomApiClient client) {
-        this.client = client;
-    }
+	public Integer getPort() {
+		return port;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public void setPort(Integer port) {
+		this.port = port;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public String getHost() {
+		return host;
+	}
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Integer getPort() {
-        return port;
-    }
-
-    public void setPort(Integer port) {
-        this.port = port;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
+	public void setHost(String host) {
+		this.host = host;
+	}
 
 }

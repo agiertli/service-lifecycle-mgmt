@@ -236,9 +236,6 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 			}
 
-			logger.info("now the validation with s-ramp client will happen");
-			logger.info(hostname + "+" + username + "+" + password + "+" + port);
-
 			/**
 			 * verify s-ramp connection, if not successful don't even try to complete the task!
 			 */
@@ -264,6 +261,9 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 			taskService.start(id, HumanTaskForm.this.taskUser);
 			taskService.complete(id, HumanTaskForm.this.taskUser, result);
+			
+			logger.info("task completed with id:"+id);
+			logger.info("output parameters:"+result.toString());
 
 			HumanTaskForm.this.navigator.navigateTo("main" + "/" + TaskListView.NAME);
 
@@ -407,10 +407,8 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				HorizontalLayout checkboxLayout = new HorizontalLayout();
 				Label caption = new Label();
 				caption.setValue(output.getLabel());
-				// checkboxLayout.setCaption(output.getLabel());
-				// Label checkboxLabel = new Label(;
+
 				CheckBox checkbox = new CheckBox();
-				// checkbox.setCaption(output.getLabel());
 				checkbox.setRequired(true);
 
 				// for enabling/disabling fields
@@ -495,7 +493,6 @@ public class HumanTaskForm extends VerticalLayout implements View {
 
 				}
 
-
 				this.emailCheckbox = checkbox;
 				this.getItemset().addItemProperty(output.getOutputIdentifier(), new ObjectProperty<Boolean>(false));
 				this.getBinder().bind(checkbox, output.getOutputIdentifier());
@@ -534,7 +531,6 @@ public class HumanTaskForm extends VerticalLayout implements View {
 				break;
 			}
 			case INTEGER: {
-
 
 				TextField integerField = new TextField(output.getLabel());
 				integerField.setRequired(true);
@@ -727,6 +723,12 @@ public class HumanTaskForm extends VerticalLayout implements View {
 	 * @throws Exception
 	 */
 	private void verifySrampConnection(String username, String password, String hostname, Integer port) throws Exception {
+
+		logger.info("Verifying whether S-RAMP server is up and running with following parameters:");
+		logger.info("username:" + username);
+		logger.info("password:" + password);
+		logger.info("hostname:" + hostname);
+		logger.info("port:" + port);
 
 		try {
 			URL endpoint = new URL("http://" + hostname + ":" + port.toString() + "/s-ramp-server/s-ramp/servicedocument");

@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -15,12 +16,15 @@ import org.fi.muni.diploma.thesis.utils.properties.ClientProperties;
 
 /**
  * Wrapper for all related database functionality
+ * 
  * @author Anton Giertli
- *
+ * 
  */
 public class DatabaseUtil {
 
 	private Connection conn;
+
+	private final static Logger logger = Logger.getLogger(DatabaseUtil.class.getName());
 
 	public DatabaseUtil() throws IOException, NamingException, SQLException {
 
@@ -29,6 +33,7 @@ public class DatabaseUtil {
 
 	/**
 	 * Opens the connection
+	 * 
 	 * @throws IOException
 	 * @throws NamingException
 	 * @throws SQLException
@@ -45,6 +50,7 @@ public class DatabaseUtil {
 
 	/**
 	 * Close the connection
+	 * 
 	 * @throws SQLException
 	 */
 	public void close() throws SQLException {
@@ -54,9 +60,11 @@ public class DatabaseUtil {
 
 	/**
 	 * Insert processed notification about retired service invocation into the database
+	 * 
 	 * @param retirement_date
 	 * @param invocationTimestamp
-	 * @return either (1) the row count for SQL Data Manipulation Language (DML) statements or (2) 0 for SQL statements that return nothing
+	 * @return either (1) the row count for SQL Data Manipulation Language (DML) statements or (2) 0 for SQL statements
+	 *         that return nothing
 	 * @throws SQLException
 	 */
 	public int insertProcessedNotification(long retirement_date, long invocationTimestamp) throws SQLException {
@@ -69,9 +77,13 @@ public class DatabaseUtil {
 
 		Statement insertRow = null;
 		insertRow = this.conn.createStatement();
-		String insertSql = "INSERT INTO NOTIFICATION " + "VALUES (" + String.valueOf(retirement_date)+","+String.valueOf(invocationTimestamp) + ")";
+		String insertSql = "INSERT INTO NOTIFICATION " + "VALUES (" + String.valueOf(retirement_date) + "," + String.valueOf(invocationTimestamp)
+				+ ")";
 		int counter = insertRow.executeUpdate((insertSql));
 
+		logger.info("processed notification inserted into the database");
+		logger.info("retirement date:" + retirement_date);
+		logger.info("invocation timestamp:" + invocationTimestamp);
 		return counter;
 	}
 
@@ -85,7 +97,7 @@ public class DatabaseUtil {
 	 * @throws SQLException
 	 * @throws IOException
 	 */
-	public ResultSet findNotificationById(long retirementtimestamp,long invocationTimestamp) throws NamingException, SQLException, IOException {
+	public ResultSet findNotificationById(long retirementtimestamp, long invocationTimestamp) throws NamingException, SQLException, IOException {
 
 		Statement createTable = null;
 
@@ -94,9 +106,15 @@ public class DatabaseUtil {
 		createTable.executeUpdate(createSql);
 
 		Statement selectByIdStatement = null;
-		String selectByIdSQL = "Select * FROM NOTIFICATION WHERE RETIREMENT_DATE =" + String.valueOf(retirementtimestamp+"AND INVOCATION_TIMESTAMP="+invocationTimestamp);
+		String selectByIdSQL = "Select * FROM NOTIFICATION WHERE RETIREMENT_DATE ="
+				+ String.valueOf(retirementtimestamp + "AND INVOCATION_TIMESTAMP=" + invocationTimestamp);
 		selectByIdStatement = this.conn.createStatement();
 		ResultSet rs = selectByIdStatement.executeQuery(selectByIdSQL);
+		
+		logger.info("looking for service invocation in database");
+		logger.info("retirement statement:"+retirementtimestamp);
+		logger.info("invocation timestamp:"+invocationTimestamp);
+		logger.info("result size:"+rs.getFetchSize());
 
 		return rs;
 

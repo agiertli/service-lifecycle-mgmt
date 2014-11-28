@@ -59,8 +59,6 @@ public class TaskDetailView extends VerticalLayout implements View {
 		// get an update
 		HumanTaskName name = HumanTaskName.convertStringToEnum(task.getName());
 
-		logger.info("human task name after conversion:" + name.toString());
-
 		//add Human Task Form
 		// Task  'Select Service From S-RAMP' is not working due to unsolve issues with jbpm+custom objects
 		addComponent(new HumanTaskForm(id,username,  InternalHumanTaskFactory.newInternalHumanTask(name),this.getNavigator()));
