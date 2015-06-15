@@ -1,5 +1,5 @@
 Service Lifecycle Management Application
-======================
+=======================
 
 The application, as well as the installation has been tested with:
 
